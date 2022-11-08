@@ -81,7 +81,7 @@ function UserLogin() {
         onSubmit: values => {
             axios.post('http://localhost:5000/login', values).then((e) => {
                 if (e.data.email) {
-                    localStorage.setItem('userToken',e.data.token)
+                    localStorage.setItem('userToken', e.data.token)
                     navigate('/')
                 }
                 else if (e.data.message === 'user not found') {
@@ -102,12 +102,9 @@ function UserLogin() {
         // validate
         validationSchema
     })
-
+console.log("initialvalues",formik.initialValues)
     return (
         <>
-
-
-
 
             <Container maxWidth='md'>
 
@@ -121,9 +118,6 @@ function UserLogin() {
                         <Paper elevation={6} className={classes.firstpaperSignin}>Sign in</Paper>
                     </Box>
                     }
-
-
-
 
                     <Grid item xs={12} md={6} sm={6}  >
                         {/* <Grid item xs={12}   > */}

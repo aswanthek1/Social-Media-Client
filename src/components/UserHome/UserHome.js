@@ -22,7 +22,7 @@ function UserHome() {
   useEffect(() => {
     const userToken = localStorage.getItem('userToken')
     axios.get('http://localhost:5000',{headers:{token:userToken}}).then((e)=>{
-      console.log("userdetails",e)
+      // console.log("userdetails",e)
     })
   })
 

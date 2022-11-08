@@ -1,11 +1,11 @@
 import React from 'react'
 import { Outlet, Navigate} from 'react-router-dom'
 
-function userRouter() {
-    let userToken = localStorage.getItem('userToken')
+function UserRouter() {
+    let auth = {authtoken:localStorage.getItem('userToken')}
   return (
-     userToken ? <Outlet/> : <Navigate to='/login' />
+     auth.authtoken ? <Outlet/> : <Navigate to='/login' />
   )
 }
 
-export default userRouter
+export default UserRouter

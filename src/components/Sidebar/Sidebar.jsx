@@ -1,6 +1,7 @@
 import { List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText,Switch } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home';
 import ModeNightIcon from '@mui/icons-material/ModeNight';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import React from 'react'
 
 function Sidebar() {
@@ -15,7 +16,16 @@ function Sidebar() {
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary="Homepage" />
+            <ListItemText primary="Home" />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton component='a' href='#'>
+            <ListItemIcon>
+              <NotificationsActiveIcon  />
+            </ListItemIcon>
+            <ListItemText primary="Notifications" />
           </ListItemButton>
         </ListItem>
 
@@ -24,20 +34,11 @@ function Sidebar() {
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary="Homepage" />
+            <ListItemText primary="Requests" />
           </ListItemButton>
         </ListItem>
 
-        <ListItem disablePadding>
-          <ListItemButton component='a' href='#'>
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Homepage" />
-          </ListItemButton>
-        </ListItem>
-
-        <ListItem disablePadding>
+        {/* <ListItem disablePadding>
           <ListItemButton component='a' href='#'>
             <ListItemIcon>
               <HomeIcon />
@@ -53,7 +54,7 @@ function Sidebar() {
             </ListItemIcon>
             <Switch />
           </ListItemButton>
-        </ListItem>
+        </ListItem> */}
       </List>
       </Box>
     </Box>

@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography, styled, InputBase, Badge, Avatar, Menu, MenuItem } from '@mui/material';
+import { AppBar, Toolbar, Typography, styled, InputBase, Badge, Avatar, Menu, MenuItem, Grid } from '@mui/material';
 import InterestsIcon from '@mui/icons-material/Interests';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -43,6 +43,7 @@ const UserBox = styled(Box)(({ theme }) => ({
 
 function Navbar() {
 
+    const [showSearch, setShowSearch] = useState(false)
     const [searchUser, setSearchUser] = useState([])
     const formik = useFormik({
         initialValues: {
@@ -52,76 +53,109 @@ function Navbar() {
 
 
     useEffect(() => {
-        axios.get('http://localhost:5000/userSearch',{headers:{data:formik.values.users}}).then((e) => {
+        console.log(formik.values.users)
+        axios.get(`http://localhost:5000/userSearch/${formik.values.users}`).then((e) => {
             console.log("e.data", e)
-            try {
-                if (e.data) {
-                    setSearchUser(e.data)
-                }
-            } catch (error) {
-                console.log("error ",error)
-            }
-        })
-       
-    },[searchUser])
+            setSearchUser(e.data)
 
-    // console.log("usersearch", searchUser)
+        })
+
+    }, [formik.values.users])
+
+
+    console.log("usersearch", searchUser)
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
 
     return (
+        <>
 
-        <AppBar position='sticky'>
-            < StyledToolBar>
-                <Typography variant='h6' sx={{ display: { xs: 'none', sm: 'block' } }}>
-                    LAMA
-                </Typography>
-                <InterestsIcon sx={{ display: { xs: 'block', sm: 'none' } }} />
-                <Search>
-                    <InputBase placeholder='search' name='users' onChange={formik.handleChange} value={formik.values.users} />
-                </Search>
-                <Icons>
-                    <Badge badgeContent={4} color="error">
-                        <MailIcon />
-                    </Badge>
-                    <Badge badgeContent={4} color="error">
-                        <NotificationsIcon />
-                    </Badge>
-                    <Avatar alt="B" src="/static/images/avatar/1.jpg" sx={{ width: 30, height: 30 }}
-                        onClick={e => setOpen(true)}
-                    />
+            <AppBar position='sticky'>
+                < StyledToolBar>
+                    <Typography variant='h6' sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        LAMA
+                    </Typography>
+                    <InterestsIcon sx={{ display: { xs: 'block', sm: 'none' } }} />
+                    <Search>
+                        <InputBase
+                            placeholder='search'
+                            name='users'
+                            onChange={formik.handleChange}
+                            value={formik.values.users}
+                            onClick={() => (setShowSearch(true))}
+                        />
+                    </Search>
 
-                </Icons>
-                <UserBox>
-                    <Avatar alt="A" src="/static/images/avatar/1.jpg" sx={{ width: 30, height: 30 }}
-                        onClick={e => setOpen(true)}
-                    />
-                    <Typography variant='span'>John</Typography>
-                </UserBox>
-            </StyledToolBar>
-            <Menu
-                id="demo-positioned-menu"
-                aria-labelledby="demo-positioned-button"
-                open={open}
-                onClose={e => setOpen(false)}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-            >
-                <MenuItem>Profile</MenuItem>
-                <MenuItem>My account</MenuItem>
-                <MenuItem onClick={() => (
-                    navigate('/login'),
-                    localStorage.removeItem("userToken")
-                )}>Logout</MenuItem>
-            </Menu>
-        </AppBar>
+                    <Icons>
+                        <Badge badgeContent={4} color="error">
+                            <MailIcon />
+                        </Badge>
+                        <Badge badgeContent={4} color="error">
+                            <NotificationsIcon />
+                        </Badge>
+                        <Avatar alt="B" src="/static/images/avatar/1.jpg" sx={{ width: 30, height: 30 }}
+                            onClick={e => setOpen(true)}
+                        />
 
+                    </Icons>
+                    <UserBox>
+                        <Avatar alt="A" src="/static/images/avatar/1.jpg" sx={{ width: 30, height: 30 }}
+                            onClick={e => setOpen(true)}
+                        />
+                        <Typography variant='span'>John</Typography>
+                    </UserBox>
+                </StyledToolBar>
+                <Menu
+                    id="demo-positioned-menu"
+                    aria-labelledby="demo-positioned-button"
+                    open={open}
+                    onClose={e => setOpen(false)}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                >
+                    <MenuItem>Profile</MenuItem>
+                    <MenuItem>My account</MenuItem>
+                    <MenuItem onClick={() => (
+                        navigate('/login'),
+                        localStorage.removeItem("userToken")
+                    )}>Logout</MenuItem>
+                </Menu>
+
+
+                <Box
+                    component={Grid}                   
+                    display={showSearch ? 'block' : 'none'}
+                    height={200}
+                    width='40%'
+                    bgcolor="aqua"
+                    position='absolute'
+                    top='80%'
+                    left='28%'
+                    borderRadius={5}
+                    
+
+                >
+                    { searchUser.map((value) => {
+                        return (
+                            <Box component={Grid} item direction='row' display='flex' marginTop='5%' marginLeft='2%' >
+                                <Avatar />
+                                <Typography color='red' variant='h6' marginLeft='3%'  >{value}</Typography>
+                            </Box>
+                        )
+                    }
+
+                    )}
+                </Box>
+            </AppBar>
+
+
+        </>
     )
 }
 

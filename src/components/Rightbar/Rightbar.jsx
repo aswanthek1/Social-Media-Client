@@ -1,48 +1,25 @@
 import Box from '@mui/material/Box';
 import React from 'react'
-import { Typography, AvatarGroup, Avatar, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, Divider } from '@mui/material'
+import { Typography, AvatarGroup, Avatar, ImageList, ImageListItem, List, ListItem, ListItemAvatar, ListItemText, Divider, Grid } from '@mui/material'
 
 function Rightbar() {
     return (
 
-        <Box flex={2} p={1} sx={{ display: { xs: 'none', md: 'block' } }}>
-            <Box position='fixed' width={300}>
-                <Typography variant='h6' fontWeight={100} mt={2} mb={2} >Online Friends</Typography>
+        <Box flex={2} p={1}   sx={{ display: { xs: 'none', md: 'block' } }}>
+            <Box  boxShadow={4}  position='fixed' width='23%' marginTop='2%'>
+                <Typography variant='h6' fontWeight={100} mt={2} mb={2} color='green' > <b>Friends Active</b> </Typography>
                 <AvatarGroup max={6}>
                     <Avatar alt="" src="" />
                     <Avatar alt="Travis Howard" src="" />
                     <Avatar alt="Cindy Baker" src="" />
                     <Avatar alt="Agnes Walker" src="" />
-                    <Avatar alt="Trevor Henderson" src="" />
-                    <Avatar alt="Agnes Walker" src="" />
-                    <Avatar alt="Trevor Henderson" src="" />
+                   
                 </AvatarGroup>
-                <Typography variant='h6' fontWeight={100}>
-                    Latest Photos
-                </Typography>
-                <ImageList cols={3} rowHeight={100} gap={5}>
-                    <ImageListItem >
-                        <img
-                            src='https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
-                            alt=''
-                        />
-                    </ImageListItem>
-                    <ImageListItem >
-                        <img
-                            src='https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
-                            alt=''
-                        />
-                    </ImageListItem>
-                    <ImageListItem >
-                        <img
-                            src='https://images.unsplash.com/photo-1551963831-b3b1ca40c98e'
-                            alt=''
-                        />
-                    </ImageListItem>
-                </ImageList>
-                <Typography variant='h6' fontWeight={100} mt={2}  >Recent Conversations</Typography>
+
+                
+                <Typography variant='h6' fontWeight={100} mt={2}  > <b>Recent Conversations</b> </Typography>
                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                    <ListItem alignItems="flex-start">
+                    <ListItem alignItems="flex-end">
                         <ListItemAvatar>
                             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
                         </ListItemAvatar>

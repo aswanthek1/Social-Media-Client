@@ -7,11 +7,16 @@ import Navbar from '../Navbar/Navbar'
 import { Stack, Box, createTheme, ThemeProvider } from '@mui/material'
 import Add from '../Add/Add'
 import { light } from '@mui/material/styles/createPalette'
+import { useSelector } from 'react-redux'
 
 
 
 function UserHome() {
 
+  const user = useSelector(state => state.user)
+
+  const [userDetails , setUserDetails ] = useState({})
+  
   // const [mode, setMode] = useState("light")
   // const darkTheme = createTheme({
   //   palette:{
@@ -22,7 +27,12 @@ function UserHome() {
   useEffect(() => {
     const userToken = localStorage.getItem('userToken')
     axios.get('http://localhost:5000',{headers:{token:userToken}}).then((e)=>{
-      // console.log("userdetails",e)
+      console.log("userdetails",e)
+      if(e.data.message === 'userNotFound'){
+        return null
+      }else{
+        setUserDetails(e.data)
+      }
     })
   })
 

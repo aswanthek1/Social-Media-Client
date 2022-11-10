@@ -6,7 +6,7 @@ import { Favorite, FavoriteBorder, MoreVert } from '@mui/icons-material';
 function Posts() {
   return (
     <div>
-      <Card sx={{margin:3}}>
+      <Card sx={{marginBlock:3,marginInline:2}} elevation={5}>
         <CardHeader
           avatar={
             <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">

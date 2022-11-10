@@ -232,18 +232,15 @@ function UserSignup() {
                                             type='text'
                                             id="lastname"
                                             variant='outlined'
-                                            label="Second Name"
-                                            placeholder='Enter your Second name'
+                                            label="Last Name"
+                                            placeholder='Enter your last name'
                                             onChange={formik.handleChange}
                                             value={formik.values.lastname}
                                             className={classes.textfieldlastname} />
                                         {formik.touched.lastname && formik.errors.lastname ? <FormHelperText className={classes.errors}>{formik.errors.lastname}</FormHelperText> : null}
                                        
                                     </Grid>
-                                </Grid>
-
-                              
-
+                                </Grid>                             
 
                                 <TextField
                                     name='email'
@@ -271,30 +268,6 @@ function UserSignup() {
                                     className={classes.textfield} />
                                 {formik.touched.phonenumber && formik.errors.phonenumber ? <FormHelperText className={classes.errors}>{formik.errors.phonenumber}</FormHelperText> : null}
 
-                                {/* <TextField
-                                    name='password'
-                                    type='password'
-                                    id="password"
-                                    variant='outlined'
-                                    label="Password"
-                                    fullWidth placeholder='Enter Password'
-                                    onChange={formik.handleChange}
-                                    value={formik.values.password}
-                                    className={classes.textfield}
-                                    inputProps={{
-                                        startAdornment: (
-                                            <InputAdornment >
-                                                <VisibilityIcon />
-                                            </InputAdornment>
-                                        )
-                                    }}
-                                />
-
-                                {formik.touched.password && formik.errors.password ? <FormHelperText className={classes.errors}>{formik.errors.password}</FormHelperText> : null} */}
-
-
-
-
                                 <OutlinedInput
                                     id="outlined-adornment-password"
                                     fullWidth
@@ -320,25 +293,6 @@ function UserSignup() {
                                 />
                                 {formik.touched.password && formik.errors.password ? <FormHelperText className={classes.errors}>{formik.errors.password}</FormHelperText> : null}
 
-
-
-                                {/* 
-                                <TextField
-                                    id="confirmpassword"
-                                    type='password'
-                                    variant='outlined'
-                                    label="Confirm Password"
-                                    name='confirmpassword'
-                                    fullWidth
-                                    placeholder='Confirm password'
-                                    onChange={formik.handleChange}
-                                    value={formik.values.confirmpassword}
-                                    className={classes.textfield} />
-                                {formik.touched.confirmpassword && formik.errors.confirmpassword ? <FormHelperText className={classes.errors}>{formik.errors.confirmpassword}</FormHelperText> : null} */}
-
-
-
-
                                 <OutlinedInput
                                     id=" password"
                                     fullWidth
@@ -362,23 +316,6 @@ function UserSignup() {
                                     } />
                                 {formik.touched.confirmpassword && formik.errors.confirmpassword ? <FormHelperText className={classes.errors}>{formik.errors.confirmpassword}</FormHelperText> : null}
 
-
-
-                                {/* <TextField
-                                    name='dateofbirth'
-                                    variant='outlined'
-                                    id="date"
-                                    label="Date Of Birth"
-                                    type="date"
-                                    // defaultValue="2017-05-24"
-                                    fullWidth
-                                    onChange={formik.handleChange}
-                                    value={formik.values.dateofbirth}
-                                    className={classes.textfieldDate}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                /> */}
                                 <Button type='submit' variant='contained' color='primary' className={classes.submit}>Submit</Button>
 
                             </form>

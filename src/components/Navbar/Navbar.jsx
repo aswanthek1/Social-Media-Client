@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useFormik } from 'formik'
+import { useSelector } from 'react-redux';
 
 const StyledToolBar = styled(Toolbar)({
     display: 'flex',
@@ -63,9 +64,10 @@ function Navbar() {
     }, [formik.values.users])
 
 
-    console.log("usersearch", searchUser)
+    // console.log("usersearch", searchUser)
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
+    const user = useSelector(state => state.user)
 
     return (
         <>
@@ -73,7 +75,7 @@ function Navbar() {
             <AppBar position='sticky'>
                 < StyledToolBar>
                     <Typography variant='h6' sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        LAMA
+                       {user.firstname}
                     </Typography>
                     <InterestsIcon sx={{ display: { xs: 'block', sm: 'none' } }} />
                     <Search>

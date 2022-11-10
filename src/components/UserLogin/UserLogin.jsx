@@ -102,7 +102,6 @@ function UserLogin() {
         // validate
         validationSchema
     })
-console.log("initialvalues",formik.initialValues)
     return (
         <>
 
@@ -165,7 +164,6 @@ console.log("initialvalues",formik.initialValues)
                                     <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
                                     <Input
                                         fullWidth
-
                                         id="standard-adornment-password"
                                         name='password'
                                         placeholder='Enter Password'
@@ -190,9 +188,10 @@ console.log("initialvalues",formik.initialValues)
 
 
 
-                                <FormControlLabel
+                                {/* <FormControlLabel
                                     control={<Checkbox name="checkedB" color='primary' />}
-                                    label="Remember me" />
+                                    label="Remember me" /> */}
+
                                 <Button className={classes.buttonSignin} type='submit' variant='contained' color='primary' fullWidth>Sign in</Button>
                             </form>
 

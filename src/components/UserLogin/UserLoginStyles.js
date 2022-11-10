@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
         padding: 20,
         height: 460,
         marginInline: 'auto',
-        backgroundColor: 'yellow'
+        backgroundColor: 'aqua'
     },
 
     avatarLock: {
@@ -28,11 +28,11 @@ const useStyles = makeStyles((theme) => ({
     },
 
     buttonSignin: {
-        margin: '8px 0'
+        margin: '30px 0'
     },
 
     passwordField: {
-        marginTop: '15px'
+        // marginTop: '400px'
     },
 
     or: {

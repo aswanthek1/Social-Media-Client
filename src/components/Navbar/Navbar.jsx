@@ -8,7 +8,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'
+// import { update } from '../../Redux/UserSlice'
 
 const StyledToolBar = styled(Toolbar)({
     display: 'flex',
@@ -43,7 +44,7 @@ const UserBox = styled(Box)(({ theme }) => ({
 
 
 function Navbar() {
-
+    const dispatch = useDispatch()
     const [showSearch, setShowSearch] = useState(false)
     const [searchUser, setSearchUser] = useState([])
     const formik = useFormik({
@@ -68,6 +69,8 @@ function Navbar() {
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const user = useSelector(state => state.user)
+
+   
 
     return (
         <>

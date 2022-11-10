@@ -7,11 +7,13 @@ import Navbar from '../Navbar/Navbar'
 import { Stack, Box, createTheme, ThemeProvider } from '@mui/material'
 import Add from '../Add/Add'
 import { light } from '@mui/material/styles/createPalette'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { update } from '../../Redux/UserSlice'
 
 
 
 function UserHome() {
+  const dispatch = useDispatch()
 
   const user = useSelector(state => state.user)
 
@@ -32,9 +34,15 @@ function UserHome() {
         return null
       }else{
         setUserDetails(e.data)
+        dispatch(update(e.data))
       }
     })
-  })
+      
+    axios.get('http://localhost:5000/getPost',{headers:{token:userToken}}).then((e)=>{
+      console.log('postDetails ',e)
+    })
+
+  },[])
 
   return (
     // <ThemeProvider theme={darkTheme} color={'text.primary'}>

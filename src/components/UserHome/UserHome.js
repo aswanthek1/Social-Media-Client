@@ -9,6 +9,7 @@ import Add from '../Add/Add'
 import { light } from '@mui/material/styles/createPalette'
 import { useDispatch, useSelector } from 'react-redux'
 import { update } from '../../Redux/UserSlice'
+import { postUpdate } from '../../Redux/PostSlice'
 
 
 
@@ -18,7 +19,8 @@ function UserHome() {
   const user = useSelector(state => state.user)
 
   const [userDetails , setUserDetails ] = useState({})
-  
+  const [postDetails, setPostDetails ] = useState([])
+
   // const [mode, setMode] = useState("light")
   // const darkTheme = createTheme({
   //   palette:{
@@ -40,6 +42,8 @@ function UserHome() {
       
     axios.get('http://localhost:5000/getPost',{headers:{token:userToken}}).then((e)=>{
       console.log('postDetails ',e)
+      setPostDetails(e.data)
+      dispatch(postUpdate(e.data))
     })
 
   },[])

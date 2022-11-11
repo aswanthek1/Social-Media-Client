@@ -78,7 +78,7 @@ function Navbar() {
             <AppBar position='sticky'>
                 < StyledToolBar>
                     <Typography variant='h6' sx={{ display: { xs: 'none', sm: 'block' } }}>
-                       {user.firstname}
+                       btvn
                     </Typography>
                     <InterestsIcon sx={{ display: { xs: 'block', sm: 'none' } }} />
                     <Search>
@@ -107,7 +107,7 @@ function Navbar() {
                         <Avatar alt="A" src="/static/images/avatar/1.jpg" sx={{ width: 30, height: 30 }}
                             onClick={e => setOpen(true)}
                         />
-                        <Typography variant='span'>John</Typography>
+                        <Typography variant='span'>{user.firstname}</Typography>
                     </UserBox>
                 </StyledToolBar>
                 <Menu

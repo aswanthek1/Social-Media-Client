@@ -8,9 +8,9 @@ function Feed() {
 
     <Box flex={4} p={1}   >
      <Posts/>
+     {/* <Posts/>
      <Posts/>
-     <Posts/>
-     <Posts/>
+     <Posts/> */}
     </Box>
   )
 }

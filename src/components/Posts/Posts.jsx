@@ -1,51 +1,62 @@
-import {Box, Card, Typography, CardMedia, CardContent, CardActions, Avatar, IconButton, CardHeader, Checkbox } from '@mui/material';
+import { Box, Card, Typography, CardMedia, CardContent, CardActions, Avatar, IconButton, CardHeader, Checkbox } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
-import React from 'react'
+import React,{useState} from 'react'
 import { Favorite, FavoriteBorder, MoreVert } from '@mui/icons-material';
+import { useSelector, useDispatch } from 'react-redux'
+
 
 function Posts() {
-  return (
-    <div>
-      <Card sx={{marginBlock:3,marginInline:2}} elevation={5}>
-        <CardHeader
-          avatar={
-            <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
-              H
-            </Avatar>
-          }
-          action={
-            <IconButton aria-label="settings">
-              <MoreVert />
-            </IconButton>
-          }
-          title="Hermoine Granger"
-          subheader="September 14, 2015"
-        />
-        <CardMedia
-          component="img"
-          height={350}
-          image="https://images.pexels.com/photos/39003/scotland-united-kingdom-england-isle-of-skye-39003.jpeg?cs=srgb&dl=pexels-pixabay-39003.jpg&fm=jpg"
-          alt="A"
-        />
-        <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            This impressive paella is a perfect party dish and a fun meal to cook
-            together with your guests. Add 1 cup of frozen peas along with the mussels,
-            if you like.
-          </Typography>
-        </CardContent>
-        <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-          <Checkbox  icon={<FavoriteBorder/>} checkedIcon={<Favorite sx={{color:'red'}} /> }  />
-          </IconButton>
-          <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton>
+  const [ likeState, setLikeState] = useState(false)
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+  const postsDetails = useSelector(state => state.post)
+  console.log("post data from slice", postsDetails.post)
 
-        </CardActions>
-       
-      </Card>
-    </div>
+  return (
+    postsDetails.post.map((postArray) => {
+      return (
+        <div>
+          <Card sx={{ marginBlock: 3, marginInline: 2 }} elevation={5}>
+            <CardHeader
+              avatar={
+                <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
+                  H
+                </Avatar>
+              }
+              action={
+                <IconButton aria-label="settings">
+                  <MoreVert />
+                </IconButton>
+              }
+              title={postArray.userId.firstname + " " + postArray.userId.lastname ? postArray.userId.firstname + " " + postArray.userId.lastname : null}
+              subheader={postArray.createdAt}
+            />
+            <CardMedia
+              component="img"
+              height={350}
+              image={postArray.image ? postArray.image : null}
+              alt="A"
+            />
+            <CardContent>
+              <Typography variant="body2" color="text.secondary">
+                {postArray.description ? postArray.description : null}
+              </Typography>
+            </CardContent>
+            <CardActions disableSpacing>
+              <IconButton aria-label="add to favorites">
+                <Checkbox icon={<FavoriteBorder/>} checkedIcon={<Favorite sx={{ color: 'red' }} />} />
+              </IconButton>
+              <IconButton aria-label="share">
+                <ShareIcon />
+              </IconButton>
+
+            </CardActions>
+
+          </Card>
+        </div>
+
+      )
+    })
   )
 }
 

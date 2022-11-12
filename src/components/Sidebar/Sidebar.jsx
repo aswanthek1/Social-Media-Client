@@ -13,7 +13,7 @@ function Sidebar() {
   return (
 
     <Box flex={2} p={1} mt="2%"  sx={{ display: { xs: 'none', md: 'block' } }} >
-      <Box boxShadow={6} position='fixed' sx={{width:'23%'}}>
+      <Box  position='fixed' sx={{width:'22%', height:'80%'}} bgcolor='#F8FFDB'>
 
         <List>
           <ListItem disablePadding>

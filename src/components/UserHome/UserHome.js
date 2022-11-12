@@ -4,7 +4,7 @@ import Feed from '../Feed/Feed'
 import Rightbar from '../Rightbar/Rightbar'
 import Sidebar from '../Sidebar/Sidebar'
 import Navbar from '../Navbar/Navbar'
-import { Stack, Box, createTheme, ThemeProvider } from '@mui/material'
+import { Stack, Box, createTheme, ThemeProvider, CircularProgress } from '@mui/material'
 import Add from '../Add/Add'
 import { light } from '@mui/material/styles/createPalette'
 import { useDispatch, useSelector } from 'react-redux'
@@ -42,25 +42,28 @@ function UserHome() {
       
     axios.get('http://localhost:5000/getPost',{headers:{token:userToken}}).then((e)=>{
       console.log('postDetails ',e)
-      setPostDetails(e.data)
-      dispatch(postUpdate(e.data))
+        // setPostDetails(e.data)
+        dispatch(postUpdate(e.data))
+
     })
 
   },[])
 
-  return (
-    // <ThemeProvider theme={darkTheme} color={'text.primary'}>
-    <Box bgcolor={'background.default'}>
-      <Navbar />
-      <Stack direction='row' spacing={2} justifyContent='space-between'>
-        <Sidebar />
-        <Feed />
-        <Rightbar />
-      </Stack>
-      <Add />
-    </Box>
-    // </ThemeProvider>
-  )
-}
+
+    return (
+      // <ThemeProvider theme={darkTheme} color={'text.primary'}>
+      <Box bgcolor={'background.default'}>
+        <Navbar />
+        <Stack direction='row' spacing={2} justifyContent='space-between'>
+          <Sidebar />
+          <Feed />
+          <Rightbar />
+        </Stack>
+        <Add />
+      </Box>
+      // </ThemeProvider>
+    )
+  }
+
 
 export default UserHome

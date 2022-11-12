@@ -70,15 +70,14 @@ function Navbar() {
     const [open, setOpen] = useState(false)
     const user = useSelector(state => state.user)
 
-   
+
 
     return (
         <>
-
-            <AppBar position='sticky'>
+            <AppBar position='sticky' sx={{backgroundColor:"#FF6464"}}>
                 < StyledToolBar>
                     <Typography variant='h6' sx={{ display: { xs: 'none', sm: 'block' } }}>
-                       btvn
+                        btvn
                     </Typography>
                     <InterestsIcon sx={{ display: { xs: 'block', sm: 'none' } }} />
                     <Search>
@@ -134,7 +133,7 @@ function Navbar() {
 
 
                 <Box
-                    component={Grid}                   
+                    component={Grid}
                     display={showSearch ? 'block' : 'none'}
                     height={200}
                     width='40%'
@@ -143,10 +142,8 @@ function Navbar() {
                     top='80%'
                     left='28%'
                     borderRadius={5}
-                    
-
                 >
-                    { searchUser.map((value) => {
+                    {searchUser.map((value) => {
                         return (
                             <Box component={Grid} item direction='row' display='flex' marginTop='5%' marginLeft='2%' >
                                 <Avatar />

@@ -3,6 +3,9 @@ import React, { useState } from 'react'
 import { Add as AddIcon, DateRange, EmojiEmotions, Image, PersonAdd, VideoCameraBack } from '@mui/icons-material'
 import { Stack } from '@mui/system'
 import axios from 'axios'
+import { useDispatch,useSelector } from 'react-redux'
+import { updatePostOnload } from '../../Redux/PostSlice'
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const StyledModal = styled(Modal)({
@@ -19,6 +22,7 @@ const UserBox = styled(Box)({
 })
 
 function Add() {
+    const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [imageSelected, setImageSelected] = useState('')
     const [description, setDescription] = useState('')
@@ -35,6 +39,8 @@ function Add() {
 
                 return axios.post('http://localhost:5000/addPost', { image: response.data.secure_url, description: description }, { headers: { token: userToken } }).then((res) => {
                     console.log("lastresponse", res)
+                    dispatch(updatePostOnload(res.data))
+                    setOpen(false)
                 })
             })
         } catch (error) {

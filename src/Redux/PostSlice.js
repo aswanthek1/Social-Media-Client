@@ -8,9 +8,12 @@ export const postSlice = createSlice({
     reducers:{
         postUpdate: ( state, action ) =>{
             state.post = action.payload
+        },
+        updatePostOnload: (state, action) =>{
+            state.post.unshift(action.payload)
         }
     }
 })
 
-export const { postUpdate } = postSlice.actions
+export const { postUpdate, updatePostOnload } = postSlice.actions
 export default postSlice.reducer

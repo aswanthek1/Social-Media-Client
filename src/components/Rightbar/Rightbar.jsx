@@ -5,8 +5,8 @@ import { Typography, AvatarGroup, Avatar, ImageList, ImageListItem, List, ListIt
 function Rightbar() {
     return (
 
-        <Box flex={2} p={1}   sx={{ display: { xs: 'none', md: 'block' } }}>
-            <Box  boxShadow={4}  position='fixed' width='23%' marginTop='2%'>
+        <Box flex={3} p={1}   sx={{ display: { xs: 'none', lg: 'block' } }} bgcolor='#F8FFDB' >
+            <Box  position='fixed' width='23%' >
                 <Typography variant='h6' fontWeight={100} mt={2} mb={2} color='green' > <b>Friends Active</b> </Typography>
                 <AvatarGroup max={6}>
                     <Avatar alt="" src="" />

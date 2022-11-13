@@ -74,10 +74,10 @@ function Navbar() {
 
     return (
         <>
-            <AppBar position='sticky' sx={{backgroundColor:"#FF6464"}}>
+            <AppBar position='sticky' sx={{ backgroundColor: "#FF6464" }}>
                 < StyledToolBar>
                     <Typography variant='h6' sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        btvn
+                        Between
                     </Typography>
                     <InterestsIcon sx={{ display: { xs: 'block', sm: 'none' } }} />
                     <Search>
@@ -97,16 +97,16 @@ function Navbar() {
                         <Badge badgeContent={4} color="error">
                             <NotificationsIcon />
                         </Badge>
-                        <Avatar alt="B" src="/static/images/avatar/1.jpg" sx={{ width: 30, height: 30 }}
+                        <Avatar alt={user.firstname} src="/static/images/avatar/1.jpg" sx={{ width: 30, height: 30 }}
                             onClick={e => setOpen(true)}
                         />
 
                     </Icons>
                     <UserBox>
-                        <Avatar alt="A" src="/static/images/avatar/1.jpg" sx={{ width: 30, height: 30 }}
+                        <Avatar alt={user.firstname} src="/static/images/avatar/1.jpg" sx={{ width: 30, height: 30 }}
                             onClick={e => setOpen(true)}
                         />
-                        <Typography variant='span'>{user.firstname}</Typography>
+
                     </UserBox>
                 </StyledToolBar>
                 <Menu
@@ -123,7 +123,10 @@ function Navbar() {
                         horizontal: 'right',
                     }}
                 >
+                    <MenuItem sx={{ marginBottom: '10px' }}> <Avatar alt={user.firstname} src='/static/images/avatar/1.jpg' sx={{ width: 30, height: 30, marginRight: '10px' }} /> <b> {user.firstname}</b></MenuItem>
                     <MenuItem>Profile</MenuItem>
+                    <MenuItem sx={{ display: { xs: 'block', sm: 'none' } }}>Messages</MenuItem>
+                    <MenuItem sx={{ display: { xs: 'block', sm: 'none' } }}>Notifications</MenuItem>
                     <MenuItem>My account</MenuItem>
                     <MenuItem onClick={() => (
                         navigate('/login'),

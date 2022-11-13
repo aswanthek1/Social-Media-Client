@@ -5,20 +5,21 @@ import { Typography, AvatarGroup, Avatar, ImageList, ImageListItem, List, ListIt
 function Rightbar() {
     return (
 
-        <Box flex={3} p={1}   sx={{ display: { xs: 'none', lg: 'block' } }} bgcolor='#F8FFDB' >
-            <Box  position='fixed' width='23%' >
-                <Typography variant='h6' fontWeight={100} mt={2} mb={2} color='green' > <b>Friends Active</b> </Typography>
-                <AvatarGroup max={6}>
+        <Box flex={3} p={1}   sx={{ display: { xs: 'none', lg: 'block' } }} >
+             <Box  position='fixed' width='31%' height='100vh' bgcolor='#F8FFDB'  >
+                <Typography align='center' variant='h5' fontWeight={100} mt={2} mb={2} color='green' > <b>Friends Active</b> </Typography>
+                <Divider variant="middle" sx={{ borderBottomWidth: 3 }} />
+                {/* <AvatarGroup max={6}>
                     <Avatar alt="" src="" />
                     <Avatar alt="Travis Howard" src="" />
                     <Avatar alt="Cindy Baker" src="" />
                     <Avatar alt="Agnes Walker" src="" />
                    
-                </AvatarGroup>
+                </AvatarGroup> */}
 
                 
-                <Typography variant='h6' fontWeight={100} mt={2}  > <b>Recent Conversations</b> </Typography>
-                <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                {/* <Typography variant='h6' fontWeight={100} mt={2} marginLeft='10%'> <b>Recent Conversations</b> </Typography> */}
+                <List sx={{ width: '100%', maxWidth: 360, bgcolor: '#F8FFDB' }}>
                     <ListItem alignItems="flex-end">
                         <ListItemAvatar>
                             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />

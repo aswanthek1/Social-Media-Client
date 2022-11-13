@@ -6,14 +6,15 @@ import RequestPageIcon from '@mui/icons-material/RequestPage';
 import React from 'react'
 // import './SidebarStyles.js'
 import useStyles from './SidebarStyle.js';
+import { Settings } from '@mui/icons-material';
 
 function Sidebar() {
 
   const classes = useStyles()
   return (
 
-    <Box flex={2} p={1} mt="2%"  sx={{ display: { xs: 'none', md: 'block' } }} >
-      <Box  position='fixed' sx={{width:'22%', height:'80%'}} bgcolor='#F8FFDB'>
+    <Box flex={2} p={1}   sx={{ display: { xs: 'none', md: 'block' } }} >
+      <Box  position='fixed' sx={{width:'22%', height:'100vh'}} bgcolor='#F8FFDB'>
 
         <List>
           <ListItem disablePadding>
@@ -52,16 +53,18 @@ function Sidebar() {
             </ListItemButton>
           </ListItem>
 
-          {/* <ListItem disablePadding>
+         <ListItem disablePadding>
           <ListItemButton component='a' href='#'>
             <ListItemIcon>
-              <HomeIcon />
+              <Settings />
             </ListItemIcon>
-            <ListItemText primary="Homepage" />
+            <ListItemText
+            primary={<Typography style={{ fontWeight: 500 }}> <b>Settings</b> </Typography>}
+              />
           </ListItemButton>
         </ListItem>
 
-        <ListItem disablePadding>
+       {/*   <ListItem disablePadding>
           <ListItemButton component='a' href='#'>
             <ListItemIcon>
               <ModeNightIcon />

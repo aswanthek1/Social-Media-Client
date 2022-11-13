@@ -1,5 +1,4 @@
-import React from 'react'
-// import { useState } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useFormik } from 'formik'
 import axios from 'axios'
@@ -19,6 +18,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import IconButton from '@mui/material/IconButton';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import jwt_decode from 'jwt-decode'
 
 import useStyles from './UserSignupStyle.js'
 
@@ -107,7 +107,7 @@ function UserSignup() {
         onSubmit: values => {
             try {
                 axios.post('http://localhost:5000/register', values).then((e) => {
-                    
+
                     if (e.data.message) {
                         toast.error("You already have an account", {
                             icon: '⚠️',
@@ -121,7 +121,7 @@ function UserSignup() {
                     }
                     else {
                         console.log('response', e.data)
-                        localStorage.setItem('userToken',e.data.token)
+                        localStorage.setItem('userToken', e.data.token)
                         navigate('/')
                     }
                 }).catch((error) => {
@@ -133,6 +133,47 @@ function UserSignup() {
         },
         validationSchema
     })
+
+
+
+    function handleCallbackResponse(response) {
+        console.log('jwt credentials ', response.credential)
+        const userObj = jwt_decode(response.credential)
+        console.log(userObj)
+        axios.post('http://localhost:5000/googleRegister', userObj).then((e) => {
+            console.log('google login response', e)
+            if (e.data.message === 'user already exists') {
+                toast.error("You already have an account", {
+                    icon: '⚠️',
+                    duration: 2000,
+                    style: {
+                        width: '300px',
+                        backgroundColor: 'greenyellow',
+                        fontSize: '20px'
+                    }
+                });
+            } else {
+                localStorage.setItem('userToken', e.data.token)
+                navigate('/')
+            }
+        })
+    }
+
+    useEffect(() => {
+        /*global google*/
+        google.accounts.id.initialize({
+            client_id: '649675884780-h9g6gsh5nov2kpq7joqsau7fnchl8mbq.apps.googleusercontent.com',
+            callback: handleCallbackResponse
+        });
+
+        google.accounts.id.renderButton(
+            document.getElementById('googlebtn'),
+            { theme: 'outline', size: 'medium' }
+        )
+
+        // google.accounts.id.prompt()
+
+    }, [])
 
     const classes = useStyles()
 
@@ -158,58 +199,11 @@ function UserSignup() {
 
 
                             <form action="" onSubmit={formik.handleSubmit}>
-
-                                {/* <Hidden mdUp implementation="css">
-                                     <div>                                    
-                                        <TextField                                        
-                                            name='firstname'
-                                            type='text'
-                                            id="firstname"
-                                            variant='outlined'
-                                            label='First Name'
-                                            className={classes.firstnamefield}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.firstname}
-                                            placeholder='Enter your First name'
-                                            fullWidth />
-                                        {formik.touched.firstname && formik.errors.firstname ? <FormHelperText className={classes.errors}>{formik.errors.firstname}</FormHelperText> : null}
-
-
-
-
-
-                                        <TextField
-                                            name='lastname'
-                                            type='text'
-                                            id="lastname"
-                                            variant='outlined'
-                                            label="Second Name"
-                                            placeholder='Enter your Second name'
-                                            fullWidth
-                                            onChange={formik.handleChange}
-                                            value={formik.values.lastname}
-                                            className={classes.textfield} />
-                                        {formik.touched.lastname && formik.errors.lastname ? <FormHelperText className={classes.errors}>{formik.errors.lastname}</FormHelperText> : null}
-
-                                    </div> 
-                                </Hidden> */}
-
-
-
-
-
-
-
-                                {/* <Hidden smDown implementation="css"> */}
                                 <Grid container spacing={0} justifyContent='space-between'  >
-
-
                                     <Grid item xs={12} sm={5}>
-                                         
-                                       
-                                    
                                         <TextField
                                             name='firstname'
+                                            size='small'
                                             fullWidth
                                             type='text'
                                             id="firstname"
@@ -221,13 +215,14 @@ function UserSignup() {
                                             placeholder='Enter your First name'
                                         />
                                         {formik.touched.firstname && formik.errors.firstname ? <FormHelperText className={classes.errors}>{formik.errors.firstname}</FormHelperText> : null}
-                                       
-                                       </Grid>
-                                       
-                                       <Grid item xs={12} sm={5}>
-                                       
+
+                                    </Grid>
+
+                                    <Grid item xs={12} sm={5}>
+
                                         <TextField
                                             name='lastname'
+                                            size='small'
                                             fullWidth
                                             type='text'
                                             id="lastname"
@@ -238,12 +233,13 @@ function UserSignup() {
                                             value={formik.values.lastname}
                                             className={classes.textfieldlastname} />
                                         {formik.touched.lastname && formik.errors.lastname ? <FormHelperText className={classes.errors}>{formik.errors.lastname}</FormHelperText> : null}
-                                       
+
                                     </Grid>
-                                </Grid>                             
+                                </Grid>
 
                                 <TextField
                                     name='email'
+                                    size='small'
                                     type='email'
                                     id="email"
                                     variant='outlined'
@@ -257,6 +253,7 @@ function UserSignup() {
 
                                 <TextField
                                     name='phonenumber'
+                                    size='small'
                                     type='text'
                                     id="phonenumber"
                                     variant='outlined'
@@ -275,6 +272,7 @@ function UserSignup() {
                                     placeholder='Enter your Password'
                                     name='password'
                                     className={classes.textfield}
+                                    size='small'
                                     type={values.showPassword ? 'text' : 'password'}
                                     value={formik.values.password}
                                     onChange={formik.handleChange('password')}
@@ -296,6 +294,7 @@ function UserSignup() {
                                 <OutlinedInput
                                     id=" password"
                                     fullWidth
+                                    size='small'
                                     label="Password"
                                     placeholder='Confirm password'
                                     name='confirmpassword'
@@ -317,6 +316,8 @@ function UserSignup() {
                                 {formik.touched.confirmpassword && formik.errors.confirmpassword ? <FormHelperText className={classes.errors}>{formik.errors.confirmpassword}</FormHelperText> : null}
 
                                 <Button type='submit' variant='contained' color='primary' className={classes.submit}>Submit</Button>
+                                <Typography align='center' className={classes.or} > <b>Or</b> </Typography>
+                                <div id='googlebtn' className={classes.google} ></div>
 
                             </form>
                             <Toaster />

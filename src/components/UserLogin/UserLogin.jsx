@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import axios from 'axios'
 import { useFormik } from 'formik'
 import { useNavigate } from 'react-router-dom'
@@ -22,6 +22,7 @@ import IconButton from '@mui/material/IconButton';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import FormControl from '@mui/material/FormControl';
+import jwt_decode from 'jwt-decode'
 
 import useStyles from './UserLoginStyles.js'
 
@@ -102,6 +103,51 @@ function UserLogin() {
         // validate
         validationSchema
     })
+
+
+    function handleCallbackResponse(response) {
+        console.log('jwt credentials ', response.credential)
+        const userObj = jwt_decode(response.credential)
+        console.log(userObj)
+        axios.post('http://localhost:5000/googleLogin', userObj).then((e) => {
+            console.log('google login response', e)
+            if (e.data.message) {
+                toast.error('You should Signup first', {
+                    icon: ' 🚫 ',
+                    style: {
+                        width: '300px',
+                        backgroundColor: 'greenyellow',
+                        fontSize: '20px',
+                    }
+                })
+            } else {
+                localStorage.setItem('userToken', e.data.token)
+                navigate('/')
+            }
+
+        })
+    }
+
+    useEffect(() => {
+        /*global google*/
+        google.accounts.id.initialize({
+            client_id: '649675884780-h9g6gsh5nov2kpq7joqsau7fnchl8mbq.apps.googleusercontent.com',
+            callback: handleCallbackResponse
+        });
+
+        google.accounts.id.renderButton(
+            document.getElementById('googlebtn'),
+            { theme: 'outline', size: 'medium' }
+        )
+
+        // google.accounts.id.prompt()
+
+    }, [])
+
+
+
+
+
     return (
         <>
 
@@ -203,7 +249,9 @@ function UserLogin() {
                             }} >Signup</Link></Typography>
                             <Typography align='center' className={classes.or} >Or</Typography>
 
-                            <Link href='#' underline='none'><Typography align='center' className={classes.googleLogin}  >Login with Google</Typography></Link>
+                            {/* <Link href='#' underline='none'><Typography align='center' className={classes.googleLogin}  >Login with Google</Typography></Link> */}
+
+                            <div id='googlebtn' align='center'></div>
 
                         </Paper>
                     </Grid>

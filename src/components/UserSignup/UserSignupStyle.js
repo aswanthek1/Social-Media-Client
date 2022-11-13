@@ -1,15 +1,14 @@
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-
+    maingrid:{
+       height:'300px'
+    },
     firstPaper: {
         position: 'relative',
         bottom:0,
         height: 'fitContent',
         padding: '30px 30px'
-    },
-    formGrid: {
-        marginTop: 50
     },
     signupTitle: {
         margin: 7
@@ -22,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop:14
     },
     textfield: {
-        marginTop: 12
+        marginTop: 12,
     },
     submit: {
         marginTop: 20
@@ -33,20 +32,11 @@ const useStyles = makeStyles((theme) => ({
     },
     textfieldfirstname: {
         marginTop: 12,
-        // marginRight:50,
-    //   float:'left'   
     },
     textfieldlastname: {
         marginTop: 12,
-        // marginLeft:50,      
-        // float:'right' ,
     },
-    // root: {
-    //     '& > *': {
-    //     //   margin: theme.spacing(4),
-    //       width: '35ch',
-    //     },
-    //   },
+
     errors: {
         color: 'red'
     },
@@ -56,6 +46,12 @@ const useStyles = makeStyles((theme) => ({
        zIndex:1,
        top:39,
        left:5
+    },
+    or:{
+        marginTop:"2%"
+    },
+    google:{
+        marginTop:"2%",
     }
 
 

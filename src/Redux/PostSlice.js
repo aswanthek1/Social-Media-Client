@@ -11,7 +11,8 @@ export const postSlice = createSlice({
         },
         updatePostOnload: (state, action) =>{
             state.post.unshift(action.payload)
-        }
+        },
+        
     }
 })
 

@@ -7,18 +7,19 @@ import React from 'react'
 // import './SidebarStyles.js'
 import useStyles from './SidebarStyle.js';
 import { Settings } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom'
 
 function Sidebar() {
-
+  const navigate = useNavigate()
   const classes = useStyles()
   return (
-
-    <Box flex={2} p={1}   sx={{ display: { xs: 'none', md: 'block' } }} >
-      <Box  position='fixed' sx={{width:'22%', height:'100vh'}} bgcolor='#F8FFDB'>
+   
+    <Box flex={2} p={1} sx={{ display: { xs: 'none', md: 'block' } }} >
+      <Box position='fixed' sx={{ width: '22%', height: '100vh' }} bgcolor='#F8FFDB'>
 
         <List>
           <ListItem disablePadding>
-            <ListItemButton component='a' href='#'>
+            <ListItemButton component='a' onClick={()=>{navigate('/')}} >
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
@@ -53,18 +54,18 @@ function Sidebar() {
             </ListItemButton>
           </ListItem>
 
-         <ListItem disablePadding>
-          <ListItemButton component='a' href='#'>
-            <ListItemIcon>
-              <Settings />
-            </ListItemIcon>
-            <ListItemText
-            primary={<Typography style={{ fontWeight: 500 }}> <b>Settings</b> </Typography>}
+          <ListItem disablePadding>
+            <ListItemButton component='a' href='#'>
+              <ListItemIcon>
+                <Settings />
+              </ListItemIcon>
+              <ListItemText
+                primary={<Typography style={{ fontWeight: 500 }}> <b>Settings</b> </Typography>}
               />
-          </ListItemButton>
-        </ListItem>
+            </ListItemButton>
+          </ListItem>
 
-       {/*   <ListItem disablePadding>
+          {/*   <ListItem disablePadding>
           <ListItemButton component='a' href='#'>
             <ListItemIcon>
               <ModeNightIcon />
@@ -75,7 +76,7 @@ function Sidebar() {
         </List>
       </Box>
     </Box>
-
+    
   )
 }
 

@@ -5,10 +5,13 @@ import React, { useState, useEffect } from 'react'
 import { CoPresent, Favorite, FavoriteBorder, MoreVert } from '@mui/icons-material';
 import Collapse from '@mui/material/Collapse';
 import axios from 'axios'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import SendIcon from '@mui/icons-material/Send';
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import { postUpdate, updatePostOnload } from '../../Redux/PostSlice'
+import { refreshReducer } from '../../Redux/RefreshSlice'
+import { update } from '../../Redux/UserSlice';
 
 
 
@@ -26,6 +29,7 @@ const ExpandMore = styled((props) => {
 
 
 function Posts(props) {
+  const dispatch = useDispatch()
   console.log('post props ', props)
 
   const [expanded, setExpanded] = React.useState(false);
@@ -38,8 +42,9 @@ function Posts(props) {
 
   const [likeState, setLikeState] = useState(false)
   const [likeNumber, setLikeNumber] = useState(0)
-  const [comment, setComment] = useState('')
+  const [commentState, setComment] = useState(false)
   const user = useSelector(state => state.user)
+  const refresh = useSelector(state => state.refresh.refresh)
 
 
   useEffect(() => {
@@ -49,17 +54,16 @@ function Posts(props) {
     proplike.includes(id) ? setLikeState(true) : setLikeState(false)
 
     const totalLike = props.data.likes.length
-    console.log("totallike", totalLike)
-    // { totalLike > 0 ? setLikeNumber(totalLike) : setLikeNumber(0) }
     setLikeNumber(totalLike)
 
+    // const userToken = localStorage.getItem('userToken')
+    // axios.get('http://localhost:5000/getLike',{headers:{token:userToken,postid:props.data._id}}).then((response)=>{
+    //     console.log("getusersss", response)
+    //     setLikeNumber(response.data)
+    //   })
 
+  }, [refresh])
 
-    // axios.get('http://localhost:5000/getLike',{headers:{token:userToken,postid:props.data._id}}).then((e)=>{
-    //   console.log("getusersss", e)
-    // })
-
-  }, [])
 
 
   const likePost = () => {
@@ -67,9 +71,11 @@ function Posts(props) {
       console.log("liked response", e)
       if (e.data.message === 'liked') {
         setLikeState(true)
-      } else {
+        dispatch(refreshReducer())
+      }
+      else {
         setLikeState(false)
-
+        dispatch(refreshReducer())
       }
     })
   }
@@ -81,12 +87,10 @@ function Posts(props) {
     onSubmit: values => {
       axios.post(`http://localhost:5000/addComment/${user._id}`, { values, postid: props.data._id }).then((e) => {
         console.log("comment response", e)
-        if (e.data.message === 'Enter something') {
-          console.log('enter something')
-        }
-        else{
-          setComment(e.data.comment)
-        }
+      //  dispatch(updatePostOnload(e.data))
+        dispatch(refreshReducer())
+        // setComment(e.data.comment)
+
       })
     },
     validationSchema: yup.object({
@@ -96,10 +100,9 @@ function Posts(props) {
 
 
 
-
   return (
     <div>
-      <Card sx={{ marginBlock: 3, marginInline: 2 }} elevation={5}>
+      <Card sx={{ marginBottom: 4, marginInline:'auto', maxWidth: 500}}  elevation={5}>
         <CardHeader
           avatar={
             <Avatar alt={user.firstname} src='/static/images/avatar/1.jpg' sx={{ bgcolor: 'red' }} aria-label="recipe">
@@ -116,7 +119,9 @@ function Posts(props) {
         />
         <CardMedia
           component="img"
-          height={350}
+            sx={{ objectFit:'unset'}} 
+           height='400' 
+           width='0'                
           image={props.data.image ? props.data.image : null}
           alt="A"
         />
@@ -135,7 +140,7 @@ function Posts(props) {
             {/* <Checkbox checked={likeState}  icon={<FavoriteBorder />} checkedIcon={<Favorite sx={{ color: 'red' }} />} /> */}
           </IconButton>
           {/* <Badge badgeContent={4} color="" sx={{marginInline:'3px'}} /> */}
-          <Typography> <b> {likeNumber > 0 ? likeNumber : 0} </b></Typography>
+          <Typography> <b> {likeNumber} </b></Typography>
 
           <ExpandMore
             expand={expanded}
@@ -149,16 +154,11 @@ function Posts(props) {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             {props.data.comments.map((obj) => {
-              if (setComment !== '') {
-                return (
-                  <h5 style={{ backgroundColor: 'aqua' }}>
-                    {obj.comment}
-                  </h5>
-                )
-
-              } else {
-                return null
-              }
+              return (
+                <h5 style={{ backgroundColor: 'aqua' }}>
+                  {obj.comment}
+                </h5>
+              )
             })}
 
             <form action="" onSubmit={formik.handleSubmit}>
@@ -170,7 +170,9 @@ function Posts(props) {
                 variant="standard"
                 color="warning"
                 focused
-                InputProps={{ endAdornment: <IconButton type='submit' ><SendIcon /></IconButton> }}
+                InputProps={{
+                  endAdornment: <IconButton type='submit'><SendIcon /></IconButton>
+                }}
               />
               {formik.touched.comment && formik.errors.comment ? <FormHelperText sx={{ color: 'red' }} >{formik.errors.comment}</FormHelperText> : null}
             </form>

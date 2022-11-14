@@ -124,7 +124,7 @@ function Navbar() {
                     }}
                 >
                     <MenuItem sx={{ marginBottom: '10px' }}> <Avatar alt={user.firstname} src='/static/images/avatar/1.jpg' sx={{ width: 30, height: 30, marginRight: '10px' }} /> <b> {user.firstname}</b></MenuItem>
-                    <MenuItem>Profile</MenuItem>
+                    <MenuItem onClick={()=>{navigate('/profile')}}>Profile</MenuItem>
                     <MenuItem sx={{ display: { xs: 'block', sm: 'none' } }}>Messages</MenuItem>
                     <MenuItem sx={{ display: { xs: 'block', sm: 'none' } }}>Notifications</MenuItem>
                     <MenuItem>My account</MenuItem>

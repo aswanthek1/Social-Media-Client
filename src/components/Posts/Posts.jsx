@@ -12,6 +12,9 @@ import * as yup from 'yup'
 import { postUpdate, updatePostOnload } from '../../Redux/PostSlice'
 import { refreshReducer } from '../../Redux/RefreshSlice'
 import { update } from '../../Redux/UserSlice';
+// import InputEmoji from 'react-input-emoji'
+// import EmojiPicker from 'emoji-picker-react';
+// import { Picker } from "emoji-mart";
 
 
 
@@ -42,7 +45,7 @@ function Posts(props) {
 
   const [likeState, setLikeState] = useState(false)
   const [likeNumber, setLikeNumber] = useState(0)
-  const [commentState, setComment] = useState(false)
+  const [imojiState, setImojiState] = useState(false)
   const user = useSelector(state => state.user)
   const refresh = useSelector(state => state.refresh.refresh)
 
@@ -84,12 +87,12 @@ function Posts(props) {
     initialValues: {
       comment: ''
     },
-    onSubmit: values => {
+    onSubmit: (values, { resetForm }) => {
       axios.post(`http://localhost:5000/addComment/${user._id}`, { values, postid: props.data._id }).then((e) => {
         console.log("comment response", e)
-      //  dispatch(updatePostOnload(e.data))
+        //  dispatch(updatePostOnload(e.data))
         dispatch(refreshReducer())
-        // setComment(e.data.comment)
+        resetForm({ values: '' })
 
       })
     },
@@ -102,7 +105,7 @@ function Posts(props) {
 
   return (
     <div>
-      <Card sx={{ marginBottom: 4, marginInline:'auto', maxWidth: 500}}  elevation={5}>
+      <Card sx={{ marginBottom: 4, marginInline: 'auto', maxWidth: 500 }} elevation={5}>
         <CardHeader
           avatar={
             <Avatar alt={user.firstname} src='/static/images/avatar/1.jpg' sx={{ bgcolor: 'red' }} aria-label="recipe">
@@ -119,9 +122,9 @@ function Posts(props) {
         />
         <CardMedia
           component="img"
-            sx={{ objectFit:'unset'}} 
-           height='400' 
-           width='0'                
+          sx={{ objectFit: 'unset' }}
+          height='400'
+          width='0'
           image={props.data.image ? props.data.image : null}
           alt="A"
         />
@@ -153,13 +156,18 @@ function Posts(props) {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            {props.data.comments.map((obj) => {
-              return (
-                <h5 style={{ backgroundColor: 'aqua' }}>
-                  {obj.comment}
-                </h5>
-              )
-            })}
+            <Box sx={{ maxHeight: 200, overflowY: 'scroll' }}>
+              {props.data.comments.map((obj) => {
+                return (
+                  <Box sx={{ display: 'flex', justifyContent: "space-between" }}>
+                    <Box marginBottom={2} height="30px" bgColor='aqua' >
+                      {obj.comment}
+                    </Box>
+                    <Box bgColor='aqua' >{obj.createdAt}</Box>
+                  </Box>
+                )
+              })}
+            </Box>
 
             <form action="" onSubmit={formik.handleSubmit}>
               <TextField
@@ -171,9 +179,11 @@ function Posts(props) {
                 color="warning"
                 focused
                 InputProps={{
+                  // startAdornment:<IconButton onClick={()=>setImojiState(true)} onDoubleClick={()=> {setImojiState(false)}}>😎</IconButton>,
                   endAdornment: <IconButton type='submit'><SendIcon /></IconButton>
                 }}
               />
+              {/* { imojiState ? <Picker/> : null} */}
               {formik.touched.comment && formik.errors.comment ? <FormHelperText sx={{ color: 'red' }} >{formik.errors.comment}</FormHelperText> : null}
             </form>
           </CardContent>

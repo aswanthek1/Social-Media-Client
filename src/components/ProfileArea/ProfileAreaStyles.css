@@ -1,0 +1,195 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* .mainbox {
+    background-color: aqua;
+    margin-top: 0;
+    height: 50vh;
+}
+
+@media screen and (min-width:900px) {
+    .mainbox {
+        margin-left: 28%;
+    }
+}
+
+.coverphoto {
+    max-height: 200px;
+    width: 100%;
+    background-color: yellow;
+}
+
+.coverimage {
+    object-fit: unset;
+    max-height: 200px;
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
+.profileimage {
+    
+    position: relative;
+    border-radius: 59%;
+    height: 110px;
+    width: 110px;
+   top: 38%; 
+    bottom: 17%;
+    left: 9%;
+    background-color: red;
+}
+
+@media screen and (max-width:899px) {
+    .profileimage {
+        left: 10%;
+        width: 92px;
+        height: 92px;
+        bottom: 14%;
+    }
+
+} */
+
+
+
+
+@media screen and (min-width:900px) {
+    .profileRightTop {
+        margin-left: 8%;
+    }
+}
+
+.profile{
+    display: flex;
+}
+.profileCover{
+    height: 320px;
+    position: relative;
+}
+.profileRight{
+    flex: 9;
+    margin-top: 0.5%;
+    margin-right: 1.5%;
+}
+.profileCoverImg{
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+.profileUserImg{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 150px;
+    margin: auto;
+    border: 3px solid white;
+}
+.profileInfo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.profileInfoName{
+    font-size: 24px;
+}
+.profileInfoDesc{
+    font-weight: 300;
+}
+.viewMore{
+    display: flex;
+    justify-content: start;
+    position: relative;
+    /* top: 0px; */
+    left: 17px; 
+}
+.viewMoreButton{
+    background-color: #FF6464;
+    width: 100px;
+    height: 20px;
+    border-radius: 6px;
+    position: relative;
+    bottom: 40px;
+    left: 17px;
+}
+.editProfile{
+    margin-top: 32px;
+    display: flex;
+    justify-content: end;
+    position: relative;
+    top: -94px;
+    right: 17px;
+}
+
+/* ========feed style=================== */
+.feedContainer{
+    display: flex;
+    flex-direction: column;
+}
+.feedMainCard{
+    /* margin-left: 3%; */
+    flex: 8;
+    margin: auto;
+}
+
+@media screen and (min-width:900px) {
+    .feedMainCard{
+        /* margin-left: 8%;
+        margin-left: 13%; */
+        margin: auto;
+    }
+}
+@media screen and (max-width:715px) {
+    .feedMainCard{
+      margin: auto;
+    }
+}
+@media screen and (min-width:900px) {
+      .feedMainCard{
+        width: 600px;
+        /* width: 810px */
+      }    
+}
+
+/* ==================ProfileRightBar style================== */
+
+
+.profileRightBottom{
+    /* display: flex; */
+    margin-top: 40px;
+}
+.rightBarMain{
+    flex:3;
+    padding-left: 24px;
+    padding-top: 3%;
+    background-color: #F8FFDB;
+    margin-left: 4%;
+    position: fixed;
+    right: 0;
+    /* border-radius: 19px; */
+}
+@media screen and (max-width:715px) {
+    .rightBarMain{
+        display: none;
+    }
+}
+.rightbarTitle{
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+.rightBarList{
+    margin-bottom: 9px;
+}
+
+.editProfileButton{
+background-color: navajowhite;
+border-radius: 12px;
+border: none;
+font-size: small;
+color: #cd8989;
+}

@@ -12,9 +12,9 @@ import * as yup from 'yup'
 import { postUpdate, updatePostOnload } from '../../Redux/PostSlice'
 import { refreshReducer } from '../../Redux/RefreshSlice'
 import { update } from '../../Redux/UserSlice';
-// import InputEmoji from 'react-input-emoji'
-// import EmojiPicker from 'emoji-picker-react';
-// import { Picker } from "emoji-mart";
+import InputEmoji from 'react-input-emoji'
+import EmojiPicker from 'emoji-picker-react';
+import { Picker } from "emoji-mart";
 
 
 

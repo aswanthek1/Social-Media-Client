@@ -24,28 +24,30 @@ const UserBox = styled(Box)({
 function Add() {
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
-    const [imageSelected, setImageSelected] = useState('')
+    const [imageSelected, setImageSelected] = useState([])
     const [description, setDescription] = useState('')
 
     const uploadPost = () => {
-        const formData = new FormData()
-        const descriptionData = new FormData()
-        formData.append('file', imageSelected)
-        formData.append('upload_preset', "xdqnbual")
-        descriptionData.append('text', description)
-        try {
-            const userToken = localStorage.getItem('userToken')
-            axios.post('http://api.cloudinary.com/v1_1/dm0l6abeb/image/upload', formData).then((response) => {
-
-                return axios.post('http://localhost:5000/addPost', { image: response.data.secure_url, description: description }, { headers: { token: userToken } }).then((res) => {
-                    console.log("lastresponse", res)
-                    dispatch(updatePostOnload(res.data))
-                    setOpen(false)
+        
+            const formData = new FormData()
+            const descriptionData = new FormData()   
+            formData.append('file', imageSelected)
+            formData.append('upload_preset', "q9zryfyr")
+            descriptionData.append('text', description)
+            try {
+                const userToken = localStorage.getItem('userToken')
+                axios.post('http://api.cloudinary.com/v1_1/dm0l6abeb/image/upload', formData).then((response) => {
+    
+                    return axios.post('http://localhost:5000/addPost', { image: response.data.secure_url, description: description }, { headers: { token: userToken } }).then((res) => {
+                        console.log("lastresponse", res)
+                        dispatch(updatePostOnload(res.data))
+                        setOpen(false)
+                    })
                 })
-            })
-        } catch (error) {
-            console.log('error', error)
-        }
+            } catch (error) {
+                console.log('error', error)
+            }
+        
     }
 
 
@@ -99,7 +101,10 @@ function Add() {
                         <IconButton color="primary" aria-label="upload picture" component="label">
                             <input hidden accept="image/*" onChange={(event) => {
                                 setImageSelected(event.target.files[0])
-                            }}
+                            }
+                            }
+                                // name='postimages'
+                                multiple
                                 type="file" />
                             <Image color='secondary' />
                         </IconButton>

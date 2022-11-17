@@ -133,8 +133,6 @@ function Navbar() {
                         localStorage.removeItem("userToken")
                     )}>Logout</MenuItem>
                 </Menu>
-
-
                 <Box
                     component={Grid}
                     display={showSearch ? 'block' : 'none'}
@@ -154,12 +152,9 @@ function Navbar() {
                             </Box>
                         )
                     }
-
                     )}
                 </Box>
             </AppBar>
-
-
         </>
     )
 }

@@ -88,6 +88,11 @@ function Posts(props) {
       comment: ''
     },
     onSubmit: (values, { resetForm }) => {
+      console.log(values);
+      if(values.comment.trim() === ''){
+        console.log('Please type something')
+        return 
+      }
       axios.post(`http://localhost:5000/addComment/${user._id}`, { values, postid: props.data._id }).then((e) => {
         console.log("comment response", e)
         //  dispatch(updatePostOnload(e.data))

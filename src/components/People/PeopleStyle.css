@@ -1,0 +1,27 @@
+.peopleRight {
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+    flex-direction: column;
+}
+
+@media screen and (min-width:900px) {
+    .peopleRight {
+        margin-left: 24%;
+    }
+}
+
+.cards {
+    margin-top: 60px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.tabTwo {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tabThree {
+    margin-left: auto;
+}

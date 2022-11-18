@@ -2,6 +2,8 @@ import { Camera, Image } from '@mui/icons-material'
 import { Box, Button, IconButton, Modal, styled, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { refreshReducer } from '../../Redux/RefreshSlice'
 
 
 const StyledModal = styled(Modal)({
@@ -14,8 +16,10 @@ const StyledModal = styled(Modal)({
 
 const ProfileEditingModal = (props) => {
 
+    const dispatch = useDispatch()
     const [coverImageSelected, setCoverImage] = useState('')
     const [profileImageSelected, setProfileImage] = useState('')
+    const refresh = useSelector(state => state.refresh.refresh)
 
     const uploadCoverImage = () => {
         const formData = new FormData()
@@ -26,6 +30,8 @@ const ProfileEditingModal = (props) => {
             axios.post('http://api.cloudinary.com/v1_1/dm0l6abeb/image/upload', formData).then((response) => {
                 return axios.post('http://localhost:5000/addCoverImg', { coverimage: response.data.secure_url }, { headers: { token: userToken } }).then((response) => {
                     console.log(response)
+                    props.modalOpenState(false)
+                    dispatch(refreshReducer())
                 })
             })
         } catch (error) {
@@ -40,11 +46,14 @@ const ProfileEditingModal = (props) => {
         try {
             const userToken = localStorage.getItem('userToken')
             axios.post('http://api.cloudinary.com/v1_1/dm0l6abeb/image/upload', formData).then((response) => {
-                console.log(response)
-                return axios.post('http://localhost:5000/addProfileImg', { profileimage: response.data.secure_url }, { headers: { token: userToken } }).then((response))
+                return axios.post('http://localhost:5000/addProfileImg', { profileimage: response.data.secure_url }, { headers: { token: userToken } }).then((response) => {
+                    console.log('response', response)
+                    props.profileModalOpenState(false)
+                    dispatch(refreshReducer())
+                })
             })
         } catch (error) {
-             console.log('error',error)
+            console.log('error', error)
         }
     }
 

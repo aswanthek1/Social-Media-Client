@@ -57,7 +57,7 @@ function Posts(props) {
     proplike.includes(id) ? setLikeState(true) : setLikeState(false)
 
     const totalLike = props.data.likes.length
-    setLikeNumber(totalLike)
+    setLikeNumber(props.data.likes.length)
 
     // const userToken = localStorage.getItem('userToken')
     // axios.get('http://localhost:5000/getLike',{headers:{token:userToken,postid:props.data._id}}).then((response)=>{
@@ -70,13 +70,13 @@ function Posts(props) {
 
 
   const likePost = () => {
-    axios.post('http://localhost:5000/postLike', { userid: user._id, postid: props.data._id }).then((e) => {
-      console.log("liked response", e)
-      if (e.data.message === 'liked') {
+    axios.post('http://localhost:5000/postLike', { userid: user._id, postid: props.data._id }).then((response) => {
+      console.log("liked response", response)
+      if (response.data.liked) {
         setLikeState(true)
         dispatch(refreshReducer())
       }
-      else {
+      else if (response.data.unlike) {
         setLikeState(false)
         dispatch(refreshReducer())
       }
@@ -113,7 +113,7 @@ function Posts(props) {
       <Card sx={{ marginBottom: 4, marginInline: 'auto', maxWidth: 500 }} elevation={5}>
         <CardHeader
           avatar={
-            <Avatar alt={user.firstname} src='/static/images/avatar/1.jpg' sx={{ bgcolor: 'red' }} aria-label="recipe">
+            <Avatar alt={user.firstname} src={user.profileimage[0]} sx={{ bgcolor: 'red' }} aria-label="recipe">
 
             </Avatar>
           }
@@ -144,8 +144,8 @@ function Posts(props) {
             onClick={likePost}
             aria-label="add to favorites"
           >
-            {likeState ? <Favorite sx={{ color: 'red' }} /> : <FavoriteBorder />}
-            {/* <Checkbox checked={likeState}  icon={<FavoriteBorder />} checkedIcon={<Favorite sx={{ color: 'red' }} />} /> */}
+            {/* {likeState ? <Favorite sx={{ color: 'red' }} /> : <FavoriteBorder />} */}
+            <Checkbox checked={likeState}  icon={<FavoriteBorder />} checkedIcon={<Favorite sx={{ color: 'red' }} />} />
           </IconButton>
           {/* <Badge badgeContent={4} color="" sx={{marginInline:'3px'}} /> */}
           <Typography> <b> {likeNumber} </b></Typography>

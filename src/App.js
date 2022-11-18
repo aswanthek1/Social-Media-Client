@@ -6,6 +6,7 @@ import UsersLoginPage from './pages/UsersLogin';
 import UserRouter from './utils/UserRouter';
 import UserLoggedout from './utils/UserLoggedout';
 import UserProfilePage from './pages/UserProfile';
+import PeoplePage from './pages/People';
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route element={<UserRouter />}>
             <Route element={<UserHomePage />} path='/' />
             <Route element={<UserProfilePage/>} path='/profile' />
+            <Route element={<PeoplePage/>} path='/people' />
           </Route>
            
     <Route element={<UserLoggedout/>}>

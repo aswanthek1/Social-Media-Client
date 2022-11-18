@@ -7,7 +7,10 @@ export const userSlice = createSlice({
         firstname:'',
         lastname:'',
         phonenumber:'',
-        _id:''
+        _id:'',
+        coverimage:'',
+        profileimage:''
+
     },
 
     reducers:{
@@ -17,6 +20,8 @@ export const userSlice = createSlice({
             state.lastname = action.payload.lastname
             state.phonenumber = action.payload.phonenumber
             state._id = action.payload._id
+            state.coverimage = action.payload.coverimage
+            state.profileimage = action.payload.profileimage
         }
     }
 })

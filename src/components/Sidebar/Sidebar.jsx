@@ -3,6 +3,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import ModeNightIcon from '@mui/icons-material/ModeNight';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import RequestPageIcon from '@mui/icons-material/RequestPage';
+import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import React from 'react'
 // import './SidebarStyles.js'
 import useStyles from './SidebarStyle.js';
@@ -41,6 +42,20 @@ function Sidebar() {
               />
             </ListItemButton>
           </ListItem>
+
+
+          <ListItem disablePadding>
+            <ListItemButton component='a'  onClick={()=> navigate('/people')}>
+              <ListItemIcon>
+                <PeopleRoundedIcon />
+              </ListItemIcon>
+              <ListItemText
+                disableTypography
+                primary={<Typography style={{ fontWeight: 500 }}> <b>People</b> </Typography>}
+              />
+            </ListItemButton>
+          </ListItem>
+
 
           <ListItem disablePadding>
             <ListItemButton component='a' href='#'>

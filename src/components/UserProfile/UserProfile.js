@@ -3,22 +3,43 @@ import ProfileArea from "../ProfileArea/ProfileFeedArea";
 import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import { useSelector } from 'react-redux'
-import '../ProfileArea/ProfileAreaStyles.css'
+import './ProfileAreaStyles.css'
 import { Button } from "@mui/material";
-import ProfileEditingModal from "../ProfileArea/ProfileEditingModal";
+import ProfileEditingModal from "./ProfileEditingModal";
 import { useState } from "react";
 import axios from "axios";
+import { useEffect } from "react";
+import { useDispatch } from 'react-redux'
+import { update } from '../../Redux/UserSlice'
+import { postUpdate } from '../../Redux/PostSlice'
+import { refreshReducer } from '../../Redux/RefreshSlice'
+import Posts from '../Posts/Posts'
 
 
 const UserProfile = () => {
+    const dispatch = useDispatch()
     const [open, setOpen] = useState(false)
     const [openProfile, setOpenProfile] = useState(false)
     const user = useSelector(state => state.user)
+    const refresh = useSelector(state => state.refresh.refresh)
+    const postsDetails = useSelector(state => state.post)
 
+    const follow = () => {
 
-    const follow = ()=>{
-        
     }
+
+
+
+    const userToken = localStorage.getItem('userToken')
+    useEffect(() => {
+        axios.get('http://localhost:5000/getPost', { headers: { token: userToken } }).then((response) => {
+            console.log('postDetails at profile ', response)
+            // setPostDetails(e.data)
+            dispatch(postUpdate(response.data))
+
+        })
+    }, [refresh])
+
 
     return (
         <>
@@ -27,15 +48,16 @@ const UserProfile = () => {
                 <Sidebar />
                 <div className="profileRight">
                     <div className="profileRightTop">
+
                         <div className="profileCover">
                             <img
                                 onClick={() => { setOpen(true) }}
                                 className="profileCoverImg"
-                                src="https://images.unsplash.com/photo-1589489873423-d1745278a8f4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c2NvdGxhbmR8ZW58MHx8MHx8&w=1000&q=80" alt="" />
+                                src={ user.coverimage ?  user.coverimage[0] : 'https://c4.wallpaperflare.com/wallpaper/604/298/500/simple-background-texture-blue-wallpaper-preview.jpg'} alt={user.firstname} />
                             <img
                                 onClick={() => setOpenProfile(true)}
                                 className="profileUserImg"
-                                src="https://thumbs.dreamstime.com/b/handsome-male-model-posing-elegant-smile-88528667.jpg" alt="" />
+                                src={ user.profileimage ? user.profileimage[0] : '/Assets/blank-profile-picture.webp' }  /> 
                         </div>
                         <div className="profileInfo">
                             <h4 className='profileInfoName'>Aswanth Raveendran E K</h4>
@@ -59,7 +81,15 @@ const UserProfile = () => {
                             </span>
                         </div>
                         <div className="profileRightBottom" >
-                            <ProfileArea />
+
+                            {postsDetails.post.map((postArray) => {
+                                return (
+                                  <Posts key={postArray._id} data={postArray} /> 
+                                    // <ProfileArea key={postArray._id} data={postArray} />
+                                )
+                            })
+                            }
+
                         </div>
                     </div>
 

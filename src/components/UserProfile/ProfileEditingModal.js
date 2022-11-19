@@ -17,6 +17,7 @@ const StyledModal = styled(Modal)({
 const ProfileEditingModal = (props) => {
 
     const dispatch = useDispatch()
+    const user = useSelector(state => state.user)
     const [coverImageSelected, setCoverImage] = useState('')
     const [profileImageSelected, setProfileImage] = useState('')
     const refresh = useSelector(state => state.refresh.refresh)
@@ -77,7 +78,7 @@ const ProfileEditingModal = (props) => {
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
                             <img
                                 style={{ width: '300px', height: '100px' }}
-                                src="https://images.unsplash.com/photo-1589489873423-d1745278a8f4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c2NvdGxhbmR8ZW58MHx8MHx8&w=1000&q=80"
+                                src={user.coverimage ? user.coverimage[0] : ''}
                                 alt="" />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'center', justifyContent: 'space-around', marginTop: '18px' }}>
@@ -120,7 +121,7 @@ const ProfileEditingModal = (props) => {
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '8px' }}>
                             <img
                                 style={{ width: '110px', height: '110px', borderRadius: '50%' }}
-                                src="https://thumbs.dreamstime.com/b/handsome-male-model-posing-elegant-smile-88528667.jpg"
+                                src={profileImageSelected ? profileImageSelected : user.profileimage[0]}
                                 alt="" />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'center', justifyContent: 'space-around', marginTop: '18px' }}>

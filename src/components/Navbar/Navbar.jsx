@@ -10,6 +10,7 @@ import axios from 'axios'
 import { useFormik } from 'formik'
 import { useSelector, useDispatch } from 'react-redux'
 import { update } from '../../Redux/UserSlice'
+import { refreshReducer } from '../../Redux/RefreshSlice';
 
 const StyledToolBar = styled(Toolbar)({
     display: 'flex',
@@ -49,6 +50,7 @@ function Navbar() {
     const dispatch = useDispatch()
     const [showSearch, setShowSearch] = useState(false)
     const [searchUser, setSearchUser] = useState([])
+    const refresh = useSelector(state => state.refresh.refresh)
     const formik = useFormik({
         initialValues: {
             users: null
@@ -86,7 +88,7 @@ function Navbar() {
                 return null
             } else {
                 dispatch(update(response.data))
-                //   dispatch(refreshReducer())
+                  dispatch(refreshReducer())
             }
         })
 

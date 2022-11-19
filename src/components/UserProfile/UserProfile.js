@@ -36,6 +36,7 @@ const UserProfile = () => {
             console.log('postDetails at profile ', response)
             // setPostDetails(e.data)
             dispatch(postUpdate(response.data))
+           
 
         })
     }, [refresh])
@@ -53,14 +54,14 @@ const UserProfile = () => {
                             <img
                                 onClick={() => { setOpen(true) }}
                                 className="profileCoverImg"
-                                src={ user.coverimage ?  user.coverimage[0] : 'https://c4.wallpaperflare.com/wallpaper/604/298/500/simple-background-texture-blue-wallpaper-preview.jpg'} alt={user.firstname} />
+                                src={ user.coverimage ?  user.coverimage[0] : 'https://c4.wallpaperflare.com/wallpaper/604/298/500/simple-background-texture-blue-wallpaper-preview.jpg'} alt='' />
                             <img
                                 onClick={() => setOpenProfile(true)}
                                 className="profileUserImg"
                                 src={ user.profileimage ? user.profileimage[0] : '/Assets/blank-profile-picture.webp' }  /> 
                         </div>
                         <div className="profileInfo">
-                            <h4 className='profileInfoName'>Aswanth Raveendran E K</h4>
+                            <h4 className='profileInfoName'>{user.firstname} {user.lastname}</h4>
                             <span className='profileInfoDesc'>Hello my friends !</span>
                         </div>
                     </div>

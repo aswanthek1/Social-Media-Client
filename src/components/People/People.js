@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './PeopleStyle.css'
 import Sidebar from '../Sidebar/Sidebar'
 import Navbar from '../Navbar/Navbar'
@@ -7,7 +7,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import axios from 'axios'
 import { addAllUsers } from '../../Redux/AllUserSlice'
+import { refreshReducer } from '../../Redux/RefreshSlice'
 import { validateYupSchema } from 'formik'
+import { useSelect } from '@mui/base'
+import Unfollow from '../Unfollow'
+import Swal from 'sweetalert2'
+import toast, { Toaster } from 'react-hot-toast'
 
 
 
@@ -16,38 +21,71 @@ import { validateYupSchema } from 'formik'
 
 const People = () => {
     const dispatch = useDispatch()
-    const [tabNumber, setTabNumber] = React.useState(1)
-    const [value, setValue] = React.useState(0);
-    const [followButtonState, setFollowButtonState] = React.useState('FOLLOW')
+    const [tabNumber, setTabNumber] = useState(1)
+    const [value, setValue] = useState(0);
+    const [youMayKnow, setYouMayKnow] = useState([])
+    const [following, setFollowing] = useState([])
+    const [followers, setFollowers] = useState([])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
 
-
-
-
+    const refresh = useSelector(state => state.refresh.refresh)
     useEffect(() => {
-        const userToken = localStorage.getItem('userToken') 
+        const userToken = localStorage.getItem('userToken')
         try {
-            axios.get('http://localhost:5000/allUsers', { headers: { token: userToken } }).then((response) => {
+            axios.get('http://localhost:5000/users', { headers: { token: userToken } }).then((response) => {
                 console.log("response from people", response)
-                dispatch(addAllUsers(response.data))
+                dispatch(addAllUsers(response.data.allUsers))
+                setYouMayKnow(response.data.exceptFollowing)
+                setFollowing(response.data.following)
+                setFollowers(response.data.followers)
+
             })
         } catch (error) {
             console.log(error)
         }
 
-    }, [])
+        axios.get('http://localhost:5000/users/followStatus')
+    }, [refresh])
 
 
     const setFollow = (id) => {
-        const userToken = localStorage.getItem('userToken') 
+        const userToken = localStorage.getItem('userToken')
         try {
-            axios.post('http://localhost:5000/addFollow',{id},{headers:{token:userToken}}).then((response) => {
-                console.log("resposner after follow", response)  
+            axios.post('http://localhost:5000/addFollow', { id }, { headers: { token: userToken } }).then((response) => {
+                console.log("resposner after follow", response)
+                toast.success("Removed successfully",{
+                    duration:3000
+                })
+                dispatch(refreshReducer())
             })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    const remove = (id) => {
+        try {
+        Swal.fire({
+            title: 'Do you want to remove this follower ?',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+        }).then((result) => {
+            if(result.isConfirmed){
+                const userToken = localStorage.getItem('userToken')
+                
+                    axios.post('http://localhost:5000/follwers/remove', { id }, { headers: { token: userToken } }).then((response) => {
+                        console.log('removed response ',response)
+                        // toast.success('Removed successfully')
+                        Swal.fire('Removed !','', 'success')
+                        dispatch(refreshReducer())
+                    })
+            }
+        })
         } catch (error) {
             console.log(error)
         }
@@ -55,7 +93,9 @@ const People = () => {
 
     const user = useSelector(state => state.user)
     const allUsers = useSelector(state => state.allUsers.allUsers)
-    console.log(allUsers)
+    console.log("followers at people ", followers)
+
+
 
     return (
         <>
@@ -65,71 +105,78 @@ const People = () => {
                 <div className="peopleRight">
                     <Box sx={{ width: '100%', bgcolor: 'wheat' }}>
                         <Tabs value={value} onChange={handleChange} centered variant='fullWidth'>
-                            <Tab label="Followers" onClick={() => setTabNumber(1)} />
-                            <Tab label="Following" onClick={() => setTabNumber(2)} />
+                            <Tab label="Following" onClick={() => setTabNumber(1)} />
+                            <Tab label="Followers" onClick={() => setTabNumber(2)} />
                             <Tab label="You may know" onClick={() => setTabNumber(3)} />
                         </Tabs>
                     </Box>
 
 
                     <div className='cards'>
-                        {tabNumber == 1 ? <div>
-                            <List
-                                sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                                <ListItem alignItems="flex-start">
-                                    <ListItemAvatar>
-                                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        sx={{ marginTop: '20px' }}
-                                        disableTypography
-                                        primary={<Typography style={{ fontWeight: 500 }}> <b>Aswanth </b> </Typography>}
-                                    />
-                                    <Button
-                                        variant='contained'
-                                        size='small'
-                                        sx={{ marginLeft: '30px', marginTop: '19px' }}
-                                    >
-                                        
-                                    </Button>
-                                </ListItem>
+                        {tabNumber === 1 ? <div>
+                            {following.map((followingValue) => {
 
-                                <Divider variant="inset" component="li" />
+                                return (
 
-                            </List>
+                                    <List
+                                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                                        <ListItem alignItems="flex-start">
+                                            <ListItemAvatar>
+                                                <Avatar alt="Remy Sharp" src={followingValue.profileimage} />
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                sx={{ marginTop: '20px' }}
+                                                disableTypography
+                                                primary={<Typography style={{ fontWeight: 500 }}> <b>{followingValue.firstname} {followingValue.lastname} </b> </Typography>}
+                                            />
+                                            <Unfollow id={followingValue._id} />
+                                        </ListItem>
+
+                                        <Divider variant="inset" component="li" />
+
+                                    </List>
+                                )
+                            })
+                            }
 
 
                         </div> : null}
 
-                        {tabNumber == 2 ? <div className='tabTwo'>
+                        {tabNumber === 2 ? <div className='tabTwo'>
 
-                            <List
-                                sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                                <ListItem alignItems="flex-start">
-                                    <ListItemAvatar>
-                                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        sx={{ marginTop: '20px' }}
-                                        disableTypography
-                                        primary={<Typography style={{ fontWeight: 500 }}> <b>Javad </b> </Typography>}
-                                    />
-                                    <Button
-                                        variant='contained'
-                                        size='small'
-                                        sx={{ marginLeft: '30px', marginTop: '19px' }}
-                                    >
-                                        Follow
-                                    </Button>
-                                </ListItem>
+                            {followers.map((followersValue) => {
+                                return (
+                                    <List
+                                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                                        <ListItem alignItems="flex-start">
+                                            <ListItemAvatar>
+                                                <Avatar alt="" src={followersValue.profileimage} />
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                sx={{ marginTop: '20px' }}
+                                                disableTypography
+                                                primary={<Typography style={{ fontWeight: 500 }}> <b>{followersValue.firstname} {followersValue.lastname}</b> </Typography>}
+                                            />
+                                            <Button
+                                                onClick={() => remove(followersValue._id)}
+                                                variant='contained'
+                                                size='small'
+                                                sx={{ marginLeft: '30px', marginTop: '19px' }}
+                                            >
 
-                                <Divider variant="inset" component="li" />
-                            </List>
+                                                REMOVE
+                                            </Button>
+                                        </ListItem>
+
+                                        <Divider variant="inset" component="li" />
+                                    </List>
+                                )
+                            })}
                         </div> : null}
 
-                        {tabNumber == 3 ? <div className='tabThree'>
+                        {tabNumber === 3 ? <div className='tabThree'>
 
-                            {allUsers.map((value) => {
+                            {youMayKnow.map((value) => {
                                 return (
 
 
@@ -147,14 +194,14 @@ const People = () => {
                                                 primary={<Typography style={{ fontWeight: 500 }}> <b>{value.firstname} {value.lastname}</b> </Typography>}
                                             />
                                             <Button
-                                                onClick={()=>setFollow(value._id)}
+                                                onClick={() => setFollow(value._id)}
                                                 variant='contained'
                                                 size='small' sx={{ marginLeft: '30px', marginTop: '19px' }}
                                             >
-                                              Follow
+                                                Follow
                                             </Button>
                                         </ListItem>
-                                        <Divider variant="inset" /> 
+                                        <Divider variant="inset" />
                                     </List>
                                 )
                             })}

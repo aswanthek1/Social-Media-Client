@@ -11,14 +11,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import { update } from '../../Redux/UserSlice'
 import { postUpdate } from '../../Redux/PostSlice'
 import { refreshReducer } from '../../Redux/RefreshSlice'
+import { useNavigate } from 'react-router-dom'
+
 
 
 
 function UserHome() {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const user = useSelector(state => state.user)
-const refresh = useSelector(state => state.refresh.refresh)
+  const refresh = useSelector(state => state.refresh.refresh)
   const [userDetails, setUserDetails] = useState({})
   const [postDetails, setPostDetails] = useState([])
 
@@ -45,14 +48,14 @@ const refresh = useSelector(state => state.refresh.refresh)
 
   }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
     axios.get('http://localhost:5000/getPost', { headers: { token: userToken } }).then((response) => {
       console.log('postDetails ', response)
       // setPostDetails(e.data)
       dispatch(postUpdate(response.data))
-      
+
     })
-  },[refresh])
+  }, [refresh])
 
 
   return (

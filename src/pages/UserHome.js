@@ -4,7 +4,7 @@ import UserHome from '../components/UserHome/UserHome'
 function UserHomePage() {
   return (
     <div>
-      <UserHome/>
+      <UserHome />
     </div>
   )
 }

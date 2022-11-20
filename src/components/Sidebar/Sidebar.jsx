@@ -1,4 +1,4 @@
-import { List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText, Switch, Typography, Paper } from '@mui/material'
+import { List, Box, ListItem, ListItemButton, ListItemIcon, ListItemText, Switch, Typography, Paper, Button, Drawer, Divider } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home';
 import ModeNightIcon from '@mui/icons-material/ModeNight';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
@@ -13,8 +13,11 @@ import { useNavigate } from 'react-router-dom'
 function Sidebar() {
   const navigate = useNavigate()
   const classes = useStyles()
+          
+
+
   return (
-   
+   <>
     <Box flex={2} p={1} sx={{ display: { xs: 'none', md: 'block' } }} >
       <Box position='fixed' sx={{ width: '22%', height: '100vh' }} bgcolor='#F8FFDB'>
 
@@ -79,19 +82,10 @@ function Sidebar() {
               />
             </ListItemButton>
           </ListItem>
-
-          {/*   <ListItem disablePadding>
-          <ListItemButton component='a' href='#'>
-            <ListItemIcon>
-              <ModeNightIcon />
-            </ListItemIcon>
-            <Switch />
-          </ListItemButton>
-        </ListItem> */}
         </List>
       </Box>
     </Box>
-    
+    </>    
   )
 }
 

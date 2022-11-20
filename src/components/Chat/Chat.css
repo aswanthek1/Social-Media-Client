@@ -1,0 +1,23 @@
+.chatRight{
+    display: flex;
+    justify-content: center;
+    max-height: 1000px;
+}
+
+@media screen and (min-width:900px) {
+    .chatRight {
+        margin-left: 25%;
+    }
+}
+
+.chatList{
+    width: 50%;
+    height: 500px;
+    background-color: aqua;
+}
+
+.messagingArea{
+    width: 50%;
+    height: 500px;
+    background-color: yellow;
+}

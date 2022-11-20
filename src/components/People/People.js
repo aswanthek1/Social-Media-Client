@@ -57,8 +57,12 @@ const People = () => {
         try {
             axios.post('http://localhost:5000/addFollow', { id }, { headers: { token: userToken } }).then((response) => {
                 console.log("resposner after follow", response)
-                toast.success("Removed successfully",{
-                    duration:3000
+                toast.success("Started following",{
+                    duration:3000,
+                    style:{
+                        width:'300px',
+                        
+                    }
                 })
                 dispatch(refreshReducer())
             })
@@ -80,8 +84,7 @@ const People = () => {
                 
                     axios.post('http://localhost:5000/follwers/remove', { id }, { headers: { token: userToken } }).then((response) => {
                         console.log('removed response ',response)
-                        // toast.success('Removed successfully')
-                        Swal.fire('Removed !','', 'success')
+                        toast.success('Removed successfully')
                         dispatch(refreshReducer())
                     })
             }
@@ -210,6 +213,7 @@ const People = () => {
                     </div>
                 </div>
             </div>
+            <Toaster/>
         </>
     )
 }

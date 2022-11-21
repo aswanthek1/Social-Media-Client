@@ -1,5 +1,4 @@
 import React from "react";
-import ProfileArea from "../ProfileArea/ProfileFeedArea";
 import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import { useSelector } from 'react-redux'

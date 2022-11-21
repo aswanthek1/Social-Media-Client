@@ -88,7 +88,7 @@ function Navbar() {
             bgcolor='#F8FFDB'
         >
             <div style={{ backgroundColor: "#FF6464", marginBottom: 1, display: 'flex', justifyContent: 'center', height: '40px', padding: '10px' }}>
-                <h2 style={{ fontWeight: 500,color:'white' }}><InterestsIcon sx={{color:'white'}}/> <b> Amigele</b></h2>
+                <h2 style={{ fontWeight: 500,color:'white' }}><InterestsIcon sx={{color:'white'}}/> <b> Instants</b></h2>
             </div>
             <List>
                 <ListItem disablePadding>
@@ -195,12 +195,12 @@ function Navbar() {
                 < StyledToolBar>
 
                     <Typography variant='h6' sx={{ display: { xs: 'none', md: 'block' } }}>
-                        Amigele
+                    Instants
                     </Typography>
                     <div onClick={toggleDrawer("left", true)}>
                         <InterestsIcon sx={{ display: { xs: 'block', md: 'none' } }} />
                     </div>
-                    <Search>
+                    {/* <Search>
                         <InputBase
                             placeholder='search'
                             name='users'
@@ -208,7 +208,7 @@ function Navbar() {
                             value={formik.values.users}
                             onClick={() => setShowSearch(true)}
                         />
-                    </Search>
+                    </Search> */}
 
                     <Icons>
                         <IconButton
@@ -257,7 +257,7 @@ function Navbar() {
                         localStorage.removeItem("userToken")
                     )}>Logout</MenuItem>
                 </Menu>
-                {formik.values.users !== '' ? <Box
+                {/* {formik.values.users !== '' ? <Box
 
                     component={Grid}
                     display={formik.values.users !== null ? 'block' : 'none'}
@@ -278,7 +278,7 @@ function Navbar() {
                         )
                     }
                     )}
-                </Box> : null}
+                </Box> : null} */}
             </AppBar>
 
             <div>

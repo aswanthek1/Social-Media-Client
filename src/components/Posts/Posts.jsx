@@ -59,18 +59,12 @@ function Posts(props) {
     const totalLike = props.data.likes.length
     setLikeNumber(props.data.likes.length)
 
-    // const userToken = localStorage.getItem('userToken')
-    // axios.get('http://localhost:5000/getLike',{headers:{token:userToken,postid:props.data._id}}).then((response)=>{
-    //     console.log("getusersss", response)
-    //     setLikeNumber(response.data)
-    //   })
-
   }, [refresh])
 
 
 
   const likePost = () => {
-    axios.post('http://localhost:5000/postLike', { userid: user._id, postid: props.data._id }).then((response) => {
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/posts/postLike`, { userid: user._id, postid: props.data._id }).then((response) => {
       console.log("liked response", response)
       if (response.data.liked) {
         setLikeState(true)
@@ -93,7 +87,7 @@ function Posts(props) {
         console.log('Please type something')
         return 
       }
-      axios.post(`http://localhost:5000/addComment/${user._id}`, { values, postid: props.data._id }).then((e) => {
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/posts/addComment/${user._id}`, { values, postid: props.data._id }).then((e) => {
         console.log("comment response", e)
         //  dispatch(updatePostOnload(e.data))
         dispatch(refreshReducer())

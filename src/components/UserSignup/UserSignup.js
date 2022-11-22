@@ -106,7 +106,7 @@ function UserSignup() {
         initialValues,
         onSubmit: values => {
             try {
-                axios.post('http://localhost:5000/register', values).then((e) => {
+                axios.post(`${process.env.REACT_APP_BACKEND_URL}/register`, values).then((e) => {
 
                     if (e.data.message) {
                         toast.error("You already have an account", {
@@ -140,7 +140,7 @@ function UserSignup() {
         console.log('jwt credentials ', response.credential)
         const userObj = jwt_decode(response.credential)
         console.log(userObj)
-        axios.post('http://localhost:5000/googleRegister', userObj).then((e) => {
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/googleRegister`, userObj).then((e) => {
             console.log('google login response', e)
             if (e.data.message === 'user already exists') {
                 toast.error("You already have an account", {

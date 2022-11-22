@@ -21,7 +21,7 @@ function Rightbar() {
 
     useEffect(() => {
         console.log(formik.values.users)
-        axios.get(`http://localhost:5000/userSearch/${formik.values.users}`).then((e) => {
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`).then((e) => {
             console.log('uesr serarched result', e.data)
                 setSearchUser(e.data)
             

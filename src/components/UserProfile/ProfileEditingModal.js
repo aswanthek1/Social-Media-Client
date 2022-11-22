@@ -29,7 +29,7 @@ const ProfileEditingModal = (props) => {
         try {
             const userToken = localStorage.getItem('userToken')
             axios.post('http://api.cloudinary.com/v1_1/dm0l6abeb/image/upload', formData).then((response) => {
-                return axios.post('http://localhost:5000/addCoverImg', { coverimage: response.data.secure_url }, { headers: { token: userToken } }).then((response) => {
+                return axios.post(`${process.env.REACT_APP_BACKEND_URL}/addCoverImg`, { coverimage: response.data.secure_url }, { headers: { token: userToken } }).then((response) => {
                     console.log(response)
                     props.modalOpenState(false)
                     dispatch(refreshReducer())
@@ -47,7 +47,7 @@ const ProfileEditingModal = (props) => {
         try {
             const userToken = localStorage.getItem('userToken')
             axios.post('http://api.cloudinary.com/v1_1/dm0l6abeb/image/upload', formData).then((response) => {
-                return axios.post('http://localhost:5000/addProfileImg', { profileimage: response.data.secure_url }, { headers: { token: userToken } }).then((response) => {
+                return axios.post(`${process.env.REACT_APP_BACKEND_URL}/addProfileImg`, { profileimage: response.data.secure_url }, { headers: { token: userToken } }).then((response) => {
                     console.log('response', response)
                     props.profileModalOpenState(false)
                     dispatch(refreshReducer())

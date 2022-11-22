@@ -31,7 +31,7 @@ const UserProfile = () => {
 
     const userToken = localStorage.getItem('userToken')
     useEffect(() => {
-        axios.get('http://localhost:5000/getPost', { headers: { token: userToken } }).then((response) => {
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/posts/getPost`, { headers: { token: userToken } }).then((response) => {
             console.log('postDetails at profile ', response)
             // setPostDetails(e.data)
             dispatch(postUpdate(response.data))

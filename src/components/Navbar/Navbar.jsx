@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography, styled, InputBase, Badge, Avatar, Menu, MenuItem, Grid, IconButton } from '@mui/material';
+import { AppBar, Toolbar, Typography, styled, Badge, Avatar, Menu, MenuItem, Grid, IconButton } from '@mui/material';
 import InterestsIcon from '@mui/icons-material/Interests';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -11,15 +11,8 @@ import { useFormik } from 'formik'
 import { useSelector, useDispatch } from 'react-redux'
 import { update } from '../../Redux/UserSlice'
 import { refreshReducer } from '../../Redux/RefreshSlice';
-import HomeIcon from '@mui/icons-material/Home';
-import ModeNightIcon from '@mui/icons-material/ModeNight';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-import RequestPageIcon from '@mui/icons-material/RequestPage';
-import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
-import { Settings } from '@mui/icons-material';
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Switch, Paper, Button, Drawer, Divider } from '@mui/material'
-
-
+import {  Drawer } from '@mui/material'
+import DrawerSidebar from './DrawerSidebar';
 
 
 const StyledToolBar = styled(Toolbar)({
@@ -56,8 +49,6 @@ const UserBox = styled(Box)(({ theme }) => ({
 
 function Navbar() {
 
-
-
     const dispatch = useDispatch()
     const [showSearch, setShowSearch] = useState(false)
     const [searchUser, setSearchUser] = useState([])
@@ -90,77 +81,15 @@ function Navbar() {
             <div style={{ backgroundColor: "#FF6464", marginBottom: 1, display: 'flex', justifyContent: 'center', height: '40px', padding: '10px' }}>
                 <h2 style={{ fontWeight: 500,color:'white' }}><InterestsIcon sx={{color:'white'}}/> <b> Instants</b></h2>
             </div>
-            <List>
-                <ListItem disablePadding>
-                    <ListItemButton component='a' onClick={() => { navigate('/') }} >
-                        <ListItemIcon>
-                            <HomeIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                            disableTypography
-                            primary={<Typography style={{ fontWeight: 500 }}> <b>Home</b> </Typography>}
-                        />
-                    </ListItemButton>
-                </ListItem>
+                 
+            <DrawerSidebar/>
 
-                <ListItem disablePadding>
-                    <ListItemButton component='a' href='#'>
-                        <ListItemIcon>
-                            <NotificationsActiveIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                            disableTypography
-                            primary={<Typography style={{ fontWeight: 500 }}> <b>Notifications</b> </Typography>}
-                        />
-                    </ListItemButton>
-                </ListItem>
-
-
-                <ListItem disablePadding>
-                    <ListItemButton component='a' onClick={() => navigate('/people')}>
-                        <ListItemIcon>
-                            <PeopleRoundedIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                            disableTypography
-                            primary={<Typography style={{ fontWeight: 500 }}> <b>People</b> </Typography>}
-                        />
-                    </ListItemButton>
-                </ListItem>
-
-
-                <ListItem disablePadding>
-                    <ListItemButton component='a' href='#'>
-                        <ListItemIcon>
-                            <RequestPageIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                            disableTypography
-                            primary={<Typography style={{ fontWeight: 500 }}> <b>Requests</b> </Typography>}
-                        />
-                    </ListItemButton>
-                </ListItem>
-
-                <ListItem disablePadding>
-                    <ListItemButton component='a' href='#'>
-                        <ListItemIcon>
-                            <Settings />
-                        </ListItemIcon>
-                        <ListItemText
-                            primary={<Typography style={{ fontWeight: 500 }}> <b>Settings</b> </Typography>}
-                        />
-                    </ListItemButton>
-                </ListItem>
-            </List>
         </Box>
     );
 
-
-
-
     useEffect(() => {
         console.log(formik.values.users)
-        axios.get(`http://localhost:5000/userSearch/${formik.values.users}`).then((e) => {
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`).then((e) => {
             setSearchUser(e.data)
             console.log('uesr serarched result', e.data)
 
@@ -172,7 +101,7 @@ function Navbar() {
     const userToken = localStorage.getItem('userToken')
     useEffect(() => {
         const userToken = localStorage.getItem('userToken')
-        axios.get('http://localhost:5000', { headers: { token: userToken } }).then((response) => {
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}`, { headers: { token: userToken } }).then((response) => {
             console.log("userdetails at profile", response)
             if (response.data.message === 'userNotFound') {
                 return null
@@ -200,15 +129,6 @@ function Navbar() {
                     <div onClick={toggleDrawer("left", true)}>
                         <InterestsIcon sx={{ display: { xs: 'block', md: 'none' } }} />
                     </div>
-                    {/* <Search>
-                        <InputBase
-                            placeholder='search'
-                            name='users'
-                            onChange={formik.handleChange}
-                            value={formik.values.users}
-                            onClick={() => setShowSearch(true)}
-                        />
-                    </Search> */}
 
                     <Icons>
                         <IconButton
@@ -257,28 +177,6 @@ function Navbar() {
                         localStorage.removeItem("userToken")
                     )}>Logout</MenuItem>
                 </Menu>
-                {/* {formik.values.users !== '' ? <Box
-
-                    component={Grid}
-                    display={formik.values.users !== null ? 'block' : 'none'}
-                    height={200}
-                    width='40%'
-                    bgcolor="aqua"
-                    position='absolute'
-                    top='80%'
-                    left='28%'
-                    borderRadius={5}
-                >
-                    {searchUser.map((value) => {
-                        return (
-                            <Box component={Grid} item direction='row' display='flex' marginTop='5%' marginLeft='2%' >
-                                <Avatar src={value.profileimage} />
-                                <Typography color='red' variant='h6' marginLeft='3%'  >{value.firstname}</Typography>
-                            </Box>
-                        )
-                    }
-                    )}
-                </Box> : null} */}
             </AppBar>
 
             <div>

@@ -37,8 +37,8 @@ function Add() {
             try {
                 const userToken = localStorage.getItem('userToken')
                 axios.post('http://api.cloudinary.com/v1_1/dm0l6abeb/image/upload', formData).then((response) => {
-    
-                    return axios.post('http://localhost:5000/addPost', { image: response.data.secure_url, description: description }, { headers: { token: userToken } }).then((res) => {
+                    // posts/addPost
+                    return axios.post(`${process.env.REACT_APP_BACKEND_URL}/posts/addPost`, { image: response.data.secure_url, description: description }, { headers: { token: userToken } }).then((res) => {
                         console.log("lastresponse", res)
                         dispatch(updatePostOnload(res.data))
                         setOpen(false)

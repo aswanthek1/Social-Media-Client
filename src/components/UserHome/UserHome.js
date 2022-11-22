@@ -34,7 +34,7 @@ function UserHome() {
   const userToken = localStorage.getItem('userToken')
   useEffect(() => {
     const userToken = localStorage.getItem('userToken')
-    axios.get('http://localhost:5000', { headers: { token: userToken } }).then((response) => {
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}`, { headers: { token: userToken } }).then((response) => {
       console.log("userdetails", response)
       if (response.data.message === 'userNotFound') {
         return null
@@ -49,7 +49,7 @@ function UserHome() {
   }, [])
 
   useEffect(() => {
-    axios.get('http://localhost:5000/getPost', { headers: { token: userToken } }).then((response) => {
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/posts/getPost`, { headers: { token: userToken } }).then((response) => {
       console.log('postDetails ', response)
       // setPostDetails(e.data)
       dispatch(postUpdate(response.data))

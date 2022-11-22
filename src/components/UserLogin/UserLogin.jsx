@@ -80,7 +80,8 @@ function UserLogin() {
     const formik = useFormik({
         initialValues,
         onSubmit: values => {
-            axios.post('http://localhost:5000/login', values).then((e) => {
+            axios.post(`${process.env.REACT_APP_BACKEND_URL}/login`, values).then((e) => {
+
                 if (e.data.email) {
                     localStorage.setItem('userToken', e.data.token)
                     navigate('/')
@@ -109,7 +110,7 @@ function UserLogin() {
         console.log('jwt credentials ', response.credential)
         const userObj = jwt_decode(response.credential)
         console.log(userObj)
-        axios.post('http://localhost:5000/googleLogin', userObj).then((e) => {
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/googleLogin`, userObj).then((e) => {
             console.log('google login response', e)
             if (e.data.message) {
                 toast.error('You should Signup first', {

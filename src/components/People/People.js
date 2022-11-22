@@ -15,10 +15,6 @@ import Swal from 'sweetalert2'
 import toast, { Toaster } from 'react-hot-toast'
 
 
-
-
-
-
 const People = () => {
     const dispatch = useDispatch()
     const [tabNumber, setTabNumber] = useState(1)
@@ -36,7 +32,7 @@ const People = () => {
     useEffect(() => {
         const userToken = localStorage.getItem('userToken')
         try {
-            axios.get('http://localhost:5000/users', { headers: { token: userToken } }).then((response) => {
+            axios.get(`${process.env.REACT_APP_BACKEND_URL}/users`, { headers: { token: userToken } }).then((response) => {
                 console.log("response from people", response)
                 dispatch(addAllUsers(response.data.allUsers))
                 setYouMayKnow(response.data.exceptFollowing)
@@ -48,20 +44,19 @@ const People = () => {
             console.log(error)
         }
 
-        axios.get('http://localhost:5000/users/followStatus')
     }, [refresh])
 
 
     const setFollow = (id) => {
         const userToken = localStorage.getItem('userToken')
         try {
-            axios.post('http://localhost:5000/addFollow', { id }, { headers: { token: userToken } }).then((response) => {
+            axios.post(`${process.env.REACT_APP_BACKEND_URL}/addFollow`, { id }, { headers: { token: userToken } }).then((response) => {
                 console.log("resposner after follow", response)
-                toast.success("Started following",{
-                    duration:3000,
-                    style:{
-                        width:'300px',
-                        
+                toast.success("Started following", {
+                    duration: 3000,
+                    style: {
+                        width: '300px',
+
                     }
                 })
                 dispatch(refreshReducer())
@@ -74,21 +69,21 @@ const People = () => {
 
     const remove = (id) => {
         try {
-        Swal.fire({
-            title: 'Do you want to remove this follower ?',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-        }).then((result) => {
-            if(result.isConfirmed){
-                const userToken = localStorage.getItem('userToken')
-                
-                    axios.post('http://localhost:5000/follwers/remove', { id }, { headers: { token: userToken } }).then((response) => {
-                        console.log('removed response ',response)
+            Swal.fire({
+                title: 'Do you want to remove this follower ?',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const userToken = localStorage.getItem('userToken')
+
+                    axios.post(`${process.env.REACT_APP_BACKEND_URL}/follwers/remove`, { id }, { headers: { token: userToken } }).then((response) => {
+                        console.log('removed response ', response)
                         toast.success('Removed successfully')
                         dispatch(refreshReducer())
                     })
-            }
-        })
+                }
+            })
         } catch (error) {
             console.log(error)
         }
@@ -122,7 +117,7 @@ const People = () => {
                                 return (
 
                                     <List
-                                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                                        sx={{ width: '100%', maxWidth: 460, bgcolor: 'background.paper' }}>
                                         <ListItem alignItems="flex-start">
                                             <ListItemAvatar>
                                                 <Avatar alt="Remy Sharp" src={followingValue.profileimage} />
@@ -150,7 +145,7 @@ const People = () => {
                             {followers.map((followersValue) => {
                                 return (
                                     <List
-                                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                                        sx={{ width: '100%', maxWidth: 460, bgcolor: 'background.paper' }}>
                                         <ListItem alignItems="flex-start">
                                             <ListItemAvatar>
                                                 <Avatar alt="" src={followersValue.profileimage} />
@@ -185,7 +180,7 @@ const People = () => {
 
                                     <List
 
-                                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+                                        sx={{ width: '100%', maxWidth: 460, bgcolor: 'background.paper' }}>
 
                                         <ListItem alignItems="flex-start">
                                             <ListItemAvatar>
@@ -213,7 +208,7 @@ const People = () => {
                     </div>
                 </div>
             </div>
-            <Toaster/>
+            <Toaster />
         </>
     )
 }

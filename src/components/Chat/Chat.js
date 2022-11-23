@@ -1,14 +1,35 @@
-import { Avatar, Box, IconButton, InputAdornment, InputBase, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
+import { Avatar, Box, IconButton, InputBase, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Navbar from '../Navbar/Navbar'
 import Sidebar from '../Sidebar/Sidebar'
 import './Chat.css'
-import SendIcon from '@mui/icons-material/Send';
 import { useFormik } from 'formik'
 import axios from 'axios'
+import { useSelector, useDispatch } from 'react-redux'
+import MessageArea from './MessageArea'
+import { refreshReducer } from '../../Redux/RefreshSlice'
+import io from 'socket.io-client'
+
 
 const Chat = () => {
+
+    const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
+   console.log('socket socket', socket)
+    const dispatch = useDispatch()
     const [searchUser, setSearchUser] = useState([])
+    const [chatUser, setChatUser] = useState('')
+    const [roomId, setRoomId] = useState('')
+    const user = useSelector(state => state.user)
+    const allUser = useSelector(state => state.allUsers.allUsers)
+
+    const setToChat = (value,roomid) => {
+        console.log(roomid)
+        setRoomId(roomid)
+        socket.emit("join_room", roomid)
+        localStorage.setItem('chatUser', JSON.stringify(value));
+        
+        dispatch(refreshReducer())
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -18,9 +39,9 @@ const Chat = () => {
 
     useEffect(() => {
         console.log(formik.values.users)
-        axios.get(`http://localhost:5000/userSearch/${formik.values.users}`).then((e) => {
+        axios.get(`http://localhost:5000/userSearch/${formik.values.users}`, { headers: { user: user._id } }).then((e) => {
             console.log('uesr serarched result', e.data)
-            setSearchUser(e.data)
+                setSearchUser(e.data)
 
         })
 
@@ -38,10 +59,11 @@ const Chat = () => {
                     <div className="chatList">
                         <Box
                             sx={{
-                                width: '80%', marginTop: '26px',
+                                width: '80%',
                                 height: '30px',
-                                borderRadius: '15px', padding: '0 10px',
-                                border: '2px solid'
+                                borderRadius: '15px',
+                                border: '2px solid',
+                                margin: '8%'
                             }}
                         >
                             <InputBase
@@ -49,17 +71,17 @@ const Chat = () => {
                                 variant='standard'
                                 size='small'
                                 name='users'
-                                placeholder='Search in chat'
+                                placeholder='Search in friends'
                                 onChange={formik.handleChange}
                                 value={formik.values.users}
                             />
                         </Box>
                         <div className='userList'>
                             {formik.values.users !== '' ? <List className='users'>
-                                {searchUser.map((value) => {
+                                {searchUser ? searchUser.map((value) => {
                                     return (
                                         <ListItem
-                                            // onClick={() => goToChat(value._id)}
+                                            onClick={() => setToChat(value,"123")}
                                             className='chatUser'
                                             secondaryAction={
                                                 <IconButton edge="end" aria-label="delete">
@@ -81,64 +103,15 @@ const Chat = () => {
                                         </ListItem>
                                     )
                                 }
-                                )}
+                                ) : null}
                             </List> : null}
                         </div>
                     </div>
 
-                    <div className='messagingArea'>
-                        <List sx={{ paddingInline: '0px', paddingBlock: '0px' }}>
-                            <ListItem
-                                secondaryAction={
-                                    <IconButton edge="end" aria-label="delete">
-                                        {/* <DeleteIcon /> */}
-                                    </IconButton>
-                                }
-                            >
-                                <ListItemAvatar>
-                                    <Avatar
-                                        sx={{ width: '52px', height: '52px', border: '2px solid' }}
-                                    >
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    sx={{ marginLeft: '19px' }}
-                                    primary="Alen Devasssia"
-                                />
-                            </ListItem>
-                        </List>
-                        <div className="messagingAreaMid">
 
-                        </div>
-                        <div className='messageInputDiv'>
+                    <MessageArea  room={roomId} />
 
-                            <Box
-                                sx={{
-                                    width: '90%',
-                                    height: '30px',
-                                    borderRadius: '15px',
-                                    padding: '0 10px',
-                                    border: '2px solid',
-                                    marginTop: '5%'
-                                }}
-                            >
-                                <InputBase
-                                    fullWidth
-                                    variant='standard'
-                                    size='small'
-                                    name='users'
-                                    placeholder='Search in chat'
-                                    endAdornment={
-                                        <InputAdornment position='end'>
-                                            <IconButton>
-                                                <SendIcon />
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
-                                />
-                            </Box>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </>

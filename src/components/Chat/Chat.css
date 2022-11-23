@@ -1,7 +1,7 @@
 .chatRight {
     display: flex;
     justify-content: space-around;
-    max-height: 1000px;
+    height: calc(100vh-70px);
 }
 
 @media screen and (min-width:900px) {
@@ -14,33 +14,61 @@
     width: 45%;
     height: 87vh;
     background-color: #e5d9d9;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
     border-radius: 12px;
+     /* display: flex; */
+    /* flex-direction: column;
+    justify-content: center; 
+    align-items: center; */
 }
-
 .userList {
-    width: 100%;
-    height: 91%;
-    background-color: #e5d9d9;
-    margin-top: 11px;
-}
+    margin: 2%;
+} 
 
 .messagingArea {
     width: 45%;
     background-color: aqua;
     /* padding-block: 63px; */
     border-radius: 12px;
+    max-height: 87vh;
 }
 
 .messagingAreaMid{
     width: 100%;
     height: 75%;
-    background-color: #e5d9d9;
+    background-color: #f8f0f0;
+    overflow-y: scroll;
 }
 
+.message{
+    display: flex;
+    flex-direction: column;
+}
+
+.messageTop{
+    display: flex;
+    margin-top: 20px;
+}
+
+.messageImage{
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.messageText{
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #1877f2;
+    color:white;
+    max-width: 200px;
+}
+
+.messageBottom{
+    font-size: 12px;
+    margin-top: 10px;
+}
 .messageInputDiv{
   width: 100%;
   display: flex;
@@ -48,5 +76,14 @@
 }
 
 .chatUser:hover{
-    background-color: grey;
+    background-color: rgb(241, 234, 234);
+}
+
+.message.own{
+    align-items: flex-end;
+}
+
+.message.own .messageText{
+    background-color: lightgrey;
+    color: black;
 }

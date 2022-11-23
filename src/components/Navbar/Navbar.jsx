@@ -174,7 +174,7 @@ function Navbar() {
                     <MenuItem>My account</MenuItem>
                     <MenuItem onClick={() => (
                         navigate('/login'),
-                        localStorage.removeItem("userToken")
+                        localStorage.clear()
                     )}>Logout</MenuItem>
                 </Menu>
             </AppBar>

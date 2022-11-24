@@ -11,9 +11,9 @@ import { refreshReducer } from '../../Redux/RefreshSlice'
 import io from 'socket.io-client'
 
 
+const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
 const Chat = () => {
 
-    const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
    console.log('socket socket', socket)
     const dispatch = useDispatch()
     const [searchUser, setSearchUser] = useState([])
@@ -32,15 +32,14 @@ const Chat = () => {
     }
 
     const formik = useFormik({
-        initialValues: {
+        initialValues: {    
             users: null
         }
     })
 
     useEffect(() => {
         console.log(formik.values.users)
-        axios.get(`http://localhost:5000/userSearch/${formik.values.users}`, { headers: { user: user._id } }).then((e) => {
-            console.log('uesr serarched result', e.data)
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`, { headers: { user: user._id } }).then((e) => {
                 setSearchUser(e.data)
 
         })
@@ -109,7 +108,7 @@ const Chat = () => {
                     </div>
 
 
-                    <MessageArea  room={roomId} />
+                    <MessageArea socket={socket}  room={roomId} />
 
 
                 </div>

@@ -76,10 +76,10 @@ function Navbar() {
             role="presentation"
             onClick={toggleDrawer(anchor, false)}
             onKeyDown={toggleDrawer(anchor, false)}
-            bgcolor='#F8FFDB'
+            bgcolor='#F5F5F5'
         >
-            <div style={{ backgroundColor: "#FF6464", marginBottom: 1, display: 'flex', justifyContent: 'center', height: '40px', padding: '10px' }}>
-                <h2 style={{ fontWeight: 500,color:'white' }}><InterestsIcon sx={{color:'white'}}/> <b> Instants</b></h2>
+            <div style={{ backgroundColor: "white", marginBottom: 1, display: 'flex', justifyContent: 'center', height: '40px', padding: '10px' }}>
+                <h2 style={{ color:'grey',fontFamily:'Angkor', fontSize:'29px', fontWeight:800 }}><InterestsIcon sx={{color:'grey'}}/> <b> Instants</b></h2>
             </div>
                  
             <DrawerSidebar/>
@@ -91,7 +91,6 @@ function Navbar() {
         console.log(formik.values.users)
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`).then((e) => {
             setSearchUser(e.data)
-            console.log('uesr serarched result', e.data)
 
         })
 
@@ -102,7 +101,6 @@ function Navbar() {
     useEffect(() => {
         const userToken = localStorage.getItem('userToken')
         axios.get(`${process.env.REACT_APP_BACKEND_URL}`, { headers: { token: userToken } }).then((response) => {
-            console.log("userdetails at profile", response)
             if (response.data.message === 'userNotFound') {
                 return null
             } else {
@@ -117,17 +115,16 @@ function Navbar() {
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const user = useSelector(state => state.user)
-    console.log('userafter profileand cover', user)
     return (
         <>
-            <AppBar position='sticky' sx={{ backgroundColor: "#FF6464" }}>
+            <AppBar position='sticky' sx={{ backgroundColor: "white" }}>
                 < StyledToolBar>
 
-                    <Typography variant='h6' sx={{ display: { xs: 'none', md: 'block' } }}>
+                    <Typography variant='h6' sx={{ display: { xs: 'none', md: 'block' },color:'grey',fontFamily:'Angkor', fontSize:'29px', fontWeight:800 }}>
                     Instants
                     </Typography>
                     <div onClick={toggleDrawer("left", true)}>
-                        <InterestsIcon sx={{ display: { xs: 'block', md: 'none' } }} />
+                        <InterestsIcon sx={{ display: { xs: 'block', md: 'none' },color:'grey' }}  />
                     </div>
 
                     <Icons>
@@ -135,11 +132,11 @@ function Navbar() {
                             onClick={() => navigate('/chat')}
                         >
                             <Badge badgeContent={4} color="error">
-                                <MailIcon sx={{ color: 'white' }} />
+                                <MailIcon sx={{ color: 'grey' }} />
                             </Badge>
                         </IconButton>
                         <Badge badgeContent={4} color="error">
-                            <NotificationsIcon />
+                            <NotificationsIcon sx={{ color: 'grey' }} />
                         </Badge>
                         <Avatar alt={user.firstname} src={user.profileimage} sx={{ width: 30, height: 30 }}
                             onClick={e => setOpen(true)}

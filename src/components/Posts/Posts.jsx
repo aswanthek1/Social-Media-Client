@@ -80,7 +80,7 @@ function Posts(props) {
   const formik = useFormik({
     initialValues: {
       comment: ''
-    },
+    }, 
     onSubmit: (values, { resetForm }) => {
       console.log(values);
       if(values.comment.trim() === ''){
@@ -121,7 +121,7 @@ function Posts(props) {
         />
         <CardMedia
           component="img"
-          sx={{ objectFit: 'unset' }}
+          sx={{ objectFit: 'cover' }}
           height='400'
           width='0'
           image={props.data.image ? props.data.image : null}

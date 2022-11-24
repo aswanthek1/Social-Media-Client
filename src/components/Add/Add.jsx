@@ -26,6 +26,7 @@ function Add() {
     const [open, setOpen] = useState(false)
     const [imageSelected, setImageSelected] = useState([])
     const [description, setDescription] = useState('')
+    const user = useSelector(state => state.user)
 
     const uploadPost = () => {
         
@@ -79,7 +80,7 @@ function Add() {
                             src=''
                             sx={{ width: 30, height: 30 }}
                         />
-                        <Typography fontWeight={500} variant='span'>John Dor</Typography>
+                        <Typography fontWeight={500} variant='span'>{user.firstname} {user.lastname}</Typography>
                     </UserBox>
 
                     <TextField

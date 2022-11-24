@@ -33,14 +33,6 @@ export default function Unfollow({ id }) {
 
                     axios.post('http://localhost:5000/unFollow', { id }, { headers: { token: userToken } }).then((response) => {
                         console.log('response of unfollow', response)
-                        // setButtonState(false)
-                        // Swal.fire({
-                        //     title: 'unfollowed',
-                        //     width: 250,
-                        //     icon: 'success',
-                        //     showConfirmButton: false,
-                        //     timer:1000
-                        // })
                         toast.success("Unfollowed successfully")
                         dispatch(refreshReducer())
 

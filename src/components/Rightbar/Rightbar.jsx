@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 
 function Rightbar() {
     const [searchUser, setSearchUser] = useState([])
+    const user = useSelector(state => state.user)
     const allUsers = useSelector(state => state.allUsers.allUsers)
     const formik = useFormik({
         initialValues: {
@@ -21,7 +22,7 @@ function Rightbar() {
 
     useEffect(() => {
         console.log(formik.values.users)
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`).then((e) => {
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`, { headers: { user: user._id } } ).then((e) => {
             console.log('uesr serarched result', e.data)
                 setSearchUser(e.data)
             
@@ -34,7 +35,7 @@ function Rightbar() {
     return (
 
         <Box flex={3} p={1} sx={{ display: { xs: 'none', lg: 'block' } }} >
-            <Box position='fixed' width='31%' height='100vh' bgcolor='#F8FFDB'  >
+            <Box position='fixed' width='31%' height='100vh' bgcolor='#EAF6F6'  >
                 {/* <Typography align='center' variant='h5' fontWeight={100} mt={1} mb={2} color='green' > <b>Search People</b> </Typography> */}
                 {/* <Divider variant="middle" sx={{ borderBottomWidth: 3 }} /> */}
 
@@ -60,7 +61,7 @@ function Rightbar() {
                 </Box>
 
                 {/* <List sx={{ width: '100%', maxWidth: 360, bgcolor: '#F8FFDB' }}> */}
-                {formik.values.users !== '' ?    <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: '#F8FFDB', marginLeft: '10%', marginTop: '12px' }}>
+                {formik.values.users !== '' ?    <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: '#ec255a00', marginLeft: '10%', marginTop: '12px' }}>
                     {searchUser.map((value) => {
                         return (
                             <ListItem alignItems="flex-start">

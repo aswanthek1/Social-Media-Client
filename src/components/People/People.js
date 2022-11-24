@@ -101,11 +101,11 @@ const People = () => {
             <div className='people'>
                 <Sidebar />
                 <div className="peopleRight">
-                    <Box sx={{ width: '100%', bgcolor: 'wheat' }}>
+                    <Box sx={{ width: '100%', bgcolor: '#EAF6F6' }}>
                         <Tabs value={value} onChange={handleChange} centered variant='fullWidth'>
-                            <Tab label="Following" onClick={() => setTabNumber(1)} />
-                            <Tab label="Followers" onClick={() => setTabNumber(2)} />
-                            <Tab label="You may know" onClick={() => setTabNumber(3)} />
+                            <Tab label={<span style={{fontWeight:700}}><b>Following</b></span>} onClick={() => setTabNumber(1)} />
+                            <Tab label={<span style={{fontWeight:700}}><b>Followers</b></span>} onClick={() => setTabNumber(2)} />
+                            <Tab label={<span style={{fontWeight:700}}><b>You may know</b></span>} onClick={() => setTabNumber(3)} />
                         </Tabs>
                     </Box>
 
@@ -125,7 +125,7 @@ const People = () => {
                                             <ListItemText
                                                 sx={{ marginTop: '20px' }}
                                                 disableTypography
-                                                primary={<Typography style={{ fontWeight: 500 }}> <b>{followingValue.firstname} {followingValue.lastname} </b> </Typography>}
+                                                primary={<Typography style={{ fontWeight: 500 }}> <b>{followingValue.firstname} </b> </Typography>}
                                             />
                                             <Unfollow id={followingValue._id} />
                                         </ListItem>
@@ -153,13 +153,14 @@ const People = () => {
                                             <ListItemText
                                                 sx={{ marginTop: '20px' }}
                                                 disableTypography
-                                                primary={<Typography style={{ fontWeight: 500 }}> <b>{followersValue.firstname} {followersValue.lastname}</b> </Typography>}
+                                                primary={<Typography style={{ fontWeight: 500 }}> <b>{followersValue.firstname}</b> </Typography>}
                                             />
                                             <Button
                                                 onClick={() => remove(followersValue._id)}
                                                 variant='contained'
                                                 size='small'
                                                 sx={{ marginLeft: '30px', marginTop: '19px' }}
+                                                
                                             >
 
                                                 REMOVE
@@ -189,12 +190,13 @@ const People = () => {
                                             <ListItemText
                                                 sx={{ marginTop: '20px' }}
                                                 disableTypography
-                                                primary={<Typography style={{ fontWeight: 500 }}> <b>{value.firstname} {value.lastname}</b> </Typography>}
+                                                primary={<Typography style={{ fontWeight: 500 }}> <b>{value.firstname}</b> </Typography>}
                                             />
                                             <Button
                                                 onClick={() => setFollow(value._id)}
                                                 variant='contained'
-                                                size='small' sx={{ marginLeft: '30px', marginTop: '19px' }}
+                                                size='small'
+                                                 sx={{ marginLeft: '30px', marginTop: '19px' }}
                                             >
                                                 Follow
                                             </Button>

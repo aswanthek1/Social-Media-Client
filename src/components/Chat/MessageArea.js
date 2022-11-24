@@ -13,19 +13,20 @@ import React, { useEffect, useState } from "react";
 import Message from "./Message";
 import SendIcon from "@mui/icons-material/Send";
 import { useSelector } from "react-redux";
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 
-const MessageArea = ( room) => {
-  const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
-  console.log("room and socket",  room);
+// const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
+
+const MessageArea = ({socket, room}) => {
+  console.log("room and socket",  room,"socket",socket);
   const [chatUserState, setChatUserState] = useState({});
   const [currentMessage, setCurrentMessage] = useState();
+  const [messagesList, setMessagesList] = useState([])
   const refresh = useSelector((state) => state.refresh.refresh);
   const user = useSelector((state) => state.user)
 
   useEffect(() => {
     const chatUser = JSON.parse(localStorage.getItem("chatUser"));
-    console.log(chatUser, "chatuser at message");
     setChatUserState(chatUser);
   }, [refresh]);
 
@@ -42,14 +43,18 @@ const MessageArea = ( room) => {
       };
 
       await socket.emit("send_message", messageData)
+      setMessagesList((list) => [...list,messageData])
+      setCurrentMessage('')
     }
   };
 
   useEffect(() => {
-    socket.on("recieve_message ",(data) => {
+    socket.on("recieve_message",(data) => {
         console.log("data from message",data)
+        setMessagesList((list) => [...list, data])
     })
-  },[socket])
+    return () => socket.off()
+  },[,messagesList,socket])
 
   return (
     <>
@@ -74,8 +79,8 @@ const MessageArea = ( room) => {
           </ListItem>
         </List>
         <div className="messagingAreaMid">
-          <Message socket={socket} chatUserState={chatUserState} />
-          <Message own={true} socket={socket} />
+          <Message messagesList={messagesList}  />
+          {/* <Message  messagesList={messagesList} own={true} /> */}
         </div>
         <div className="messageInputDiv">
           <Box
@@ -90,6 +95,7 @@ const MessageArea = ( room) => {
           >
             <InputBase
               onChange={(event) => setCurrentMessage(event.target.value)}
+              value={currentMessage}
               fullWidth
               variant="standard"
               size="small"
@@ -102,6 +108,9 @@ const MessageArea = ( room) => {
                   </IconButton>
                 </InputAdornment>
               }
+              onKeyPress={(event) => {
+                event.key === "Enter" && sentMessage()
+              }}
             />
           </Box>
         </div>

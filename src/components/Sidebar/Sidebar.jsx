@@ -19,7 +19,7 @@ function Sidebar() {
   return (
    <>
     <Box flex={2} p={1} sx={{ display: { xs: 'none', md: 'block' } }} >
-      <Box position='fixed' sx={{ width: '22%', height: '100vh' }} bgcolor='#F8FFDB'>
+      <Box position='fixed' sx={{ width: '22%', height: '100vh' }} bgcolor='#EAF6F6'>
 
         <List>
           <ListItem disablePadding>

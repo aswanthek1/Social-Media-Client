@@ -8,8 +8,6 @@ import UserLoggedout from "./utils/UserLoggedout";
 import UserProfilePage from "./pages/UserProfile";
 import PeoplePage from "./pages/People";
 import ChatPage from "./pages/Chat";
-import io from 'socket.io-client'
-const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
 
 
 function App() {

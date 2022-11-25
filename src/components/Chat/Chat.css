@@ -16,6 +16,7 @@
     background-color: #e5d9d9;
     border-radius: 12px;
     overflow-y: scroll;
+    overflow-x: hidden;
      /* display: flex; */
     /* flex-direction: column;
     justify-content: center; 
@@ -24,6 +25,13 @@
 .userList {
     margin: 2%;
 } 
+
+.chatUsersList{
+    margin-left: 30px;
+}
+/* .chatUser{
+    margin-right:10px;
+} */
 
 .messagingArea {
     width: 45%;

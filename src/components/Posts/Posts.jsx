@@ -15,6 +15,7 @@ import { update } from '../../Redux/UserSlice';
 import InputEmoji from 'react-input-emoji'
 import EmojiPicker from 'emoji-picker-react';
 import { Picker } from "emoji-mart";
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 
 
@@ -67,11 +68,11 @@ function Posts(props) {
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/posts/postLike`, { userid: user._id, postid: props.data._id }).then((response) => {
       console.log("liked response", response)
       if (response.data.liked) {
-        setLikeState(true)
+        // setLikeState(true)
         dispatch(refreshReducer())
       }
       else if (response.data.unlike) {
-        setLikeState(false)
+        // setLikeState(false)
         dispatch(refreshReducer())
       }
     })
@@ -87,8 +88,8 @@ function Posts(props) {
         console.log('Please type something')
         return 
       }
-      axios.post(`${process.env.REACT_APP_BACKEND_URL}/posts/addComment/${user._id}`, { values, postid: props.data._id }).then((e) => {
-        console.log("comment response", e)
+      axios.post(`${process.env.REACT_APP_BACKEND_URL}/posts/addComment/${user._id}`, { values, postid: props.data._id }).then((response) => {
+        console.log("comment response", response)
         //  dispatch(updatePostOnload(e.data))
         dispatch(refreshReducer())
         resetForm({ values: '' })
@@ -155,18 +156,25 @@ function Posts(props) {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Box sx={{ maxHeight: 200, overflowY: 'scroll' }}>
+            <ScrollToBottom >
+            <Box sx={{ maxHeight: 200}}>
               {props.data.comments.map((obj) => {
                 return (
+                  <>
+                  <p style={{color:'red',fontSize:'12px',fontWeight:'800'}}>{obj.commentBy.firstname}</p>
                   <Box sx={{ display: 'flex', justifyContent: "space-between" }}>
+                    
                     <Box marginBottom={2} height="30px" bgColor='aqua' >
                       {obj.comment}
                     </Box>
+                    
                     <Box bgColor='aqua' >{obj.createdAt}</Box>
                   </Box>
+                  </>
                 )
               })}
             </Box>
+            </ScrollToBottom>
 
             <form action="" onSubmit={formik.handleSubmit}>
               <TextField

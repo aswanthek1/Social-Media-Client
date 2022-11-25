@@ -13,48 +13,60 @@ import React, { useEffect, useState } from "react";
 import Message from "./Message";
 import SendIcon from "@mui/icons-material/Send";
 import { useSelector } from "react-redux";
+import axios from "axios";
 // import io from 'socket.io-client'
 
 // const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
 
-const MessageArea = ({socket, room}) => {
-  console.log("room and socket",  room,"socket",socket);
+const MessageArea = ({ socket, room }) => {
+  
+  console.log("room and socket", room, "socket", socket);
   const [chatUserState, setChatUserState] = useState({});
   const [currentMessage, setCurrentMessage] = useState();
-  const [messagesList, setMessagesList] = useState([])
+  const [messagesList, setMessagesList] = useState([]);
   const refresh = useSelector((state) => state.refresh.refresh);
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     const chatUser = JSON.parse(localStorage.getItem("chatUser"));
     setChatUserState(chatUser);
   }, [refresh]);
 
-  const sentMessage = async() => {
+  const sentMessage = async () => {
     if (currentMessage !== "") {
       const messageData = {
         room,
         author: user.firstname,
+        authorId: user._id,
         message: currentMessage,
+        receiver: chatUserState._id,
         time:
           new Date(Date.now()).getHours() +
           ":" +
           new Date(Date.now()).getMinutes(),
       };
 
-      await socket.emit("send_message", messageData)
-      setMessagesList((list) => [...list,messageData])
-      setCurrentMessage('')
+      await socket.emit("send_message", messageData);
+      setMessagesList((list) => [...list, messageData]);
+      setCurrentMessage("");
+      const userId = user._id;
+      axios
+        .post(`${process.env.REACT_APP_BACKEND_URL}/chat/addMessage`, {
+          messageData,
+        })
+        .then((response) => {
+          console.log("response after message ", response);
+        });
     }
   };
 
   useEffect(() => {
-    socket.on("recieve_message",(data) => {
-        console.log("data from message",data)
-        setMessagesList((list) => [...list, data])
-    })
-    return () => socket.off()
-  },[,messagesList,socket])
+    socket.on("recieve_message", (data) => {
+      console.log("data from message", data);
+      setMessagesList((list) => [...list, data]);
+    });
+    return () => socket.off();
+  }, [, messagesList, socket]);
 
   return (
     <>
@@ -79,7 +91,7 @@ const MessageArea = ({socket, room}) => {
           </ListItem>
         </List>
         <div className="messagingAreaMid">
-          <Message messagesList={messagesList}  />
+          <Message messagesList={messagesList} />
           {/* <Message  messagesList={messagesList} own={true} /> */}
         </div>
         <div className="messageInputDiv">
@@ -109,7 +121,7 @@ const MessageArea = ({socket, room}) => {
                 </InputAdornment>
               }
               onKeyPress={(event) => {
-                event.key === "Enter" && sentMessage()
+                event.key === "Enter" && sentMessage();
               }}
             />
           </Box>

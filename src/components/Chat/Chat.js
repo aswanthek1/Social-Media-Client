@@ -1,120 +1,206 @@
-import { Avatar, Box, IconButton, InputBase, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import Navbar from '../Navbar/Navbar'
-import Sidebar from '../Sidebar/Sidebar'
-import './Chat.css'
-import { useFormik } from 'formik'
-import axios from 'axios'
-import { useSelector, useDispatch } from 'react-redux'
-import MessageArea from './MessageArea'
-import { refreshReducer } from '../../Redux/RefreshSlice'
-import io from 'socket.io-client'
-
+import {
+  Avatar,
+  Box,
+  IconButton,
+  InputBase,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import Navbar from "../Navbar/Navbar";
+import Sidebar from "../Sidebar/Sidebar";
+import "./Chat.css";
+import { useFormik } from "formik";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import MessageArea from "./MessageArea";
+import { refreshReducer } from "../../Redux/RefreshSlice";
+import io from "socket.io-client";
 
 const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
 const Chat = () => {
+  console.log("socket socket", socket);
+  const dispatch = useDispatch();
+  const [searchUser, setSearchUser] = useState([]);
+  const [roomId, setRoomId] = useState("");
+  const [chatList, setChatList] = useState([]);
+  const user = useSelector((state) => state.user);
+  const allUser = useSelector((state) => state.allUsers.allUsers);
 
-   console.log('socket socket', socket)
-    const dispatch = useDispatch()
-    const [searchUser, setSearchUser] = useState([])
-    const [chatUser, setChatUser] = useState('')
-    const [roomId, setRoomId] = useState('')
-    const user = useSelector(state => state.user)
-    const allUser = useSelector(state => state.allUsers.allUsers)
+  const setToChat = (value, roomid) => {
+    console.log("room id as userid ", roomid);
+    setRoomId(roomid);
+    socket.emit("join_room", roomid);
+    localStorage.setItem("chatUser", JSON.stringify(value));
 
-    const setToChat = (value,roomid) => {
-        console.log(roomid)
-        setRoomId(roomid)
-        socket.emit("join_room", roomid)
-        localStorage.setItem('chatUser', JSON.stringify(value));
-        
-        dispatch(refreshReducer())
-    }
+    dispatch(refreshReducer());
+  };
 
-    const formik = useFormik({
-        initialValues: {    
-            users: null
-        }
-    })
+  const formik = useFormik({
+    initialValues: {
+      users: null,
+    },
+  });
 
-    useEffect(() => {
-        console.log(formik.values.users)
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`, { headers: { user: user._id } }).then((e) => {
-                setSearchUser(e.data)
+  useEffect(() => {
+    console.log(formik.values.users);
+    axios
+      .get(
+        `${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`,
+        { headers: { user: user._id } }
+      )
+      .then((response) => {
+        setSearchUser(response.data);
+      });
+  }, [formik.values.users]);
 
-        })
+  const userToken = localStorage.getItem("userToken");
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/chat/messages`, {
+        headers: { token: userToken },
+      })
+      .then((response) => {
+        console.log("response for message getting", response);
+        setChatList(response.data);
+      });
+  }, []);
 
-    }, [formik.values.users])
-
-
-    return (
-        <>
-            <Navbar />
-            <div>
-                <div>
-                    <Sidebar />
-                </div>
-                <div className='chatRight'>
-                    <div className="chatList">
-                        <Box
-                            sx={{
-                                width: '80%',
-                                height: '30px',
-                                borderRadius: '15px',
-                                border: '2px solid',
-                                margin: '8%'
-                            }}
-                        >
-                            <InputBase
-                                fullWidth
-                                variant='standard'
-                                size='small'
-                                name='users'
-                                placeholder='Search in friends'
-                                onChange={formik.handleChange}
-                                value={formik.values.users}
+  return (
+    <>
+      <Navbar />
+      <div>
+        <div>
+          <Sidebar />
+        </div>
+        <div className="chatRight">
+          <div className="chatList">
+            <Box
+              sx={{
+                width: "80%",
+                height: "30px",
+                borderRadius: "15px",
+                border: "2px solid",
+                margin: "8%",
+              }}
+            >
+              <InputBase
+                fullWidth
+                variant="standard"
+                size="small"
+                name="users"
+                placeholder="Search in friends"
+                onChange={formik.handleChange}
+                value={formik.values.users}
+              />
+            </Box>
+            <div className="userList">
+              {formik.values.users !== "" ? (
+                <List className="users">
+                  {searchUser
+                    ? searchUser.map((value) => {
+                        return (
+                          <ListItem
+                            onClick={() => setToChat(value, "123")}
+                            className="chatUser"
+                            secondaryAction={
+                              <IconButton edge="end" aria-label="delete">
+                                {/* <DeleteIcon /> */}
+                              </IconButton>
+                            }
+                          >
+                            <ListItemAvatar>
+                              <Avatar
+                                src={value.profileimage}
+                                sx={{
+                                  width: "52px",
+                                  height: "52px",
+                                  border: "2px solid",
+                                }}
+                              ></Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                              sx={{ marginLeft: "19px" }}
+                              primary={
+                                <Typography style={{ fontWeight: 500 }}>
+                                  {" "}
+                                  <b>{value.firstname} </b>{" "}
+                                </Typography>
+                              }
                             />
-                        </Box>
-                        <div className='userList'>
-                            {formik.values.users !== '' ? <List className='users'>
-                                {searchUser ? searchUser.map((value) => {
-                                    return (
-                                        <ListItem
-                                            onClick={() => setToChat(value,"123")}
-                                            className='chatUser'
-                                            secondaryAction={
-                                                <IconButton edge="end" aria-label="delete">
-                                                    {/* <DeleteIcon /> */}
-                                                </IconButton>
-                                            }
-                                        >
-                                            <ListItemAvatar>
-                                                <Avatar
-                                                    src={value.profileimage}
-                                                    sx={{ width: '52px', height: '52px', border: '2px solid' }}
-                                                >
-                                                </Avatar>
-                                            </ListItemAvatar>
-                                            <ListItemText
-                                                sx={{ marginLeft: '19px' }}
-                                                primary={<Typography style={{ fontWeight: 500 }}> <b>{value.firstname} </b> </Typography>}
-                                            />
-                                        </ListItem>
-                                    )
-                                }
-                                ) : null}
-                            </List> : null}
-                        </div>
-                    </div>
-
-
-                    <MessageArea socket={socket}  room={roomId} />
-
-
-                </div>
+                          </ListItem>
+                        );
+                      })
+                    : null}
+                </List>
+              ) : null}
             </div>
-        </>
-    )
-}
+            <div className="userList">
+              <List>
+                {chatList.map((value) => {
+                  return (
+                    <ListItem
+                      className="chatUser"
+                     
+                      secondaryAction={
+                        <IconButton edge="end" aria-label="delete">
+                          {/* <DeleteIcon /> */}
+                        </IconButton>
+                      }
+                    >
+                      {value.users.map((userValue) => {
+                        return (
+                          <ListItemAvatar>
+                            {userValue._id === user._id ? null : (
+                              <Avatar
+                                src={
+                                  userValue._id === user._id
+                                    ? null
+                                    : userValue.profileimage
+                                }
+                                sx={{
+                                  width: "52px",
+                                  height: "52px",
+                                  border: "2px solid",
+                                }}
+                              ></Avatar>
+                            )}
+                          </ListItemAvatar>
+                        );
+                      })}
+                      {value.users.map((userValue) => {
+                        return (
+                            
+                          <ListItemText
+                          onClick={() => setToChat(userValue, value._id)}
+                            sx={{ marginRight: "13px" }}
+                            primary={
+                              <Typography style={{ fontWeight: 500 }}>
+                                <b>
+                                  {userValue._id === user._id
+                                    ? null
+                                    : userValue.firstname}
+                                </b>
+                              </Typography>
+                            }
+                          />
+                        );
+                      })}
+                    </ListItem>
+                  );
+                })}
+              </List>
+            </div>
+          </div>
 
-export default Chat
+          <MessageArea socket={socket} room={roomId}  />
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Chat;

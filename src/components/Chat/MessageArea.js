@@ -18,9 +18,8 @@ import axios from "axios";
 
 // const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
 
-const MessageArea = ({ socket, room }) => {
-  
-  console.log("room and socket", room, "socket", socket);
+const MessageArea = ({ socket, room, uniqueChat }) => {
+  console.log("room and socket", uniqueChat);
   const [chatUserState, setChatUserState] = useState({});
   const [currentMessage, setCurrentMessage] = useState();
   const [messagesList, setMessagesList] = useState([]);
@@ -91,7 +90,7 @@ const MessageArea = ({ socket, room }) => {
           </ListItem>
         </List>
         <div className="messagingAreaMid">
-          <Message messagesList={messagesList} />
+          <Message messagesList={messagesList} uniqueChat={uniqueChat} />
           {/* <Message  messagesList={messagesList} own={true} /> */}
         </div>
         <div className="messageInputDiv">

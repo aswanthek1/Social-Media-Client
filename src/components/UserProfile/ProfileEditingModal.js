@@ -62,7 +62,6 @@ const ProfileEditingModal = (props) => {
     ///====================================================modal for cover photo======================///
     return (
         <div>
-            return (
             <div>
                 <StyledModal
                     keepMounted
@@ -99,12 +98,11 @@ const ProfileEditingModal = (props) => {
                     </Box>
                 </StyledModal>
             </div>
-            )
+            {/* ) */}
 
 
             {/* /////========================modal for profile picture==============================/// */}
 
-            return (
 
             <div>
                 <StyledModal
@@ -147,7 +145,7 @@ const ProfileEditingModal = (props) => {
                     </Box>
                 </StyledModal>
             </div>
-            )
+
         </div>
     )
 }

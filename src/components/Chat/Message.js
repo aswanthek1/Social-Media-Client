@@ -3,46 +3,42 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ScrollToBottom from "react-scroll-to-bottom";
 
-const Message = ({ messagesList }) => {
-
+const Message = ({ messagesList, uniqueChat }) => {
+  const savedChat = uniqueChat.messages
+const [allMessages, setAllMessages] = useState([])
   const user = useSelector((state) => state.user);
-  const [chatList, setChatList] = useState([])
-
-  const userToken = localStorage.getItem("userToken");
+  const [chatList, setChatList] = useState([]);
+     const userid = user._id
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/chat/messages`, {
-        headers: { token: userToken },
-      })
-      .then((response) => {
-        console.log("response for message getting", response);
-        setChatList(response.data);
-      });
-  }, []);
-
-
+    // { messagesList && uniqueChat ? setAllMessages(...messagesList,...savedChat) : null}
+    setAllMessages((messagesList) => [...messagesList,savedChat])
+  },[])
+  console.log(savedChat, messagesList, allMessages)
   return (
     <>
       <ScrollToBottom className="scrollToBottom">
-        {messagesList.map((value) => {
+        {savedChat ?  savedChat.map((value) => {
+        
+          console.log("e", value);
           return (
+            
             <div
               className={
-                user.firstname === value.author ? "message own" : "message"
+               value && user._id === value.authorId ? "message own" : "message" 
               }
-            >
+            > 
               <div className="messageTop">
                 <img
                   className="messageImage"
                   src="/Assets/blank-profile-picture.webp"
                   alt=""
                 />
-                <p className="messageText">{value.message}</p>
+                <p className="messageText">{value ? value.message : null}</p>
               </div>
-              <div className="messageBottom">{value.time}</div>
+              <div className="messageBottom">{value ? value.time : null}</div>
             </div>
           );
-        })}
+        }) : null}
       </ScrollToBottom>
     </>
   );

@@ -27,16 +27,32 @@ const Chat = () => {
   const [searchUser, setSearchUser] = useState([]);
   const [roomId, setRoomId] = useState("");
   const [chatList, setChatList] = useState([]);
+  const [messageArea, setMessageArea] = useState(false)
+  const [uniqueChat, setUniqueChat] = useState({})
   const user = useSelector((state) => state.user);
   const allUser = useSelector((state) => state.allUsers.allUsers);
+  // const userToken = localStorage.getItem('userToken')
 
-  const setToChat = (value, roomid) => {
+  const setToChat = (value) => {
+    const userId = user._id
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/chat/addMessageForRoomId`,{value,userId}).then((response) => {
+      console.log('response added by aruns idea', response)
+   const roomid = response.data._id
     console.log("room id as userid ", roomid);
     setRoomId(roomid);
     socket.emit("join_room", roomid);
     localStorage.setItem("chatUser", JSON.stringify(value));
 
+    setMessageArea(true)
     dispatch(refreshReducer());
+        const userToken = localStorage.getItem('userToken')
+        console.log(userToken)
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/chat/getChat/${value._id}`,{headers:{token:userToken}}).then((response) => {
+        console.log('rrrrrrrrrrrrrrrrrrrr', response)
+        setUniqueChat(response.data)
+    })
+
+  })
   };
 
   const formik = useFormik({
@@ -57,8 +73,9 @@ const Chat = () => {
       });
   }, [formik.values.users]);
 
-  const userToken = localStorage.getItem("userToken");
+  
   useEffect(() => {
+    const userToken = localStorage.getItem('userToken')
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/chat/messages`, {
         headers: { token: userToken },
@@ -104,7 +121,7 @@ const Chat = () => {
                     ? searchUser.map((value) => {
                         return (
                           <ListItem
-                            onClick={() => setToChat(value, "123")}
+                            onClick={() => setToChat(value)}
                             className="chatUser"
                             secondaryAction={
                               <IconButton edge="end" aria-label="delete">
@@ -175,7 +192,7 @@ const Chat = () => {
                         return (
                             
                           <ListItemText
-                          onClick={() => setToChat(userValue, value._id)}
+                          onClick={() => setToChat(userValue)}
                             sx={{ marginRight: "13px" }}
                             primary={
                               <Typography style={{ fontWeight: 500 }}>
@@ -196,7 +213,7 @@ const Chat = () => {
             </div>
           </div>
 
-          <MessageArea socket={socket} room={roomId}  />
+         { messageArea ? <MessageArea socket={socket} room={roomId}  uniqueChat={uniqueChat} /> : 'Start a conversation'}
         </div>
       </div>
     </>

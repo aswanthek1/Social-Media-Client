@@ -48,7 +48,7 @@ const Chat = () => {
         const userToken = localStorage.getItem('userToken')
         console.log(userToken)
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/chat/getChat/${value._id}`,{headers:{token:userToken}}).then((response) => {
-        console.log('rrrrrrrrrrrrrrrrrrrr', response)
+        console.log('rrrrrrrrrrrrrrrrrrrr', response.data)
         setUniqueChat(response.data)
     })
 

@@ -18,7 +18,7 @@ import axios from "axios";
 
 // const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
 
-const MessageArea = ({ socket, room, uniqueChat }) => {
+const MessageArea = ({ socket, room , uniqueChat}) => {
   console.log("room and socket", uniqueChat);
   const [chatUserState, setChatUserState] = useState({});
   const [currentMessage, setCurrentMessage] = useState();
@@ -62,7 +62,7 @@ const MessageArea = ({ socket, room, uniqueChat }) => {
   useEffect(() => {
     socket.on("recieve_message", (data) => {
       console.log("data from message", data);
-      setMessagesList((list) => [...list, data]);
+      setMessagesList((list) => [...list,data]);
     });
     return () => socket.off();
   }, [, messagesList, socket]);
@@ -90,7 +90,8 @@ const MessageArea = ({ socket, room, uniqueChat }) => {
           </ListItem>
         </List>
         <div className="messagingAreaMid">
-          <Message messagesList={messagesList} uniqueChat={uniqueChat} />
+          <Message messagesList={messagesList} uniqueChat={uniqueChat}  />
+          
           {/* <Message  messagesList={messagesList} own={true} /> */}
         </div>
         <div className="messageInputDiv">

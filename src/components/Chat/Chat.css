@@ -22,6 +22,12 @@
     justify-content: center; 
     align-items: center; */
 }
+
+@media screen and (max-width:700px) {
+  .chatList{
+    width: 60%;
+  }
+}
 .userList {
   margin: 2%;
 }
@@ -40,6 +46,12 @@
   border-radius: 12px;
   height: 87vh;
   overflow-y: hidden;
+}
+
+@media screen and (max-width:700px) {
+  .messagingArea{
+    display: none;
+}
 }
 
 .messagingAreaMid {
@@ -104,3 +116,18 @@
   height: 100%;
   overflow-x: hidden;
 }
+
+.messageAreaText{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: grey;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@media screen and (max-width:700px) {
+  .messageAreaText{
+    display: none;
+}
+}
+

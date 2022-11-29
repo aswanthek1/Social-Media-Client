@@ -34,7 +34,6 @@ const ExpandMore = styled((props) => {
 
 function Posts(props) {
   const dispatch = useDispatch()
-  console.log('post props ', props)
 
   const [expanded, setExpanded] = React.useState(false);
 

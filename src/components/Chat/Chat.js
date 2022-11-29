@@ -18,27 +18,25 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import MessageArea from "./MessageArea";
 import { refreshReducer } from "../../Redux/RefreshSlice";
-import io from "socket.io-client";
 
+///socket connection with backend url
+import io from "socket.io-client";
 const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
+
 const Chat = () => {
-  console.log("socket socket", socket);
   const dispatch = useDispatch();
   const [searchUser, setSearchUser] = useState([]);
   const [roomId, setRoomId] = useState("");
   const [chatList, setChatList] = useState([]);
   const [messageArea, setMessageArea] = useState(false)
-  const [uniqueChat, setUniqueChat] = useState({})
+  const [uniqueChat, setUniqueChat] = useState([])
   const user = useSelector((state) => state.user);
-  const allUser = useSelector((state) => state.allUsers.allUsers);
-  // const userToken = localStorage.getItem('userToken')
 
   const setToChat = (value) => {
     const userId = user._id
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/chat/addMessageForRoomId`,{value,userId}).then((response) => {
-      console.log('response added by aruns idea', response)
+      // console.log('response added by aruns idea', response)
    const roomid = response.data._id
-    console.log("room id as userid ", roomid);
     setRoomId(roomid);
     socket.emit("join_room", roomid);
     localStorage.setItem("chatUser", JSON.stringify(value));
@@ -46,10 +44,8 @@ const Chat = () => {
     setMessageArea(true)
     dispatch(refreshReducer());
         const userToken = localStorage.getItem('userToken')
-        console.log(userToken)
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/chat/getChat/${value._id}`,{headers:{token:userToken}}).then((response) => {
-        console.log('rrrrrrrrrrrrrrrrrrrr', response.data)
-        setUniqueChat(response.data)
+        setUniqueChat(response.data.messages)
     })
 
   })
@@ -62,7 +58,6 @@ const Chat = () => {
   });
 
   useEffect(() => {
-    console.log(formik.values.users);
     axios
       .get(
         `${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`,
@@ -81,7 +76,6 @@ const Chat = () => {
         headers: { token: userToken },
       })
       .then((response) => {
-        console.log("response for message getting", response);
         setChatList(response.data);
       });
   }, []);
@@ -213,7 +207,7 @@ const Chat = () => {
             </div>
           </div>
 
-         { messageArea ? <MessageArea socket={socket} room={roomId}  uniqueChat={uniqueChat} /> : 'Start a conversation'}
+         { messageArea ? <MessageArea socket={socket} room={roomId}  uniqueChat={uniqueChat} setUniqueChat={setUniqueChat} /> : <div className="messageAreaText"><h2><b>Start a new conversation</b></h2></div>}
         </div>
       </div>
     </>

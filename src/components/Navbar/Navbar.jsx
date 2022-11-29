@@ -129,7 +129,6 @@ function Navbar() {
       });
   }, [formik.values.users]);
 
-  const userToken = localStorage.getItem("userToken");
   useEffect(() => {
     const userToken = localStorage.getItem("userToken");
     axios
@@ -141,7 +140,7 @@ function Navbar() {
           return null;
         } else {
           dispatch(update(response.data));
-          dispatch(refreshReducer());
+          // dispatch(refreshReducer());
         }
       });
   }, []);

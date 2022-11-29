@@ -156,7 +156,6 @@ const ProfileEditingModal = (props) => {
           </Box>
         </StyledModal>
       </div>
-      {/* ) */}
 
       {/* /////========================modal for profile picture==============================/// */}
 

@@ -13,16 +13,39 @@ import { update } from "../../Redux/UserSlice";
 import { postUpdate } from "../../Redux/PostSlice";
 import { refreshReducer } from "../../Redux/RefreshSlice";
 import Posts from "../Posts/Posts";
+import BioEditingModal from "./BioEditingModal";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
+  const [bioEditingModal, setBioEditingModal] = useState(false);
+  const [userDetails, setUserDetails] = useState({});
   const user = useSelector((state) => state.user);
   const refresh = useSelector((state) => state.refresh.refresh);
   const postsDetails = useSelector((state) => state.post);
 
   const follow = () => {};
+
+
+  useEffect(() => {
+    const userToken = localStorage.getItem("userToken");
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}`, {
+        headers: { token: userToken },
+      })
+      .then((response) => {
+        console.log("userdetails", response);
+        if (response.data.message === "userNotFound") {
+          return null;
+        } else {
+          setUserDetails(response.data);
+          // dispatch(update(response.data));
+
+        }
+      });
+  }, []);
+
 
   const userToken = localStorage.getItem("userToken");
   useEffect(() => {
@@ -31,11 +54,11 @@ const UserProfile = () => {
         headers: { token: userToken },
       })
       .then((response) => {
-        console.log("postDetails at profile ", response);
         // setPostDetails(e.data)
         dispatch(postUpdate(response.data));
       });
   }, [refresh]);
+  
 
   return (
     <>
@@ -71,7 +94,10 @@ const UserProfile = () => {
               <h4 className="profileInfoName">
                 {user.firstname} {user.lastname}
               </h4>
-              <span className="profileInfoDesc">Hello my friends !</span>
+              <h5 className="profileInfoDesc">
+                Hello my friends ! Iam Aswanth. Iam a software Engineer. Works
+                at Clicut Kinfra  Hello my friends ! Iam 
+              </h5>
             </div>
           </div>
           <div className="followButton">
@@ -93,6 +119,43 @@ const UserProfile = () => {
               Message
             </Button>
           </div>
+
+          <div className="bioMain">
+            <div className="bioLeftMain">
+              <div className="proffessionMain">
+                <span className="proffession">Work : </span>
+                <span className="proffessionName">Software Engineer</span>
+              </div>
+              <br />
+              <div className="livesInMain">
+                <span className="livesIn">Lives in : </span>
+                <span className="livesInName">Kannur</span>
+              </div>
+              <br />
+              <div className="stateMain">
+                <span className="state">State : </span>
+                <span className="stateName">Kerala</span>
+              </div>
+            </div>
+
+            <div className="bioRightMain">
+              <div className="countryMain">
+                <span className="country">Email : </span>
+                <span className="countryName">aswanthek1@gmail.com</span>
+              </div>
+              <br />
+              <div className="followersMain">
+                <span className="followers">followers : </span>
+                <span className="followersNumber">67</span>
+              </div>
+              <br />
+              <div className="followingMain">
+                <span className="following">Following : </span>
+                <span className="followingNumber">89</span>
+              </div>
+            </div>
+          </div>
+
           <div>
             <div className="infoList">
               <span>
@@ -117,6 +180,7 @@ const UserProfile = () => {
               </span>
               <span>
                 <Button
+                  onClick={() => setBioEditingModal(true)}
                   color="primary"
                   sx={{ width: "94px", fontSize: "10px" }}
                   variant="outlined"
@@ -141,6 +205,10 @@ const UserProfile = () => {
       <ProfileEditingModal
         profileModalOpenState={setOpenProfile}
         profileModalState={openProfile}
+      />
+      <BioEditingModal
+        bioEditingModal={bioEditingModal}
+        setBioEditingModal={setBioEditingModal}
       />
     </>
   );

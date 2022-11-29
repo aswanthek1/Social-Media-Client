@@ -14,15 +14,12 @@ import Message from "./Message";
 import SendIcon from "@mui/icons-material/Send";
 import { useSelector } from "react-redux";
 import axios from "axios";
-// import io from 'socket.io-client'
 
-// const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
 
-const MessageArea = ({ socket, room , uniqueChat}) => {
-  console.log("room and socket", uniqueChat);
+const MessageArea = ({ socket, room , uniqueChat, setUniqueChat}) => {
+  // console.log("room and socket", uniqueChat);
   const [chatUserState, setChatUserState] = useState({});
   const [currentMessage, setCurrentMessage] = useState();
-  const [messagesList, setMessagesList] = useState([]);
   const refresh = useSelector((state) => state.refresh.refresh);
   const user = useSelector((state) => state.user);
 
@@ -46,7 +43,7 @@ const MessageArea = ({ socket, room , uniqueChat}) => {
       };
 
       await socket.emit("send_message", messageData);
-      setMessagesList((list) => [...list, messageData]);
+      setUniqueChat((list) => [...list, messageData]);
       setCurrentMessage("");
       const userId = user._id;
       axios
@@ -54,18 +51,18 @@ const MessageArea = ({ socket, room , uniqueChat}) => {
           messageData,
         })
         .then((response) => {
-          console.log("response after message ", response);
+          // console.log("response after message ", response);
         });
     }
   };
 
   useEffect(() => {
     socket.on("recieve_message", (data) => {
-      console.log("data from message", data);
-      setMessagesList((list) => [...list,data]);
+      // console.log("data from message", data);
+      setUniqueChat((list) => [...list,data]);
     });
     return () => socket.off();
-  }, [, messagesList, socket]);
+  }, [ socket]);
 
   return (
     <>
@@ -90,7 +87,7 @@ const MessageArea = ({ socket, room , uniqueChat}) => {
           </ListItem>
         </List>
         <div className="messagingAreaMid">
-          <Message messagesList={messagesList} uniqueChat={uniqueChat}  />
+          <Message  uniqueChat={uniqueChat}  />
           
           {/* <Message  messagesList={messagesList} own={true} /> */}
         </div>

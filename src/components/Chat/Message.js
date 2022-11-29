@@ -3,31 +3,14 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ScrollToBottom from "react-scroll-to-bottom";
 
-const Message = ({ messagesList, uniqueChat }) => {
-  console.log("ayyyyyyyyyyyyyyyyyyyyy", uniqueChat);
-  const savedChat = uniqueChat.messages;
-  console.log("at top", savedChat);
-  const [allMessages, setAllMessages] = useState([]);
+const Message = ({ uniqueChat }) => {
   const user = useSelector((state) => state.user);
-  const [chatList, setChatList] = useState([]);
-  const userid = user._id;
-  useEffect(() => {
-    // setAllMessages( [...messagesList,savedChat]);
-    // messagesList.push(savedChat)
-    setAllMessages((prev) => [...prev, savedChat]);
-  }, [savedChat, messagesList]);
 
   return (
     <>
       <ScrollToBottom className="scrollToBottom">
-        {savedChat
-          ? savedChat.map((value, index) => {
-              //  value.map((obj)=>{
-              //   console.log("e", obj);
-              //  })
-              // messagesList.shift()
-              console.log("llll", messagesList);
-              console.log("e", value, index);
+        {uniqueChat
+          ? uniqueChat.map((value) => {
               return (
                 <div
                   className={

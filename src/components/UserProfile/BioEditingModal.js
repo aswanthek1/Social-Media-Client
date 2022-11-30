@@ -18,6 +18,7 @@ import { update } from "../../Redux/UserSlice";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useFormik } from "formik";
+import * as yup from "yup";
 
 const StyledModal = styled(Modal)({
   display: "flex",
@@ -25,10 +26,30 @@ const StyledModal = styled(Modal)({
   justifyContent: "center",
 });
 
+const validationSchema = yup.object({
+  firstname: yup
+    .string()
+    .required("This field is required")
+    .min(3, "First name must need minimum 3 charachters")
+    .max(12, "Maximum 12 charachters are permitted")
+    .matches(/^[A-Za-z]+(\s*[A-Za-z]+)*$/, "Only alphabets are allowed"),
+
+  lastname: yup
+    .string()
+    .required("This field is required")
+    .min(1, "Last name must need minimum 1 charachter")
+    .max(12, "Maximum 12 charachters are permitted")
+    .matches(/^[A-Za-z]+(\s*[A-Za-z]+)*$/, "Only alphabets are allowed"),
+
+  bio: yup.string().matches(/^(?:\b\w+\b[\s\r\n]*){1,250}$/),
+});
+
 const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
   const refresh = useSelector((state) => state.refresh.refresh);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState('');
   const [userDetails, setUserDetails] = useState({});
+  const [validFirstname, setFirstnameValid] = useState(null);
+  // const [initialValues,setinitialValues]=useState({})
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
@@ -44,34 +65,65 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
           return null;
         } else {
           setUserDetails(response.data);
+          // setSelectedDate(response.data.dateofbirth)
           dispatch(update(response.data));
         }
       });
   }, []);
 
-  const initialValues = {
-    firstname: user.firstname,
-    lastname: user.lastname,
-    // bio: user.bio,
-    // proffession: user.proffession,
-    // dateofbirth: user.dateofbirth,
-    // city: user.city,
-    // district: user.district,
+  // const formik = useFormik({
+  //   validationSchema,
+  // });
+
+  const handleValidation = async () => {
+    const isFirstnameValid = await validationSchema.isValid(
+      userDetails.firstname
+    );
+    console.log("onBlur ", isFirstnameValid);
+    if (!isFirstnameValid) {
+      setFirstnameValid(false);
+    } else {
+      setFirstnameValid(true);
+    }
   };
-  const formik = useFormik({
-    initialValues,
-    // {
-    // firstname: userDetails.firstname,
-    // lastname: userDetails.lastname,
-    // bio: userDetails.bio,
-    // proffession: userDetails.proffession,
-    // dateofbirth: userDetails.dateofbirth,
-    // city: userDetails.city,
-    // district: userDetails.district,
-    // }
-  });
-  console.log("formik user values", formik.values);
-  console.log("state users at modal", userDetails);
+  // const handleValidation = async () => {
+  //   const validate = await validationSchema
+  //     .validate(userDetails, { abortEarly: false })
+  //     .then((responseData) => {
+  //   console.log('userdetaeisls at validation ', userDetails)
+  //       console.log("no errors");
+  //       console.log(responseData);
+  //       setValid([]);
+  //     })
+  //     .catch((err) => {
+  //       console.log("err",err);
+  //       console.log(err.firstname,err.lastname);
+  //       console.log(err.errors);
+  //       setValid(err.errors);
+  //     });
+  // };
+
+  const handleSubmit = async (e) => {
+    const userId = user._id;
+    e.preventDefault();
+    // const isValid = await validationSchema.isValid(userDetails);
+    console.log(typeof(selectedDate))
+    const dateofbirth = JSON.stringify(selectedDate)
+    console.log(typeof(dateofbirth),dateofbirth)
+    userDetails.dateofbirth = dateofbirth.slice(1,11);
+    console.log(dateofbirth)
+    console.log("user in on submitggggggggggggggggggggggg", userDetails.dateofbirth);
+    axios
+      .put(`${process.env.REACT_APP_BACKEND_URL}/user/update`, {
+        userDetails,
+      })
+      .then((response) => {
+        console.log("response ", response);
+      });
+  };
+
+  // console.log("formik user values", formik.values.firstname);
+
   return (
     <div>
       <div>
@@ -92,22 +144,33 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
             >
               <b>Edit your profile here</b>
             </Typography>
-            <form action="" onSubmit={formik.handleSubmit}>
+            <form action="" onSubmit={handleSubmit}>
               <div className="textFieldMain">
                 <div className="nameFields">
                   <TextField
-                    //   value={userDetails.firstname}
-                    value={formik.values.firstname}
-                    onChange={formik.handleChange}
+                    value={userDetails.firstname}
+                    onChange={(event) => {
+                      userDetails.firstname = event.target.value;
+                      console.log("first userdaetails", userDetails);
+                      setUserDetails({ ...userDetails });
+                    }}
+                    onBlur={handleValidation}
                     name="firstname"
                     variant="standard"
                     placeholder="First Name"
                   />
+                  {/* {valid ? null  : <FormHelperText sx={{}} >
+                     Use only 1 to 3 letters and use alphabets only
+                     </FormHelperText> }  */}
 
                   <TextField
-                    // value={user.lastname}
-                    value={formik.values.lastname}
-                    onChange={formik.handleChange}
+                    value={userDetails.lastname}
+                    onChange={(event) => {
+                      userDetails.lastname = event.target.value;
+                      setUserDetails({ ...userDetails });
+                    }}
+                    onBlur={handleValidation}
+                    type="text"
                     name="lastname"
                     variant="standard"
                     placeholder="Last Name"
@@ -116,8 +179,11 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
                 <div className="textField">
                   {/* <FormHelperText></FormHelperText> */}
                   <TextField
-                    value={formik.values.bio}
-                    onChange={formik.handleChange}
+                    value={userDetails.bio}
+                    onChange={(event) => {
+                      userDetails.bio = event.target.value;
+                      setUserDetails({ ...userDetails });
+                    }}
                     name="bio"
                     variant="standard"
                     placeholder="Say about your self with in 20 words"
@@ -127,44 +193,49 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
                   <div className="textField">
                     <TextField
                       name="proffession"
-                      value={formik.values.proffession}
-                      onChange={formik.handleChange}
+                      value={userDetails.proffession}
+                      onChange={(event) => {
+                        userDetails.proffession = event.target.value;
+                        setUserDetails({ ...userDetails });
+                      }}
                       variant="standard"
                       placeholder="Proffession"
                       fullWidth
-                      multiline
                     />
                   </div>
                   <div className="textField">
                     <TextField
-                      name="city"
-                      value={formik.values.city}
-                      onChange={formik.handleChange}
-                      //   value={user.city}
+                      name="livesin"
+                      value={userDetails.livesin}
+                      onChange={(event) => {
+                        userDetails.livesin = event.target.value;
+                        setUserDetails({ ...userDetails });
+                      }}
                       variant="standard"
-                      placeholder="City"
+                      placeholder="Lives In"
                       fullWidth
-                      multiline
                     />
                   </div>
                   <div className="textField">
                     <TextField
-                      name="district"
-                      value={formik.values.district}
-                      onChange={formik.handleChange}
-                      //   value={user.district}
+                      name="country"
+                      
+                      value={userDetails.country}
+                      onChange={(event) => {
+                        userDetails.country = event.target.value;
+                        setUserDetails({ ...userDetails });
+                      }}
                       variant="standard"
-                      placeholder="District"
+                      placeholder="Country"
                       fullWidth
-                      multiline
                     />
                   </div>
                   <div className="date">
                     <pre>Date of birth</pre>
                     <DatePicker
                       name="dateofbirth"
-                      //   value={user.dateofbirth}
-                      value={formik.values.dateofbirth}
+                      // value={userDetails.dateofbirth}
+                        value={selectedDate}
                       className="datePicker"
                       selected={selectedDate}
                       onChange={(date) => setSelectedDate(date)}
@@ -177,8 +248,18 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
                     />
                   </div>
                   <div className="saveButton">
-                    <Button variant="outlined">Save</Button>
+                    <Button type="submit" variant="outlined">
+                      Save
+                    </Button>
                   </div>
+                  {/* {valid.map((e) => {
+                    console.log("eeeeeee", valid)
+                    return (
+                      <span style={{ color: "red" }} key={e}>
+                        {e}
+                      </span>
+                    );
+                  })} */}
                 </div>
               </div>
             </form>

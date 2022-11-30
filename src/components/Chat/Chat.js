@@ -18,6 +18,8 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import MessageArea from "./MessageArea";
 import { refreshReducer } from "../../Redux/RefreshSlice";
+import { useMediaQuery } from 'react-responsive'
+
 
 ///socket connection with backend url
 import io from "socket.io-client";

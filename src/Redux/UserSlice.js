@@ -9,8 +9,14 @@ export const userSlice = createSlice({
         phonenumber:'',
         _id:'',
         coverimage:'',
-        profileimage:''
-
+        profileimage:'',
+        followers:'',
+        following:'',
+        bio:'',
+        livesin:'',
+        country:'',
+        dateofbirth:'',
+        proffession:''
     },
 
     reducers:{
@@ -22,6 +28,13 @@ export const userSlice = createSlice({
             state._id = action.payload._id
             state.coverimage = action.payload.coverimage
             state.profileimage = action.payload.profileimage
+            state.following = action.payload.following
+            state.followers = action.payload.followers
+            state.bio = action.payload.bio
+            state.livesin = action.payload.livesin
+            state.country = action.payload.country
+            state.dateofbirth = action.payload.dateofbirth
+            state.proffession = action.payload.proffession
         }
     }
 })

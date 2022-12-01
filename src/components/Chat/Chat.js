@@ -18,8 +18,7 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import MessageArea from "./MessageArea";
 import { refreshReducer } from "../../Redux/RefreshSlice";
-import { useMediaQuery } from 'react-responsive'
-
+import { useMediaQuery } from "react-responsive";
 
 ///socket connection with backend url
 import io from "socket.io-client";
@@ -30,27 +29,47 @@ const Chat = () => {
   const [searchUser, setSearchUser] = useState([]);
   const [roomId, setRoomId] = useState("");
   const [chatList, setChatList] = useState([]);
-  const [messageArea, setMessageArea] = useState(false)
-  const [uniqueChat, setUniqueChat] = useState([])
+  const [messageArea, setMessageArea] = useState(false);
+  const [uniqueChat, setUniqueChat] = useState([]);
+  const [showList, setShowList] = useState(true);
   const user = useSelector((state) => state.user);
 
   const setToChat = (value) => {
-    const userId = user._id
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/chat/addMessageForRoomId`,{value,userId}).then((response) => {
-      // console.log('response added by aruns idea', response)
-   const roomid = response.data._id
-    setRoomId(roomid);
-    socket.emit("join_room", roomid);
-    localStorage.setItem("chatUser", JSON.stringify(value));
+    if (window.innerWidth < 700) {
+      setShowList(false);
+    }
+    window.addEventListener("resize", (Event) => {
+      if (window.innerWidth < 700) {
+        setShowList(false);
+      } else {
+        setShowList(true);
+      }
+    });
 
-    setMessageArea(true)
-    dispatch(refreshReducer());
-        const userToken = localStorage.getItem('userToken')
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/chat/getChat/${value._id}`,{headers:{token:userToken}}).then((response) => {
-        setUniqueChat(response.data.messages)
-    })
+    const userId = user._id;
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/chat/addMessageForRoomId`, {
+        value,
+        userId,
+      })
+      .then((response) => {
+        const roomid = response.data._id;
+        setRoomId(roomid);
+        socket.emit("join_room", roomid);
+        localStorage.setItem("chatUser", JSON.stringify(value));
 
-  })
+        setMessageArea(true);
+        dispatch(refreshReducer());
+        const userToken = localStorage.getItem("userToken");
+        axios
+          .get(
+            `${process.env.REACT_APP_BACKEND_URL}/chat/getChat/${value._id}`,
+            { headers: { token: userToken } }
+          )
+          .then((response) => {
+            setUniqueChat(response.data.messages);
+          });
+      });
   };
 
   const formik = useFormik({
@@ -70,9 +89,8 @@ const Chat = () => {
       });
   }, [formik.values.users]);
 
-  
   useEffect(() => {
-    const userToken = localStorage.getItem('userToken')
+    const userToken = localStorage.getItem("userToken");
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/chat/messages`, {
         headers: { token: userToken },
@@ -82,6 +100,8 @@ const Chat = () => {
       });
   }, []);
 
+  console.log("tttttttttt", showList);
+
   return (
     <>
       <Navbar />
@@ -90,126 +110,147 @@ const Chat = () => {
           <Sidebar />
         </div>
         <div className="chatRight">
-          <div className="chatList">
-            <Box
-              sx={{
-                width: "80%",
-                height: "30px",
-                borderRadius: "15px",
-                border: "2px solid",
-                margin: "8%",
-              }}
-            >
-              <InputBase
-                fullWidth
-                variant="standard"
-                size="small"
-                name="users"
-                placeholder="Search in friends"
-                onChange={formik.handleChange}
-                value={formik.values.users}
-              />
-            </Box>
-            <div className="userList">
-              {formik.values.users !== "" ? (
-                <List className="users">
-                  {searchUser
-                    ? searchUser.map((value) => {
-                        return (
-                          <ListItem
-                            onClick={() => setToChat(value)}
-                            className="chatUser"
-                            secondaryAction={
-                              <IconButton edge="end" aria-label="delete">
-                                {/* <DeleteIcon /> */}
-                              </IconButton>
-                            }
-                          >
+          {showList ? (
+            <div className="chatList">
+              <Box
+                sx={{
+                  width: "80%",
+                  height: "30px",
+                  borderRadius: "15px",
+                  border: "2px solid",
+                  margin: "8%",
+                }}
+              >
+                <InputBase
+                  fullWidth
+                  variant="standard"
+                  size="small"
+                  name="users"
+                  placeholder="Search in friends"
+                  onChange={formik.handleChange}
+                  value={formik.values.users}
+                />
+              </Box>
+              {formik.values.users !== "" ? (  <div className="userList">
+               
+                  <List className="users">
+                    {searchUser
+                      ? searchUser.map((value) => {
+                          return (
+                            <ListItem
+                              key={value._id}
+                              onClick={() => setToChat(value)}
+                              className="chatUser"
+                              secondaryAction={
+                                <IconButton edge="end" aria-label="delete">
+                                  {/* <DeleteIcon /> */}
+                                </IconButton>
+                              }
+                            >
+                              <ListItemAvatar>
+                                <Avatar
+                                  src={value.profileimage}
+                                  sx={{
+                                    width: "52px",
+                                    height: "52px",
+                                    border: "2px solid",
+                                  }}
+                                ></Avatar>
+                              </ListItemAvatar>
+                              <ListItemText
+                                sx={{ marginLeft: "19px" }}
+                                primary={
+                                  <Typography style={{ fontWeight: 500 }}>
+                                    {" "}
+                                    <b>{value.firstname} </b>{" "}
+                                  </Typography>
+                                }
+                              />
+                            </ListItem>
+                          );
+                        })
+                      : null}
+                  </List>
+                
+              </div>) : null}
+
+              <div className="chatUsersList">
+                <List>
+                  {chatList.map((value) => {
+                    return (
+                      <ListItem
+                        className="chatUser"
+                        secondaryAction={
+                          <IconButton edge="end" aria-label="delete">
+                            {/* <DeleteIcon /> */}
+                          </IconButton>
+                        }
+                      >
+                        {value.users.map((userValue) => {
+                          return (
                             <ListItemAvatar>
-                              <Avatar
-                                src={value.profileimage}
-                                sx={{
-                                  width: "52px",
-                                  height: "52px",
-                                  border: "2px solid",
-                                }}
-                              ></Avatar>
+                              {userValue._id === user._id ? null : (
+                                <Avatar
+                                  src={
+                                    userValue._id === user._id
+                                      ? null
+                                      : userValue.profileimage
+                                  }
+                                  sx={{
+                                    width: "52px",
+                                    height: "52px",
+                                    border: "2px solid",
+                                  }}
+                                ></Avatar>
+                              )}
                             </ListItemAvatar>
+                          );
+                        })}
+                        {value.users.map((userValue) => {
+                          return (
                             <ListItemText
-                              sx={{ marginLeft: "19px" }}
+                              key={userValue._id}
+                              onClick={() =>
+                                setToChat(userValue) && setShowList(false)
+                              }
+                              sx={{ marginRight:'-113px' }}
                               primary={
                                 <Typography style={{ fontWeight: 500 }}>
-                                  {" "}
-                                  <b>{value.firstname} </b>{" "}
+                                  <b>
+                                    {userValue._id === user._id
+                                      ? null
+                                      : userValue.firstname}
+                                  </b>
                                 </Typography>
                               }
                             />
-                          </ListItem>
-                        );
-                      })
-                    : null}
+                          );
+                        })}
+                      </ListItem>
+                    );
+                  })}
                 </List>
-              ) : null}
+              </div>
             </div>
-            <div className="userList">
-              <List>
-                {chatList.map((value) => {
-                  return (
-                    <ListItem
-                      className="chatUser"
-                     
-                      secondaryAction={
-                        <IconButton edge="end" aria-label="delete">
-                          {/* <DeleteIcon /> */}
-                        </IconButton>
-                      }
-                    >
-                      {value.users.map((userValue) => {
-                        return (
-                          <ListItemAvatar>
-                            {userValue._id === user._id ? null : (
-                              <Avatar
-                                src={
-                                  userValue._id === user._id
-                                    ? null
-                                    : userValue.profileimage
-                                }
-                                sx={{
-                                  width: "52px",
-                                  height: "52px",
-                                  border: "2px solid",
-                                }}
-                              ></Avatar>
-                            )}
-                          </ListItemAvatar>
-                        );
-                      })}
-                      {value.users.map((userValue) => {
-                        return (
-                            
-                          <ListItemText
-                          onClick={() => setToChat(userValue)}
-                            sx={{ marginRight: "13px" }}
-                            primary={
-                              <Typography style={{ fontWeight: 500 }}>
-                                <b>
-                                  {userValue._id === user._id
-                                    ? null
-                                    : userValue.firstname}
-                                </b>
-                              </Typography>
-                            }
-                          />
-                        );
-                      })}
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </div>
-          </div>
+          ) : null}
 
-         { messageArea ? <MessageArea socket={socket} room={roomId}  uniqueChat={uniqueChat} setUniqueChat={setUniqueChat} /> : <div className="messageAreaText"><h2><b>Start a new conversation</b></h2></div>}
+          {messageArea ? (
+            <MessageArea
+              socket={socket}
+              room={roomId}
+              uniqueChat={uniqueChat}
+              setUniqueChat={setUniqueChat}
+              showList={showList}
+              setShowList={setShowList}
+              setMessageArea={setMessageArea}
+            />
+          ) : (
+            <div className="messageAreaText">
+              <h2>
+                <b>Start a new conversation</b>
+              </h2>
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -46,11 +46,11 @@ const validationSchema = yup.object({
 
 const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
   const refresh = useSelector((state) => state.refresh.refresh);
-  const [selectedDate, setSelectedDate] = useState('');
   const [userDetails, setUserDetails] = useState({});
   const [validFirstname, setFirstnameValid] = useState(null);
   // const [initialValues,setinitialValues]=useState({})
   const dispatch = useDispatch();
+  const [maxDate, setMaxDate] = useState(null);
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -65,7 +65,6 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
           return null;
         } else {
           setUserDetails(response.data);
-          // setSelectedDate(response.data.dateofbirth)
           dispatch(update(response.data));
         }
       });
@@ -75,17 +74,18 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
   //   validationSchema,
   // });
 
-  const handleValidation = async () => {
-    const isFirstnameValid = await validationSchema.isValid(
-      userDetails.firstname
-    );
-    console.log("onBlur ", isFirstnameValid);
-    if (!isFirstnameValid) {
-      setFirstnameValid(false);
-    } else {
-      setFirstnameValid(true);
-    }
-  };
+  // const handleValidation = async () => {
+  //   const isFirstnameValid = await validationSchema.isValid(
+  //     userDetails.firstname
+  //   );
+  //   console.log("onBlur ", isFirstnameValid);
+  //   if (!isFirstnameValid) {
+  //     setFirstnameValid(false);
+  //   } else {
+  //     setFirstnameValid(true);
+  //   }
+  // };
+
   // const handleValidation = async () => {
   //   const validate = await validationSchema
   //     .validate(userDetails, { abortEarly: false })
@@ -104,22 +104,29 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
   // };
 
   const handleSubmit = async (e) => {
-    const userId = user._id;
     e.preventDefault();
+    // const bioFormat = /^(?:\b\w+\b[\s\r\n]*){1,250}$/
     // const isValid = await validationSchema.isValid(userDetails);
-    console.log(typeof(selectedDate))
-    const dateofbirth = JSON.stringify(selectedDate)
-    console.log(typeof(dateofbirth),dateofbirth)
-    userDetails.dateofbirth = dateofbirth.slice(1,11);
-    console.log(dateofbirth)
-    console.log("user in on submitggggggggggggggggggggggg", userDetails.dateofbirth);
-    axios
-      .put(`${process.env.REACT_APP_BACKEND_URL}/user/update`, {
-        userDetails,
-      })
-      .then((response) => {
-        console.log("response ", response);
-      });
+
+    if(userDetails.firstname.length < 3 || userDetails.firstname.length > 12){
+      console.log("firstname not correct")
+    }
+   else if(userDetails.lastname.length < 1 || userDetails.lastname.length > 12 ){
+      console.log('second name incorrect')
+    }
+else{
+  axios
+    .put(`${process.env.REACT_APP_BACKEND_URL}/user/update`, {
+      userDetails,
+    })
+    .then((response) => {
+      console.log("response ", response);
+      dispatch(refreshReducer())
+      dispatch(update(response.data));
+      setBioEditingModal(false)
+    });
+}
+
   };
 
   // console.log("formik user values", formik.values.firstname);
@@ -154,7 +161,6 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
                       console.log("first userdaetails", userDetails);
                       setUserDetails({ ...userDetails });
                     }}
-                    onBlur={handleValidation}
                     name="firstname"
                     variant="standard"
                     placeholder="First Name"
@@ -169,7 +175,6 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
                       userDetails.lastname = event.target.value;
                       setUserDetails({ ...userDetails });
                     }}
-                    onBlur={handleValidation}
                     type="text"
                     name="lastname"
                     variant="standard"
@@ -219,7 +224,6 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
                   <div className="textField">
                     <TextField
                       name="country"
-                      
                       value={userDetails.country}
                       onChange={(event) => {
                         userDetails.country = event.target.value;
@@ -232,23 +236,20 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
                   </div>
                   <div className="date">
                     <pre>Date of birth</pre>
-                    <DatePicker
+                    <input
+                      type="date"
+                      value={userDetails.dateofbirth}
+                      onChange={(event) => {
+                        userDetails.dateofbirth = event.target.value;
+                        setUserDetails({ ...userDetails });
+                      }}
                       name="dateofbirth"
-                      // value={userDetails.dateofbirth}
-                        value={selectedDate}
-                      className="datePicker"
-                      selected={selectedDate}
-                      onChange={(date) => setSelectedDate(date)}
-                      dateFormat="dd/MM/yyyy"
-                      minDate={new Date("02-01-2020")}
-                      maxDate={new Date()}
-                      isClearable
-                      showYearDropdown
-                      scrollableMonthYearDropdown
+                      min="1980-01-01"
+                      max="2012-01-01"
                     />
                   </div>
                   <div className="saveButton">
-                    <Button type="submit" variant="outlined">
+                    <Button type="submit" variant="outlined" size="small" >
                       Save
                     </Button>
                   </div>

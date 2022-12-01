@@ -53,6 +53,7 @@ const ProfileEditingModal = (props) => {
 
   const uploadProfileImage = () => {
     const formData = new FormData();
+    console.log('============', profileImageSelected)
     formData.append("file", profileImageSelected);
     formData.append("upload_preset", "himv7zii");
     try {
@@ -107,8 +108,9 @@ const ProfileEditingModal = (props) => {
             >
               <img
                 style={{ width: "300px", height: "100px" }}
-                src={user.coverimage ? user.coverimage[0] : ""}
-                alt=""
+                src={user.coverimage[0] 
+                  ? user.coverimage[0] 
+                  : ""}
               />
             </div>
             <div
@@ -188,7 +190,7 @@ const ProfileEditingModal = (props) => {
                 style={{ width: "110px", height: "110px", borderRadius: "50%" }}
                 src={
                   profileImageSelected
-                    ? profileImageSelected
+                    ? profileImageSelected.name
                     : user.profileimage[0]
                 }
                 alt=""

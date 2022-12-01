@@ -21,44 +21,41 @@ const UserProfile = () => {
   const [openProfile, setOpenProfile] = useState(false);
   const [bioEditingModal, setBioEditingModal] = useState(false);
   const [userDetails, setUserDetails] = useState({});
-  const user = useSelector((state) => state.user);
   const refresh = useSelector((state) => state.refresh.refresh);
   const postsDetails = useSelector((state) => state.post);
+  const userToken = localStorage.getItem("userToken");
+
 
   const follow = () => {};
-
-
   useEffect(() => {
-    const userToken = localStorage.getItem("userToken");
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}`, {
         headers: { token: userToken },
       })
       .then((response) => {
-        console.log("userdetails", response);
         if (response.data.message === "userNotFound") {
           return null;
         } else {
           setUserDetails(response.data);
-          // dispatch(update(response.data));
-
+          dispatch(update(response.data));
         }
       });
-  }, []);
+    
+  }, [refresh]);
 
 
-  const userToken = localStorage.getItem("userToken");
+  const user = useSelector((state) => state.user);
+
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/posts/getPost`, {
         headers: { token: userToken },
       })
       .then((response) => {
-        // setPostDetails(e.data)
         dispatch(postUpdate(response.data));
       });
   }, [refresh]);
-  
 
   return (
     <>
@@ -74,7 +71,7 @@ const UserProfile = () => {
                 }}
                 className="profileCoverImg"
                 src={
-                  user.coverimage
+                  user.coverimage[0]
                     ? user.coverimage[0]
                     : "https://c4.wallpaperflare.com/wallpaper/604/298/500/simple-background-texture-blue-wallpaper-preview.jpg"
                 }
@@ -84,20 +81,18 @@ const UserProfile = () => {
                 onClick={() => setOpenProfile(true)}
                 className="profileUserImg"
                 src={
-                  user.profileimage
+                  user.profileimage[0]
                     ? user.profileimage[0]
-                    : "/Assets/blank-profile-picture.webp"
+                    : 'https://res.cloudinary.com/dm0l6abeb/image/upload/v1669888071/SocialMedia%20Assets/blank-profile-picture_aj6but.webp'
                 }
               />
             </div>
             <div className="profileInfo">
               <h4 className="profileInfoName">
-                {user.firstname} {user.lastname}
+                {/* {user.firstname} {user.lastname} */}
+                {user.firstname || user.lastname ? user.firstname + user.lastname : null}
               </h4>
-              <h5 className="profileInfoDesc">
-                Hello my friends ! Iam Aswanth. Iam a software Engineer. Works
-                at Clicut Kinfra  Hello my friends ! Iam 
-              </h5>
+              <h5 className="profileInfoDesc">{user.bio ? user.bio : null}</h5>
             </div>
           </div>
           <div className="followButton">
@@ -124,34 +119,34 @@ const UserProfile = () => {
             <div className="bioLeftMain">
               <div className="proffessionMain">
                 <span className="proffession">Work : </span>
-                <span className="proffessionName">Software Engineer</span>
+                <span className="proffessionName">{user.proffession ? user.proffession : null}</span>
               </div>
               <br />
               <div className="livesInMain">
                 <span className="livesIn">Lives in : </span>
-                <span className="livesInName">Kannur</span>
+                <span className="livesInName">{user.livesin ? user.livesin : null}</span>
               </div>
               <br />
-              <div className="stateMain">
-                <span className="state">State : </span>
-                <span className="stateName">Kerala</span>
+              <div className="countryMain">
+                <span className="country">Country : </span>
+                <span className="countryName">{user.country ? user.country : null}</span>
               </div>
             </div>
 
             <div className="bioRightMain">
               <div className="countryMain">
                 <span className="country">Email : </span>
-                <span className="countryName">aswanthek1@gmail.com</span>
+                <span className="countryName">{user.email ? user.email : null}</span>
               </div>
               <br />
               <div className="followersMain">
-                <span className="followers">followers : </span>
-                <span className="followersNumber">67</span>
+                <span className="followers">Followers : </span>
+                <span className="followersNumber">{user.followers ? user.followers.length : 0}</span>
               </div>
               <br />
               <div className="followingMain">
                 <span className="following">Following : </span>
-                <span className="followingNumber">89</span>
+                <span className="followingNumber">{user.following ? user.following.length : 0}</span>
               </div>
             </div>
           </div>

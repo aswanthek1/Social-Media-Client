@@ -32,8 +32,10 @@
   margin: 2%;
 }
 
+
 .chatUsersList {
-  margin-left: 30px;
+  margin-left: -44px;
+  margin-top: -20px;
 }
 /* .chatUser{
     margin-right:10px;
@@ -50,7 +52,8 @@
 
 @media screen and (max-width:700px) {
   .messagingArea{
-    display: none;
+    /* display: none; */
+    width: 60%;
 }
 }
 

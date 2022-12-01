@@ -12,12 +12,15 @@ import {
 import React, { useEffect, useState } from "react";
 import Message from "./Message";
 import SendIcon from "@mui/icons-material/Send";
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
-const MessageArea = ({ socket, room , uniqueChat, setUniqueChat}) => {
+const MessageArea = ({ socket, room , uniqueChat, setUniqueChat, showList, setShowList, setMessageArea }) => {
   // console.log("room and socket", uniqueChat);
+  const navigate = useNavigate()
   const [chatUserState, setChatUserState] = useState({});
   const [currentMessage, setCurrentMessage] = useState();
   const refresh = useSelector((state) => state.refresh.refresh);
@@ -67,6 +70,11 @@ const MessageArea = ({ socket, room , uniqueChat, setUniqueChat}) => {
   return (
     <>
       <div className="messagingArea">
+        { !showList ? <IconButton
+        onClick={() => setShowList(true) || setMessageArea(false)}
+        >
+          <ChevronLeftIcon/>
+        </IconButton> : null}
         <List sx={{ paddingInline: "0px", paddingBlock: "0px" }}>
           <ListItem
             secondaryAction={

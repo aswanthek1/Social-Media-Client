@@ -10,10 +10,22 @@
   }
 }
 
+@media screen and (max-width: 900px) {
+  .chatRight {
+    margin-top: 8%;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
 .chatList {
-  width: 45%;
-  height: 84vh;
-  background-color: #e5d9d9;
+  width: 40%;
+  max-height: 100vh;
+  height: 500px;
+  background-color: white;
+  border: 2px solid grey;
   border-radius: 12px;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -23,9 +35,12 @@
     align-items: center; */
 }
 
-@media screen and (max-width:700px) {
+
+
+@media screen and (max-width:600px) {
   .chatList{
-    width: 60%;
+    width: 100%;
+    border: 0px;
   }
 }
 .userList {
@@ -36,43 +51,60 @@
 .chatUsersList {
   margin-left: -44px;
   margin-top: -20px;
+  
 }
 /* .chatUser{
     margin-right:10px;
 } */
 
 .messagingArea {
-  width: 45%;
+  width: 40%;
   background-color: aqua;
   /* padding-block: 63px; */
   border-radius: 12px;
-  height: 87vh;
+  max-height: 100vh;
+  height: 500px;
+  border: 2px solid grey;
   overflow-y: hidden;
 }
 
-@media screen and (max-width:700px) {
+@media screen and (max-width:600px) {
   .messagingArea{
     /* display: none; */
-    width: 60%;
+    width: 100%;
+    border: 0ch;
+    border-radius: 0%;
+    background-color: white;
+    max-height: 100vh;
+    height: 88vh;
 }
 }
 
 .messagingAreaMid {
-  max-width: 100%;
+  /* max-width: 100%; */
   /* overflow-x: hidden; */
+  width: 100%;
   height: 75%;
-  background-color: #f8f0f0;
+  background-color: white;
   overflow-y: hidden;
 }
 
 .message {
   display: flex;
   flex-direction: column;
+  margin-left: 2%;
+  /* overflow-x: hidden */
+}
+
+.message.own {
+  align-items: flex-end;
 }
 
 .messageTop {
   display: flex;
   margin-top: 20px;
+  overflow-x: hidden;
+  height: auto;
 }
 
 .messageImage {
@@ -89,6 +121,30 @@
   background-color: #1877f2;
   color: white;
   max-width: 200px;
+  word-wrap: break-word;
+  height: auto; 
+}
+
+@media screen and (max-width:425px) {
+  .messageText{
+    max-width: 100px;
+  }
+}
+
+.message.own .messageText {
+  background-color: lightgrey;
+  color: black;
+  max-width: 200px;
+  border-radius: 10px;
+  padding: 10px;
+  height: auto;
+  word-wrap: break-word;
+
+}
+@media screen and (max-width:425px) {
+  .message.own .messageText{
+    max-width: 100px;
+  }
 }
 
 .messageBottom {
@@ -105,14 +161,7 @@
   background-color: rgb(241, 234, 234);
 }
 
-.message.own {
-  align-items: flex-end;
-}
 
-.message.own .messageText {
-  background-color: lightgrey;
-  color: black;
-}
 
 .scrollToBottom {
   width: 100%;

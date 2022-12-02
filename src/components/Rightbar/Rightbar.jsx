@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useFormik } from "formik";
-import Unfollow from "../Unfollow";
+import Unfollow from "../People/Unfollow";
 import { useSelector } from "react-redux";
 
 function Rightbar() {

@@ -1,13 +1,10 @@
-import { Alert, Button, Snackbar } from "@mui/material";
+import {  Button } from "@mui/material";
 import axios from "axios";
-import { refreshReducer } from "../Redux/RefreshSlice";
+import { refreshReducer } from "../../Redux/RefreshSlice";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import toast, { Toaster } from "react-hot-toast";
-import snackBar from "@mui/material/Snackbar";
 import React, { useState } from "react";
-
-
 
 export default function Unfollow({ id }) {
   const dispatch = useDispatch();

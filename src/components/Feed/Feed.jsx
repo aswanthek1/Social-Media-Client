@@ -8,7 +8,7 @@ function Feed() {
   console.log("feed post", postsDetails);
 
   return (
-  <Box flex={4} p={1}>
+  <Box flex={4} paddingTop={1}>
       {postsDetails.post.map((postArray) => {
         return <Posts key={postArray._id} data={postArray} />;
       })}

@@ -20,7 +20,7 @@ function App() {
         <Routes>
           <Route element={<UserRouter />}>
             <Route element={<UserHomePage />} path="/" />
-            <Route element={<UserProfilePage />} path="/profile" />
+            <Route element={<UserProfilePage />} path="/profile/:id" />
             <Route element={<PeoplePage />} path="/people" />
             <Route element={<ChatPage />} path="/chat" />
           </Route>

@@ -226,7 +226,7 @@ function Navbar() {
           </MenuItem>
           <MenuItem
             onClick={() => {
-              navigate("/profile");
+              navigate(`/profile/${user._id}` );
             }}
           >
             Profile

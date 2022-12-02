@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Divider,
   IconButton,
   InputBase,
   List,
@@ -35,11 +36,11 @@ const Chat = () => {
   const user = useSelector((state) => state.user);
 
   const setToChat = (value) => {
-    if (window.innerWidth < 700) {
+    if (window.innerWidth < 600) {
       setShowList(false);
     }
     window.addEventListener("resize", (Event) => {
-      if (window.innerWidth < 700) {
+      if (window.innerWidth < 600) {
         setShowList(false);
       } else {
         setShowList(true);
@@ -115,14 +116,16 @@ const Chat = () => {
               <Box
                 sx={{
                   width: "80%",
-                  height: "30px",
+                  height: "25px",
                   borderRadius: "15px",
-                  border: "2px solid",
+                  border: "1px solid grey",
                   margin: "8%",
+                  paddingLeft:'6px',
+                  backgroundColor:"#EAF6F6"
                 }}
               >
                 <InputBase
-                  fullWidth
+                  fullWidth 
                   variant="standard"
                   size="small"
                   name="users"
@@ -133,8 +136,8 @@ const Chat = () => {
               </Box>
               {formik.values.users !== "" ? (  <div className="userList">
                
-                  <List className="users">
-                    {searchUser
+              {formik.values.users !== "" ? <List className="users">
+                    {searchUser 
                       ? searchUser.map((value) => {
                           return (
                             <ListItem
@@ -169,13 +172,18 @@ const Chat = () => {
                             </ListItem>
                           );
                         })
-                      : null}
-                  </List>
-                
-              </div>) : null}
+                      :  null}
+                  </List> :  <div  style={{position:'absolute', zIndex:12}} ><h4>No user found</h4></div>  }
+              </div>) :null}
 
-              <div className="chatUsersList">
-                <List>
+          {formik.values.users  ? null : <div className="chatUsersList">
+            <div style={{marginBottom:'20px'}}>
+            <h3 style={{textAlign:'center',color:'grey'}}>Recent chats</h3>
+            <Divider sx={{ borderBottomWidth: 2 }}/>
+            </div>
+                <List
+                sx={{ paddingLeft:'4px'}}
+                >
                   {chatList.map((value) => {
                     return (
                       <ListItem
@@ -192,9 +200,9 @@ const Chat = () => {
                               {userValue._id === user._id ? null : (
                                 <Avatar
                                   src={
-                                    userValue._id === user._id
-                                      ? null
-                                      : userValue.profileimage
+                                    userValue._id !== user._id
+                                      ? userValue.profileimage
+                                      : null
                                   }
                                   sx={{
                                     width: "52px",
@@ -209,11 +217,12 @@ const Chat = () => {
                         {value.users.map((userValue) => {
                           return (
                             <ListItemText
+                            sx={{ marginLeft: "5px" }}
                               key={userValue._id}
                               onClick={() =>
                                 setToChat(userValue) && setShowList(false)
                               }
-                              sx={{ marginRight:'-113px' }}
+                              // sx={{ marginRight:'-113px' }}
                               primary={
                                 <Typography style={{ fontWeight: 500 }}>
                                   <b>
@@ -230,7 +239,7 @@ const Chat = () => {
                     );
                   })}
                 </List>
-              </div>
+              </div> }
             </div>
           ) : null}
 

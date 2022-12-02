@@ -129,7 +129,7 @@ function Posts(props) {
       <>
   {  <div>
       <Card
-        sx={{ marginBottom: 4, marginInline: "auto", maxWidth: 500 }}
+        sx={{ marginBottom: 4, marginInline: "auto", width:{sm:430, xs:'100%'}, maxWidth:{sm: 600,xs:'100%'}}}
         elevation={5}
       >
         <CardHeader
@@ -157,7 +157,7 @@ function Posts(props) {
           component="img"
           sx={{ objectFit: "cover" }}
           height="400"
-          width="0"
+          // width="400px"
           image={props.data.image ? props.data.image : null}
           alt="A"
         />

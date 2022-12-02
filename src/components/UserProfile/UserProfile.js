@@ -95,7 +95,7 @@ const UserProfile = () => {
               <h5 className="profileInfoDesc">{user.bio ? user.bio : null}</h5>
             </div>
           </div>
-          <div className="followButton">
+          {/* <div className="followButton">
             <Button
               sx={{ width: "70px", fontSize: "10px", marginRight: "10px" }}
               color="primary"
@@ -113,7 +113,7 @@ const UserProfile = () => {
             >
               Message
             </Button>
-          </div>
+          </div> */}
 
           <div className="bioMain">
             <div className="bioLeftMain">
@@ -185,6 +185,9 @@ const UserProfile = () => {
                 </Button>
               </span>
             </div>
+            
+            
+
             <div className="profileRightBottom">
               {postsDetails.post.map((postArray) => {
                 return (

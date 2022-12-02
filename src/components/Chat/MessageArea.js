@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import Message from "./Message";
 import SendIcon from "@mui/icons-material/Send";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import EastOutlinedIcon from '@mui/icons-material/EastOutlined';
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -61,25 +62,21 @@ const MessageArea = ({ socket, room , uniqueChat, setUniqueChat, showList, setSh
 
   useEffect(() => {
     socket.on("recieve_message", (data) => {
-      // console.log("data from message", data);
       setUniqueChat((list) => [...list,data]);
     });
     return () => socket.off();
   }, [ socket]);
 
-  return (
+  return ( 
     <>
       <div className="messagingArea">
-        { !showList ? <IconButton
-        onClick={() => setShowList(true) || setMessageArea(false)}
-        >
-          <ChevronLeftIcon/>
-        </IconButton> : null}
         <List sx={{ paddingInline: "0px", paddingBlock: "0px" }}>
           <ListItem
-            secondaryAction={
-              <IconButton edge="end" aria-label="delete">
-                {/* <DeleteIcon /> */}
+           secondaryAction={
+               <IconButton edge="end"
+               onClick={() => setShowList(true) || setMessageArea(false)}
+               >
+               { !showList ?  <EastOutlinedIcon />: null} 
               </IconButton>
             }
           >
@@ -106,8 +103,11 @@ const MessageArea = ({ socket, room , uniqueChat, setUniqueChat, showList, setSh
               height: "30px",
               borderRadius: "15px",
               padding: "0 10px",
-              border: "2px solid",
-              marginTop: "5%",
+              // border: "1.5px solid grey",
+              background:{sm:'white',xs:'#272ccb4f'},
+              marginTop: "3%",
+              color:{sm:'grey',xs:'white'}
+
             }}
           >
             <InputBase

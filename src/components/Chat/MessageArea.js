@@ -12,7 +12,6 @@ import {
 import React, { useEffect, useState } from "react";
 import Message from "./Message";
 import SendIcon from "@mui/icons-material/Send";
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import EastOutlinedIcon from '@mui/icons-material/EastOutlined';
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -23,7 +22,7 @@ const MessageArea = ({ socket, room , uniqueChat, setUniqueChat, showList, setSh
   // console.log("room and socket", uniqueChat);
   const navigate = useNavigate()
   const [chatUserState, setChatUserState] = useState({});
-  const [currentMessage, setCurrentMessage] = useState();
+  const [currentMessage, setCurrentMessage] = useState("");
   const refresh = useSelector((state) => state.refresh.refresh);
   const user = useSelector((state) => state.user);
 
@@ -33,7 +32,8 @@ const MessageArea = ({ socket, room , uniqueChat, setUniqueChat, showList, setSh
   }, [refresh]);
 
   const sentMessage = async () => {
-    if (currentMessage !== "") {
+      if( currentMessage.trim() === "" ){ console.log('What you mean ? ')}
+      else{
       const messageData = {
         room,
         author: user.firstname,
@@ -83,6 +83,7 @@ const MessageArea = ({ socket, room , uniqueChat, setUniqueChat, showList, setSh
             <ListItemAvatar>
               <Avatar
                 sx={{ width: "52px", height: "52px", border: "2px solid" }}
+                src={chatUserState ? chatUserState.profileimage : null}
               ></Avatar>
             </ListItemAvatar>
             <ListItemText

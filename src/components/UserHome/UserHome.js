@@ -12,11 +12,10 @@ import {
   CircularProgress,
 } from "@mui/material";
 import Add from "../Add/Add";
-import { light } from "@mui/material/styles/createPalette";
+// import { light } from "@mui/material/styles/createPalette";
 import { useDispatch, useSelector } from "react-redux";
 import { update } from "../../Redux/UserSlice";
 import { postUpdate } from "../../Redux/PostSlice";
-import { refreshReducer } from "../../Redux/RefreshSlice";
 import { useNavigate } from "react-router-dom";
 
 function UserHome() {
@@ -26,7 +25,7 @@ function UserHome() {
   const user = useSelector((state) => state.user);
   const refresh = useSelector((state) => state.refresh.refresh);
   const [userDetails, setUserDetails] = useState({});
-  const [postDetails, setPostDetails] = useState([]);
+  const [allPosts, setAllPosts] = useState([])
 
   // const [mode, setMode] = useState("light")
   // const darkTheme = createTheme({
@@ -42,7 +41,6 @@ function UserHome() {
         headers: { token: userToken },
       })
       .then((response) => {
-        console.log("userdetails", response);
         if (response.data.message === "userNotFound") {
           return null;
         } else {
@@ -59,10 +57,15 @@ function UserHome() {
       })
       .then((response) => {
         console.log("postDetails ", response);
-        // setPostDetails(e.data)
         dispatch(postUpdate(response.data));
       });
   }, [refresh]);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/posts/allPosts`,{headers:{token:userToken}}).then((response) => {
+      setAllPosts(response.data)
+    })
+  },[refresh])
 
   return (
     // <ThemeProvider theme={darkTheme} color={'text.primary'}>

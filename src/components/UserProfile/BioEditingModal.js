@@ -13,10 +13,10 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { refreshReducer } from "../../Redux/RefreshSlice";
 import { update } from "../../Redux/UserSlice";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { refreshReducer } from "../../Redux/RefreshSlice";
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -44,14 +44,14 @@ const validationSchema = yup.object({
   bio: yup.string().matches(/^(?:\b\w+\b[\s\r\n]*){1,250}$/),
 });
 
-const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
+const BioEditingModal = ({ bioEditingModal, setBioEditingModal,userProfileData,setUserProfileData }) => {
   const refresh = useSelector((state) => state.refresh.refresh);
   const [userDetails, setUserDetails] = useState({});
   const [validFirstname, setFirstnameValid] = useState(null);
   // const [initialValues,setinitialValues]=useState({})
   const dispatch = useDispatch();
   const [maxDate, setMaxDate] = useState(null);
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user); 
 
   useEffect(() => {
     const userToken = localStorage.getItem("userToken");
@@ -68,40 +68,8 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal }) => {
           dispatch(update(response.data));
         }
       });
-  }, []);
+  }, [refresh]);
 
-  // const formik = useFormik({
-  //   validationSchema,
-  // });
-
-  // const handleValidation = async () => {
-  //   const isFirstnameValid = await validationSchema.isValid(
-  //     userDetails.firstname
-  //   );
-  //   console.log("onBlur ", isFirstnameValid);
-  //   if (!isFirstnameValid) {
-  //     setFirstnameValid(false);
-  //   } else {
-  //     setFirstnameValid(true);
-  //   }
-  // };
-
-  // const handleValidation = async () => {
-  //   const validate = await validationSchema
-  //     .validate(userDetails, { abortEarly: false })
-  //     .then((responseData) => {
-  //   console.log('userdetaeisls at validation ', userDetails)
-  //       console.log("no errors");
-  //       console.log(responseData);
-  //       setValid([]);
-  //     })
-  //     .catch((err) => {
-  //       console.log("err",err);
-  //       console.log(err.firstname,err.lastname);
-  //       console.log(err.errors);
-  //       setValid(err.errors);
-  //     });
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -121,15 +89,15 @@ else{
     })
     .then((response) => {
       console.log("response ", response);
-      dispatch(refreshReducer())
+      setUserProfileData(response.data)
       dispatch(update(response.data));
       setBioEditingModal(false)
+      dispatch(refreshReducer())
     });
 }
 
   };
 
-  // console.log("formik user values", formik.values.firstname);
 
   return (
     <div>
@@ -137,7 +105,7 @@ else{
         <StyledModal
           keepMounted
           open={bioEditingModal}
-          onClose={() => setBioEditingModal(false)}
+          onClose={() =>{ setBioEditingModal(false) ; dispatch(refreshReducer())}}
           aria-labelledby="keep-mounted-modal-title"
           aria-describedby="keep-mounted-modal-description"
         >
@@ -253,14 +221,6 @@ else{
                       Save
                     </Button>
                   </div>
-                  {/* {valid.map((e) => {
-                    console.log("eeeeeee", valid)
-                    return (
-                      <span style={{ color: "red" }} key={e}>
-                        {e}
-                      </span>
-                    );
-                  })} */}
                 </div>
               </div>
             </form>

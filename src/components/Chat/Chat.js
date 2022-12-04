@@ -101,8 +101,6 @@ const Chat = () => {
       });
   }, []);
 
-  console.log("tttttttttt", showList);
-
   return (
     <>
       <Navbar />
@@ -120,12 +118,12 @@ const Chat = () => {
                   borderRadius: "15px",
                   border: "1px solid grey",
                   margin: "8%",
-                  paddingLeft:'6px',
-                  backgroundColor:"#EAF6F6"
+                  paddingLeft: "6px",
+                  backgroundColor: "#EAF6F6",
                 }}
               >
                 <InputBase
-                  fullWidth 
+                  fullWidth
                   variant="standard"
                   size="small"
                   name="users"
@@ -134,112 +132,125 @@ const Chat = () => {
                   value={formik.values.users}
                 />
               </Box>
-              {formik.values.users !== "" ? (  <div className="userList">
-               
-              {formik.values.users !== "" ? <List className="users">
-                    {searchUser 
-                      ? searchUser.map((value) => {
-                          return (
-                            <ListItem
-                              key={value._id}
-                              onClick={() => setToChat(value)}
-                              className="chatUser"
-                              secondaryAction={
-                                <IconButton edge="end" aria-label="delete">
-                                  {/* <DeleteIcon /> */}
-                                </IconButton>
-                              }
-                            >
+              {formik.values.users !== "" ? (
+                <div className="userList">
+                  {formik.values.users !== "" ? (
+                    <List className="users">
+                      {searchUser
+                        ? searchUser.map((value) => {
+                            return (
+                              <ListItem
+                                key={value._id}
+                                onClick={() => setToChat(value)}
+                                className="chatUser"
+                                secondaryAction={
+                                  <IconButton edge="end" aria-label="delete">
+                                    {/* <DeleteIcon /> */}
+                                  </IconButton>
+                                }
+                              >
+                                <ListItemAvatar>
+                                  <Avatar
+                                    src={value.profileimage}
+                                    sx={{
+                                      width: "52px",
+                                      height: "52px",
+                                      border: "2px solid",
+                                    }}
+                                  ></Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                  sx={{ marginLeft: "19px" }}
+                                  primary={
+                                    <Typography style={{ fontWeight: 500 }}>
+                                      {" "}
+                                      <b>{value.firstname} </b>{" "}
+                                    </Typography>
+                                  }
+                                />
+                              </ListItem>
+                            );
+                          })
+                        : null}
+                    </List>
+                  ) : (
+                    <div style={{ position: "absolute", zIndex: 12 }}>
+                      <h4>No user found</h4>
+                    </div>
+                  )}
+                </div>
+              ) : null}
+
+              {formik.values.users ? null : (
+                <div className="chatUsersList">
+                  <div style={{ marginBottom: "20px" }}>
+                    <h3 style={{ textAlign: "center", color: "grey" }}>
+                      Recent chats
+                    </h3>
+                    <Divider sx={{ borderBottomWidth: 2 }} />
+                  </div>
+                  <List sx={{ paddingLeft: "4px", paddingRight: "28x" }}>
+                    {chatList.map((value) => {
+                      return (
+                        <ListItem
+                          className="chatUser"
+                          secondaryAction={
+                            <IconButton edge="end" aria-label="delete">
+                              {/* <DeleteIcon /> */}
+                            </IconButton>
+                          }
+                        >
+                          {value.users.map((userValue) => {
+                            return (
                               <ListItemAvatar>
-                                <Avatar
-                                  src={value.profileimage}
-                                  sx={{
-                                    width: "52px",
-                                    height: "52px",
-                                    border: "2px solid",
-                                  }}
-                                ></Avatar>
+                                {userValue._id === user._id ? null : (
+                                  <Avatar
+                                    src={
+                                      userValue._id !== user._id
+                                        ? userValue.profileimage
+                                        : null
+                                    }
+                                    sx={{
+                                      width: "52px",
+                                      height: "52px",
+                                      border: "2px solid",
+                                    }}
+                                  ></Avatar>
+                                )}
                               </ListItemAvatar>
+                            );
+                          })}
+                          {value.users.map((userValue) => {
+                            return (
                               <ListItemText
-                                sx={{ marginLeft: "19px" }}
+                                sx={{
+                                  marginLeft: "5px",
+                                  position: "absolute",
+                                  left: "155px",
+                                }}
+                                key={userValue._id}
+                                onClick={() =>
+                                  setToChat(userValue) && setShowList(false)
+                                }
+                                // sx={{ marginRight:'-113px' }}
                                 primary={
                                   <Typography style={{ fontWeight: 500 }}>
-                                    {" "}
-                                    <b>{value.firstname} </b>{" "}
+                                    <b>
+                                      {userValue._id === user._id
+                                        ? null
+                                        : userValue.firstname}
+                                    </b>
                                   </Typography>
                                 }
                               />
-                            </ListItem>
-                          );
-                        })
-                      :  null}
-                  </List> :  <div  style={{position:'absolute', zIndex:12}} ><h4>No user found</h4></div>  }
-              </div>) :null}
-
-          {formik.values.users  ? null : <div className="chatUsersList">
-            <div style={{marginBottom:'20px'}}>
-            <h3 style={{textAlign:'center',color:'grey'}}>Recent chats</h3>
-            <Divider sx={{ borderBottomWidth: 2 }}/>
-            </div>
-                <List
-                sx={{ paddingLeft:'4px'}}
-                >
-                  {chatList.map((value) => {
-                    return (
-                      <ListItem
-                        className="chatUser"
-                        secondaryAction={
-                          <IconButton edge="end" aria-label="delete">
-                            {/* <DeleteIcon /> */}
-                          </IconButton>
-                        }
-                      >
-                        {value.users.map((userValue) => {
-                          return (
-                            <ListItemAvatar>
-                              {userValue._id === user._id ? null : (
-                                <Avatar
-                                  src={
-                                    userValue._id !== user._id
-                                      ? userValue.profileimage
-                                      : null
-                                  }
-                                  sx={{
-                                    width: "52px",
-                                    height: "52px",
-                                    border: "2px solid",
-                                  }}
-                                ></Avatar>
-                              )}
-                            </ListItemAvatar>
-                          );
-                        })}
-                        {value.users.map((userValue) => {
-                          return (
-                            <ListItemText
-                            sx={{ marginLeft: "5px" }}
-                              key={userValue._id}
-                              onClick={() =>
-                                setToChat(userValue) && setShowList(false)
-                              }
-                              // sx={{ marginRight:'-113px' }}
-                              primary={
-                                <Typography style={{ fontWeight: 500 }}>
-                                  <b>
-                                    {userValue._id === user._id
-                                      ? null
-                                      : userValue.firstname}
-                                  </b>
-                                </Typography>
-                              }
-                            />
-                          );
-                        })}
-                      </ListItem>
-                    );
-                  })}
-                </List>
-              </div> }
+                            );
+                          })}
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+                </div>
+              )}
             </div>
           ) : null}
 

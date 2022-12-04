@@ -139,6 +139,7 @@
   padding: 10px;
   height: auto;
   word-wrap: break-word;
+  margin-right: 16px;
 
 }
 @media screen and (max-width:425px) {
@@ -150,6 +151,7 @@
 .messageBottom {
   font-size: 12px;
   margin-top: 10px;
+  margin-right: 16px;
 }
 .messageInputDiv {
   width: 100%;

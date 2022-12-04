@@ -227,7 +227,7 @@ function Navbar() {
           <MenuItem
             onClick={() => {
               navigate(`/profile/${user._id}` );
-            }}
+            localStorage.setItem('profileUser',user._id)}}
           >
             Profile
           </MenuItem>
@@ -240,7 +240,6 @@ function Navbar() {
           <MenuItem sx={{ display: { xs: "block", sm: "none" } }}>
             Notifications
           </MenuItem>
-          <MenuItem>My account</MenuItem>
           <MenuItem onClick={() => (navigate("/login"), localStorage.clear())}>
             Logout
           </MenuItem>

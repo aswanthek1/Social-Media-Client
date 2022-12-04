@@ -11,6 +11,6 @@ export default configureStore({
         post:postReducer,
         refresh: refreshReducer,
         allUsers:allUsersReducer,
-        socket:socketReducers
+        socket:socketReducers,
     }
 })

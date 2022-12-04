@@ -108,8 +108,8 @@ const ProfileEditingModal = (props) => {
             >
               <img
                 style={{ width: "300px", height: "100px" }}
-                src={user.coverimage[0] 
-                  ? user.coverimage[0] 
+                src={user.coverimage 
+                  ? user.coverimage
                   : ""}
               />
             </div>
@@ -191,7 +191,7 @@ const ProfileEditingModal = (props) => {
                 src={
                   profileImageSelected
                     ? profileImageSelected.name
-                    : user.profileimage[0]
+                    : user.profileimage
                 }
                 alt=""
               />

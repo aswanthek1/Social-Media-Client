@@ -1,20 +1,30 @@
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Posts from "../Posts/Posts";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 function Feed() {
-  const postsDetails = useSelector((state) => state.post);
-  console.log("feed post", postsDetails);
+  const [allPosts, setAllPosts] = useState([]);
+  const refresh = useSelector((state) => state.refresh.refresh);
+  const userToken = localStorage.getItem("userToken");
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BACKEND_URL}/posts/allPosts`, {
+        headers: { token: userToken },
+      })
+      .then((response) => {
+        setAllPosts(response.data);
+      });
+  }, [refresh]);
 
   return (
-  <Box flex={4} paddingTop={1}>
-      {postsDetails.post.map((postArray) => {
+    <Box flex={4} paddingTop={1}>
+      {allPosts.map((postArray) => {
         return <Posts key={postArray._id} data={postArray} />;
       })}
-    </Box> 
+    </Box>
   );
-
 }
 
 export default Feed;

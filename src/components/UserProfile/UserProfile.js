@@ -3,59 +3,62 @@ import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import { useSelector } from "react-redux";
 import "./ProfileAreaStyles.css";
-import { Button } from "@mui/material";
+import {
+  Box,
+  IconButton,
+} from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 import ProfileEditingModal from "./ProfileEditingModal";
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { update } from "../../Redux/UserSlice";
-import { postUpdate } from "../../Redux/PostSlice";
-import { refreshReducer } from "../../Redux/RefreshSlice";
 import Posts from "../Posts/Posts";
 import BioEditingModal from "./BioEditingModal";
+import ChangingTabs from "../Tabs/ChangingTabs";
+import FollowersLists from "../UserLists/FollowersLists";
+import FollowingLists from "../UserLists/FollowingLists";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const [bioEditingModal, setBioEditingModal] = useState(false);
-  const [userDetails, setUserDetails] = useState({});
+  const [tabNumber, setTabNumber] = useState(1);
+  const [value, setValue] = useState(1);
   const refresh = useSelector((state) => state.refresh.refresh);
-  const postsDetails = useSelector((state) => state.post);
   const userToken = localStorage.getItem("userToken");
 
 
-  const follow = () => {};
+  const [userProfileData, setUserProfileData] = useState({})
+  const [userPost, setUserPost] = useState([])
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  
+  const profileId = localStorage.getItem('profileUser')
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}`, {
-        headers: { token: userToken },
-      })
-      .then((response) => {
-        if (response.data.message === "userNotFound") {
-          return null;
-        } else {
-          setUserDetails(response.data);
-          dispatch(update(response.data));
-        }
-      });
-    
-  }, [refresh]);
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/profile/${profileId}`).then((response) => {
+       setUserProfileData(response.data)
+    })
+  },[refresh])
 
 
   const user = useSelector((state) => state.user);
 
-
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/posts/getPost`, {
+      .get(`${process.env.REACT_APP_BACKEND_URL}/posts/getPost/${profileId}`, {
         headers: { token: userToken },
       })
       .then((response) => {
-        dispatch(postUpdate(response.data));
+           setUserPost(response.data)
+        // dispatch(postUpdate(response.data));
       });
-  }, [refresh]);
+  }, []);
+
 
   return (
     <>
@@ -71,9 +74,9 @@ const UserProfile = () => {
                 }}
                 className="profileCoverImg"
                 src={
-                  user.coverimage[0]
-                    ? user.coverimage[0]
-                    : "https://c4.wallpaperflare.com/wallpaper/604/298/500/simple-background-texture-blue-wallpaper-preview.jpg"
+                  userProfileData.coverimage
+                    ?  userProfileData.coverimage
+                    :  "https://res.cloudinary.com/dm0l6abeb/image/upload/v1670160233/SocialMedia%20Assets/simple-background-texture-blue-wallpaper-preview_xazvvv.jpg"
                 }
                 alt=""
               />
@@ -81,18 +84,19 @@ const UserProfile = () => {
                 onClick={() => setOpenProfile(true)}
                 className="profileUserImg"
                 src={
-                  user.profileimage[0]
-                    ? user.profileimage[0]
-                    : 'https://res.cloudinary.com/dm0l6abeb/image/upload/v1669888071/SocialMedia%20Assets/blank-profile-picture_aj6but.webp'
+                  userProfileData.profileimage
+                    ? userProfileData.profileimage
+                    : "https://res.cloudinary.com/dm0l6abeb/image/upload/v1669888071/SocialMedia%20Assets/blank-profile-picture_aj6but.webp"
                 }
               />
             </div>
             <div className="profileInfo">
               <h4 className="profileInfoName">
-                {/* {user.firstname} {user.lastname} */}
-                {user.firstname || user.lastname ? user.firstname + user.lastname : null}
+                {userProfileData.firstname || userProfileData.lastname
+                  ? userProfileData.firstname +" "+ userProfileData.lastname
+                  : null}
               </h4>
-              <h5 className="profileInfoDesc">{user.bio ? user.bio : null}</h5>
+              <h5 className="profileInfoDesc">{userProfileData.bio ? userProfileData.bio : null}</h5>
             </div>
           </div>
           {/* <div className="followButton">
@@ -119,95 +123,100 @@ const UserProfile = () => {
             <div className="bioLeftMain">
               <div className="proffessionMain">
                 <span className="proffession">Work : </span>
-                <span className="proffessionName">{user.proffession ? user.proffession : null}</span>
+                <span className="proffessionName">
+                  {userProfileData.proffession ? userProfileData.proffession : null}
+                </span>
               </div>
               <br />
               <div className="livesInMain">
                 <span className="livesIn">Lives in : </span>
-                <span className="livesInName">{user.livesin ? user.livesin : null}</span>
+                <span className="livesInName">
+                  {userProfileData.livesin ? userProfileData.livesin : null}
+                </span>
               </div>
               <br />
               <div className="countryMain">
                 <span className="country">Country : </span>
-                <span className="countryName">{user.country ? user.country : null}</span>
+                <span className="countryName">
+                  {userProfileData.country ? userProfileData.country : null}
+                </span>
               </div>
             </div>
 
             <div className="bioRightMain">
               <div className="countryMain">
                 <span className="country">Email : </span>
-                <span className="countryName">{user.email ? user.email : null}</span>
+                <span className="countryName">
+                  {userProfileData.email ? userProfileData.email : null}
+                </span>
               </div>
               <br />
-              <div className="followersMain">
+              <div className="followersMain" >
                 <span className="followers">Followers : </span>
-                <span className="followersNumber">{user.followers ? user.followers.length : 0}</span>
+                <span className="followersNumber">
+                  {userProfileData.followers ? userProfileData.followers.length : 0}
+                </span>
               </div>
               <br />
               <div className="followingMain">
                 <span className="following">Following : </span>
-                <span className="followingNumber">{user.following ? user.following.length : 0}</span>
+                <span className="followingNumber">
+                  {userProfileData.following ? userProfileData.following.length : 0}
+                </span>
               </div>
             </div>
+
+            {user._id ===userProfileData._id ?  <IconButton sx={{position:'absolute',right:0, bottom:'98%'}}
+              onClick={() => setBioEditingModal(true)}
+            >
+            <EditIcon/>
+            </IconButton> : null}
+            {/* </div> */}
           </div>
 
-          <div>
-            <div className="infoList">
-              <span>
-                <Button
-                  color="primary"
-                  sx={{ width: "70px", fontSize: "10px" }}
-                  variant="outlined"
-                  size="small"
-                >
-                  Following
-                </Button>
-              </span>
-              <span>
-                <Button
-                  color="primary"
-                  sx={{ width: "70px", fontSize: "10px" }}
-                  variant="outlined"
-                  size="small"
-                >
-                  Followers
-                </Button>
-              </span>
-              <span>
-                <Button
-                  onClick={() => setBioEditingModal(true)}
-                  color="primary"
-                  sx={{ width: "94px", fontSize: "10px" }}
-                  variant="outlined"
-                  size="small"
-                >
-                  Edit Profile
-                </Button>
-              </span>
-            </div>
-            
-            
+          <div>      
+            <div className="profileRightBottomMain">
+              <div className="profileRightBottom">
+                {userPost.map((postArray) => {
+                  return (
+                    <Posts key={postArray._id} data={postArray} />
+                  );
+                })}
+              </div>
 
-            <div className="profileRightBottom">
-              {postsDetails.post.map((postArray) => {
-                return (
-                  <Posts key={postArray._id} data={postArray} />
-                  // <ProfileArea key={postArray._id} data={postArray} />
-                );
-              })}
+           <div className="peopleBox">
+                <Box sx={{ width: "100%", bgcolor: "#EAF6F6" }}>
+                  <ChangingTabs
+                    setTabNumber={setTabNumber}
+                    tabNumber={tabNumber}
+                  />
+                </Box>
+
+                {tabNumber === 1 ? <div className="following">
+                  <FollowingLists following={userProfileData.following} />
+                </div> : null}
+
+                {tabNumber === 2 ? (
+                  <div className="followers">
+                    <FollowersLists followers={userProfileData.followers} />
+                  </div>
+                ) : null}
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <ProfileEditingModal modalOpenState={setOpen} modalState={open} />
-      <ProfileEditingModal
+    {user._id ===userProfileData._id ?  <ProfileEditingModal modalOpenState={setOpen} modalState={open} /> : null}
+    {user._id ===userProfileData._id ?  <ProfileEditingModal
         profileModalOpenState={setOpenProfile}
         profileModalState={openProfile}
-      />
-      <BioEditingModal
+      /> : null}
+      {user._id ===userProfileData._id ?  <BioEditingModal
         bioEditingModal={bioEditingModal}
         setBioEditingModal={setBioEditingModal}
-      />
+        userProfileData={userProfileData}
+        setUserProfileData={setUserProfileData}
+      /> : null}
     </>
   );
 };

@@ -19,11 +19,13 @@ import axios from "axios";
 import { useFormik } from "formik";
 import Unfollow from "../People/Unfollow";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function Rightbar() {
   const [searchUser, setSearchUser] = useState([]);
   const user = useSelector((state) => state.user);
   const allUsers = useSelector((state) => state.allUsers.allUsers);
+  const navigate = useNavigate()
   const formik = useFormik({
     initialValues: {
       users: null,
@@ -89,11 +91,20 @@ function Rightbar() {
             {searchUser.map((value) => {
               return (
                 <ListItem alignItems="flex-start">
-                  <ListItemAvatar>
+                  <ListItemAvatar
+                    onClick={() => {
+                      navigate(`/profile/${value._id}`);
+                      localStorage.setItem("profileUser", value._id);
+                    }}
+                  >
                     <Avatar alt="Remy Sharp" src={value.profileimage} />
                   </ListItemAvatar>
                   <ListItemText
                     sx={{ marginTop: "18px" }}
+                    onClick={() => {
+                      navigate(`/profile/${value._id}`);
+                      localStorage.setItem("profileUser", value._id);
+                    }}
                     disableTypography
                     primary={
                       <Typography style={{ fontWeight: 500 }}>
@@ -102,12 +113,10 @@ function Rightbar() {
                       </Typography>
                     }
                   />
-                  {/* <Unfollow  /> */}
+                  <Divider variant="inset" component="li" />
                 </ListItem>
               );
             })}
-
-            <Divider variant="inset" component="li" />
           </List>
         ) : (
           ""

@@ -14,6 +14,8 @@ import {
   TextField,
   Button,
   FormHelperText,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import ShareIcon from "@mui/icons-material/Share";
 import InsertCommentIcon from "@mui/icons-material/InsertComment";
@@ -50,6 +52,7 @@ const ExpandMore = styled((props) => {
 }));
 
 function Posts(props) {
+  console.log("props of posts" , props)
   const dispatch = useDispatch();  
   const [expanded, setExpanded] = React.useState(false); 
   const handleExpandClick = () => {
@@ -59,13 +62,10 @@ function Posts(props) {
   const [likeState, setLikeState] = useState(false);
   const [likeNumber, setLikeNumber] = useState(0);
   const [imojiState, setImojiState] = useState(false);
-  const [postData, setPostData] = useState([]);
   const user = useSelector((state) => state.user);
   const refresh = useSelector((state) => state.refresh.refresh);
-  
-  useEffect(()=>{
-    setPostData(props.data)
-  },[])
+  const [open, setOpen] = useState(false);
+
 
 
   useEffect(() => {
@@ -123,7 +123,6 @@ function Posts(props) {
       }),
     });
 
-    if (!postData) return <div style={{backgroundColor:'red', display:"flex",justifyContent:'center',alignItems:'center'}}><h1>loading</h1></div>
     
     return (
       <>
@@ -135,24 +134,50 @@ function Posts(props) {
         <CardHeader
           avatar={
             <Avatar
-              alt={user.firstname}
-              src={user.profileimage[0]}
+              alt={props.data.userId ? props.data.userId.firstname: null}
+              src={props.data.userId ? props.data.userId.profileimage: null}
               sx={{ bgcolor: "red" }}
               aria-label="recipe"
             ></Avatar>
           }
           action={
-            <IconButton aria-label="settings">
+            <IconButton aria-label="settings"
+            onClick={() => setOpen(true)}
+            >
               <MoreVert />
             </IconButton>
           }
           title={
-            props.data.userId.firstname + " " + props.data.userId.lastname
+            props.data.userId
               ? props.data.userId.firstname + " " + props.data.userId.lastname
               : null
           }
           subheader={props.data.date}
         />
+              {/* <Menu
+        id="basic-menu"
+        anchorEl={open}
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        open={open}
+        onClose={() => setOpen(false)}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+      >
+        <MenuItem >Profile</MenuItem>
+        <MenuItem >My account</MenuItem>
+        <MenuItem >Logout</MenuItem>
+      </Menu> */}
         <CardMedia
           component="img"
           sx={{ objectFit: "cover" }}
@@ -196,9 +221,11 @@ function Posts(props) {
             <ScrollToBottom>
               <Box sx={{ maxHeight: 200 }}>
                 {props.data.comments.map((obj) => {
+                  console.log('comment obj ', obj)
                   return (
                     <>
                       <p
+                          key={obj._id}
                         style={{
                           color: "red",
                           fontSize: "12px",

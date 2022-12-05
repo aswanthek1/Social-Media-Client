@@ -18,6 +18,7 @@ import BioEditingModal from "./BioEditingModal";
 import ChangingTabs from "../Tabs/ChangingTabs";
 import FollowersLists from "../UserLists/FollowersLists";
 import FollowingLists from "../UserLists/FollowingLists";
+import toast, {Toaster} from 'react-hot-toast'
 
 const UserProfile = () => {
   const dispatch = useDispatch();
@@ -57,11 +58,12 @@ const UserProfile = () => {
            setUserPost(response.data)
         // dispatch(postUpdate(response.data));
       });
-  }, []);
+  }, [refresh]);
 
 
   return (
     <>
+    <Toaster/>
       <Navbar />
       <div className="profile">
         <Sidebar />

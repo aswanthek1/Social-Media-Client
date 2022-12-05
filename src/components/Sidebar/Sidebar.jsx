@@ -17,7 +17,8 @@ import ModeNightIcon from "@mui/icons-material/ModeNight";
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import RequestPageIcon from "@mui/icons-material/RequestPage";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
-import React from "react";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import React, { useState } from "react";
 // import './SidebarStyles.js'
 import useStyles from "./SidebarStyle.js";
 import { Settings } from "@mui/icons-material";
@@ -58,17 +59,20 @@ function Sidebar() {
               </ListItemButton>
             </ListItem>
 
-            <ListItem disablePadding>
+            <ListItem
+            onClick={() => {navigate('/posts/saved')}}
+              disablePadding
+            >
               <ListItemButton component="a" href="#">
                 <ListItemIcon>
-                  <NotificationsActiveIcon />
+                  <BookmarkIcon />
                 </ListItemIcon>
                 <ListItemText
                   disableTypography
                   primary={
                     <Typography style={{ fontWeight: 500 }}>
                       {" "}
-                      <b>Notifications</b>{" "}
+                      <b>Saved Posts</b>{" "}
                     </Typography>
                   }
                 />
@@ -76,7 +80,12 @@ function Sidebar() {
             </ListItem>
 
             <ListItem disablePadding>
-              <ListItemButton component="a" onClick={() => navigate("/people")}>
+              <ListItemButton
+                component="a"
+                onClick={() => {
+                  navigate("/people");
+                }}
+              >
                 <ListItemIcon>
                   <PeopleRoundedIcon />
                 </ListItemIcon>

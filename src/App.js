@@ -8,6 +8,7 @@ import UserLoggedout from "./utils/UserLoggedout";
 import UserProfilePage from "./pages/UserProfile";
 import PeoplePage from "./pages/People";
 import ChatPage from "./pages/Chat";
+import SavedPostsPage from "./pages/SavedPosts";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Route element={<UserProfilePage />} path="/profile/:id" />
             <Route element={<PeoplePage />} path="/people" />
             <Route element={<ChatPage />} path="/chat" />
+            <Route element={<SavedPostsPage/>} path='/posts/saved' />
           </Route>
 
           <Route element={<UserLoggedout />}>

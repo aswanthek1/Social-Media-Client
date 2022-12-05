@@ -219,7 +219,7 @@ function Navbar() {
             {" "}
             <Avatar
               alt={user.firstname}
-              src="/static/images/avatar/1.jpg"
+              src={user.profileimage}
               sx={{ width: 30, height: 30, marginRight: "10px" }}
             />{" "}
             <b> {user.firstname}</b>

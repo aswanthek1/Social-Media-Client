@@ -16,7 +16,8 @@ export const userSlice = createSlice({
         livesin:'',
         country:'',
         dateofbirth:'',
-        proffession:''
+        proffession:'',
+        savedPosts:''
     },
 
     reducers:{
@@ -35,6 +36,7 @@ export const userSlice = createSlice({
             state.country = action.payload.country
             state.dateofbirth = action.payload.dateofbirth
             state.proffession = action.payload.proffession
+            state.savedPosts = action.payload.savedPosts
         }
     }
 })

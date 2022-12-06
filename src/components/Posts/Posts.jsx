@@ -39,7 +39,7 @@ import InputEmoji from "react-input-emoji";
 import EmojiPicker from "emoji-picker-react";
 import { Picker } from "emoji-mart";
 import ScrollToBottom from "react-scroll-to-bottom";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from "react-router-dom";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -53,17 +53,16 @@ const ExpandMore = styled((props) => {
 }));
 
 function Posts(props) {
-  console.log(props.data,"props");
   const dispatch = useDispatch();
   const [expanded, setExpanded] = React.useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [likeState, setLikeState] = useState(false);
   const [likeNumber, setLikeNumber] = useState(0);
-  const [savedState, setSavedState] = useState(false)
+  const [savedState, setSavedState] = useState(false);
   const [imojiState, setImojiState] = useState(false);
   const user = useSelector((state) => state.user);
   const refresh = useSelector((state) => state.refresh.refresh);
@@ -75,9 +74,6 @@ function Posts(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-console.log(user,"user")
-
 
   const deletePost = (postId) => {
     try {
@@ -119,12 +115,12 @@ console.log(user,"user")
         .then((response) => {
           if (response.data.message === "post saved") {
             toast.success("Post moved to saved posts");
-            setSavedState(true)
+            setSavedState(true);
             dispatch(refreshReducer());
           } else {
             toast.success("Post removed from saved posts");
             dispatch(refreshReducer());
-            setSavedState(false)
+            setSavedState(false);
           }
         });
     } catch (error) {
@@ -141,17 +137,17 @@ console.log(user,"user")
       .then((response) => {
         console.log("liked response", response);
         if (response.data.liked) {
-          // setLikeState(true)
+          setLikeState(true);
           dispatch(refreshReducer());
         } else if (response.data.unlike) {
-          // setLikeState(false)
+          setLikeState(false);
           dispatch(refreshReducer());
         }
       });
   };
 
   useEffect(() => {
-    console.log(typeof(user._id) , typeof(props.data.likes[0]))
+    console.log(typeof user._id, typeof props.data.likes[0]);
     const id = `${user._id}`;
     let proplike = [];
     proplike = `${props.data.likes}`;
@@ -159,14 +155,13 @@ console.log(user,"user")
 
     const totalLike = props.data.likes.length;
     setLikeNumber(props.data.likes.length);
-
-  }, [refresh]);
+  }, []);
 
   const formik = useFormik({
     initialValues: {
       comment: "",
     },
-    onSubmit: (values, { resetForm }) => { 
+    onSubmit: (values, { resetForm }) => {
       console.log(values);
       if (values.comment.trim() === "") {
         console.log("Please type something");
@@ -263,8 +258,12 @@ console.log(user,"user")
                     handleClose();
                     savePost(props.data._id);
                   }}
-                >                
-                {savedState ? 'Remove post from saved' : 'Save Post'}               
+                >
+                  {/* {savedState || props.saved ? "Remove post from saved" : "Save Post"} */}
+
+                  {user.saved.includes(props.data._id)
+                    ? "Remove post from saved"
+                    : "Save Post"}
                 </MenuItem>
               )}
             </Menu>
@@ -284,7 +283,11 @@ console.log(user,"user")
 
             <CardActions disableSpacing>
               <IconButton onClick={likePost} aria-label="add to favorites">
-                {likeState ? <Favorite sx={{ color: 'red' }} /> : <FavoriteBorder />}
+                {likeState ? (
+                  <Favorite sx={{ color: "red" }} />
+                ) : (
+                  <FavoriteBorder />
+                )}
                 {/* <Checkbox
                   checked={likeState}
                   icon={<FavoriteBorder />}

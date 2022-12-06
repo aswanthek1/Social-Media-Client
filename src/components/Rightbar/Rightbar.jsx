@@ -2,17 +2,12 @@ import Box from "@mui/material/Box";
 import React, { useState, useEffect } from "react";
 import {
   Typography,
-  AvatarGroup,
   Avatar,
-  ImageList,
-  ImageListItem,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Divider,
-  Grid,
-  TextField,
   InputBase,
 } from "@mui/material";
 import axios from "axios";
@@ -24,8 +19,7 @@ import { useNavigate } from "react-router-dom";
 function Rightbar() {
   const [searchUser, setSearchUser] = useState([]);
   const user = useSelector((state) => state.user);
-  const allUsers = useSelector((state) => state.allUsers.allUsers);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       users: null,
@@ -40,7 +34,6 @@ function Rightbar() {
         { headers: { user: user._id } }
       )
       .then((e) => {
-        console.log("uesr serarched result", e.data);
         setSearchUser(e.data);
       });
   }, [formik.values.users]);

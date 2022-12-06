@@ -7,7 +7,6 @@ import {
   Avatar,
   Menu,
   MenuItem,
-  Grid,
   IconButton,
 } from "@mui/material";
 import InterestsIcon from "@mui/icons-material/Interests";
@@ -18,10 +17,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useFormik } from "formik";
 import { useSelector, useDispatch } from "react-redux";
 import { update } from "../../Redux/UserSlice";
-import { refreshReducer } from "../../Redux/RefreshSlice";
 import { Drawer } from "@mui/material";
 import DrawerSidebar from "./DrawerSidebar";
 import { PersonSearchRounded } from "@mui/icons-material";
@@ -60,17 +57,9 @@ const UserBox = styled(Box)(({ theme }) => ({
 
 function Navbar() {
   const dispatch = useDispatch();
-  const [showSearch, setShowSearch] = useState(false);
-  const [searchUser, setSearchUser] = useState([]);
-  const refresh = useSelector((state) => state.refresh.refresh);
-  const formik = useFormik({
-    initialValues: {
-      users: null,
-    },
-  });
   const [state, setState] = React.useState({
     left: false,
-    right: false
+    right: false,
   });
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -117,17 +106,6 @@ function Navbar() {
       <DrawerSidebar state={state} />
     </Box>
   );
-
-  useEffect(() => {
-    console.log(formik.values.users);
-    axios
-      .get(
-        `${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`
-      )
-      .then((e) => {
-        setSearchUser(e.data);
-      });
-  }, [formik.values.users]);
 
   useEffect(() => {
     const userToken = localStorage.getItem("userToken");
@@ -197,9 +175,11 @@ function Navbar() {
         </StyledToolBar>
         <Box
           onClick={toggleDrawer("right", true)}
-          style={{ position: "absolute", right: "2px",top:'15px' }}
+          style={{ position: "absolute", right: "2px", top: "15px" }}
         >
-          <PersonSearchRounded sx={{ color: "grey", fontSize: "30px",display:{lg:'none'} }} />
+          <PersonSearchRounded
+            sx={{ color: "grey", fontSize: "30px", display: { lg: "none" } }}
+          />
         </Box>
         <Menu
           id="demo-positioned-menu"
@@ -226,8 +206,9 @@ function Navbar() {
           </MenuItem>
           <MenuItem
             onClick={() => {
-              navigate(`/profile/${user._id}` );
-            localStorage.setItem('profileUser',user._id)}}
+              navigate(`/profile/${user._id}`);
+              localStorage.setItem("profileUser", user._id);
+            }}
           >
             Profile
           </MenuItem>

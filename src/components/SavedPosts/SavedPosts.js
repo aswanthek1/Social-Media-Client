@@ -1,21 +1,16 @@
-import { Box, Stack } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import Add from '../Add/Add' 
-import Navbar from '../Navbar/Navbar'
-import Rightbar from '../Rightbar/Rightbar'
-import SavedFeed from '../SavedFeed/SavedFeed'
-import Sidebar from '../Sidebar/Sidebar'
+import { Box, Stack } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import Add from "../Add/Add";
+import Navbar from "../Navbar/Navbar";
+import Rightbar from "../Rightbar/Rightbar";
+import SavedFeed from "../SavedFeed/SavedFeed";
+import Sidebar from "../Sidebar/Sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { update } from "../../Redux/UserSlice";
-import { postUpdate } from "../../Redux/PostSlice";
-import { useNavigate } from "react-router-dom";
-import axios from 'axios'
+import axios from "axios";
 
 const SavedPosts = () => {
-
   const dispatch = useDispatch();
-
-  const user = useSelector((state) => state.user);
   const refresh = useSelector((state) => state.refresh.refresh);
   const [userDetails, setUserDetails] = useState({});
   const [allPosts, setAllPosts] = useState([]);
@@ -39,16 +34,6 @@ const SavedPosts = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/posts/getPost`, {
-        headers: { token: userToken },
-      })
-      .then((response) => {
-        dispatch(postUpdate(response.data));
-      });
-  }, [refresh]);
-
-  useEffect(() => {
-    axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/posts/allPosts`, {
         headers: { token: userToken },
       })
@@ -60,16 +45,16 @@ const SavedPosts = () => {
   return (
     <div>
       <Box bgcolor={"background.default"}>
-      <Navbar />
-      <Stack direction="row" spacing={2} justifyContent="space-between">
-        <Sidebar />
-        <SavedFeed />
-        <Rightbar />
-      </Stack>
-      <Add />
-    </Box>
+        <Navbar />
+        <Stack direction="row" spacing={2} justifyContent="space-between">
+          <Sidebar />
+          <SavedFeed />
+          <Rightbar />
+        </Stack>
+        <Add />
+      </Box>
     </div>
-  )
-}
+  );
+};
 
-export default SavedPosts
+export default SavedPosts;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import axios from "axios";
@@ -29,6 +29,7 @@ const initialValues = {
   phonenumber: "",
   password: "",
   confirmpassword: "",
+  otp:''
   // dateofbirth: ''
 };
 
@@ -71,7 +72,9 @@ const validationSchema = yup.object({
 
 function UserSignup() {
   const navigate = useNavigate();
-
+  const [otpField, setOtpField] = useState(false)
+  const [OTP, setOTP] = useState('')
+  const [OTPcheck, setOTPCheck] = useState('')
   const [values, setValues] = React.useState({
     password: "",
     showPassword: false,
@@ -100,6 +103,17 @@ function UserSignup() {
   // const showTextfield = useMediaQuery(theme.breakpoints.up('sm'))
   // const showTextfieldSM = useMediaQuery(theme.breakpoints.up('md'))
 
+
+  const verifyOTP = (value) => {
+    value.preventDefault()
+    console.log('value otp', OTPcheck, "  ", OTP)
+    if(OTPcheck === OTP){
+      
+    }
+  }
+
+
+
   const formik = useFormik({
     initialValues,
     onSubmit: (values) => {
@@ -107,7 +121,9 @@ function UserSignup() {
         axios
           .post(`${process.env.REACT_APP_BACKEND_URL}/register`, values)
           .then((e) => {
-            if (e.data.message) {
+            console.log("response", e);
+
+            if (e.data.message === 'This email already exists, try another one') {
               toast.error("You already have an account", {
                 icon: "⚠️",
                 duration: 2000,
@@ -117,10 +133,12 @@ function UserSignup() {
                   fontSize: "20px",
                 },
               });
-            } else {
-              console.log("response", e.data);
-              localStorage.setItem("userToken", e.data.token);
-              navigate("/");
+            } else if(e.data.message === 'otp sent') {
+              toast.success('otp sent')
+              setOtpField(true)
+              setOTP(e.data.otp)
+              // localStorage.setItem("userToken", e.data.token);
+              // navigate("/");
             }
           })
           .catch((error) => {
@@ -132,6 +150,10 @@ function UserSignup() {
     },
     validationSchema,
   });
+
+
+
+
 
   function handleCallbackResponse(response) {
     console.log("jwt credentials ", response.credential);
@@ -352,20 +374,54 @@ function UserSignup() {
                   </FormHelperText>
                 ) : null}
 
-                <Button
+{otpField ===false ? <Button
                   type="submit"
                   variant="contained"
                   color="primary"
                   className={classes.submit}
                 >
-                  Submit
-                </Button>
+                  Proceed
+                </Button> : null}
+             </form>
+
+
+          {/* <form action="">                    */}
+       { otpField ? <TextField
+                  name="otp"
+                  size="small"
+                  value={OTPcheck}
+                  onChange={(event) => {setOTPCheck(event.target.value)}}
+                  // value={formik.values.otp}
+                  // onChange={formik.handleChange}
+                  type="text"
+                  id="otp"
+                  variant="outlined"
+                  label="Enter otp sent to your mail"
+                  fullWidth
+                  placeholder="OTP"
+                  className={classes.textfield}
+                />: null}
+                {/* {formik.touched.phonenumber && formik.errors.phonenumber ? (
+                  <FormHelperText className={classes.errors}>
+                    {formik.errors.phonenumber}
+                  </FormHelperText>
+                ) : null} */} 
+
+    { otpField ? <Button
+                  variant="contained"
+                  // onClick={verifyOTP}
+                  color="primary"
+                  className={classes.submit}
+                  >
+                    Submit
+                  </Button>:null}
+
                 <Typography align="center" className={classes.or}>
                   {" "}
                   <b>Or</b>{" "}
                 </Typography>
                 <div id="googlebtn" className={classes.google}></div>
-              </form>
+              {/* </form> */}
               <Toaster />
             </Paper>
           </Grid>

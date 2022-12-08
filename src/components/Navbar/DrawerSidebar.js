@@ -1,6 +1,5 @@
 import HomeIcon from '@mui/icons-material/Home';
 import ModeNightIcon from '@mui/icons-material/ModeNight';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import RequestPageIcon from '@mui/icons-material/RequestPage';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import { Settings } from '@mui/icons-material';
@@ -10,12 +9,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 
 const DrawerSidebar = ({state}) => {
     const navigate = useNavigate()
     const [searchUser, setSearchUser] = useState([]);
     const user = useSelector((state) => state.user);
-    const allUsers = useSelector((state) => state.allUsers.allUsers);
     const formik = useFormik({
       initialValues: {
         users: null,
@@ -49,14 +48,16 @@ const DrawerSidebar = ({state}) => {
                     </ListItemButton>
                 </ListItem>
 
-                <ListItem disablePadding>
+                <ListItem
+                onClick={() => {navigate('/posts/saved')}}
+                 disablePadding>
                     <ListItemButton component='a' href='#'>
                         <ListItemIcon>
-                            <NotificationsActiveIcon />
+                            <BookmarkIcon />
                         </ListItemIcon>
                         <ListItemText
                             disableTypography
-                            primary={<Typography style={{ fontWeight: 500 }}> <b>Notifications</b> </Typography>}
+                            primary={<Typography style={{ fontWeight: 500 }}> <b>Saved Posts</b> </Typography>}
                         />
                     </ListItemButton>
                 </ListItem>

@@ -65,7 +65,6 @@ function Posts(props) {
   const [savedState, setSavedState] = useState(false);
   const [imojiState, setImojiState] = useState(false);
   const user = useSelector((state) => state.user);
-  const refresh = useSelector((state) => state.refresh.refresh);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -152,9 +151,6 @@ function Posts(props) {
     let proplike = [];
     proplike = `${props.data.likes}`;
     proplike.includes(id) ? setLikeState(true) : setLikeState(false);
-
-    const totalLike = props.data.likes.length;
-    setLikeNumber(props.data.likes.length);
   }, []);
 
   const formik = useFormik({
@@ -192,7 +188,7 @@ function Posts(props) {
             sx={{
               marginBottom: 4,
               marginInline: "auto",
-              width: { sm: 430, xs: "100%" },
+              width: { md: 430, sm: "100%" },
               maxWidth: { sm: 600, xs: "100%" },
             }}
             elevation={5}
@@ -288,16 +284,11 @@ function Posts(props) {
                 ) : (
                   <FavoriteBorder />
                 )}
-                {/* <Checkbox
-                  checked={likeState}
-                  icon={<FavoriteBorder />}
-                  checkedIcon={<Favorite sx={{ color: "red" }} />}
-                /> */}
               </IconButton>
               {/* <Badge badgeContent={4} color="" sx={{marginInline:'3px'}} /> */}
               <Typography>
                 {" "}
-                <b> {likeNumber} </b>
+                <b> {props.data.likes.length} likes </b>
               </Typography>
 
               <ExpandMore
@@ -308,6 +299,10 @@ function Posts(props) {
               >
                 <InsertCommentIcon />
               </ExpandMore>
+              <Typography>
+                {" "}
+                <b> {props.data.comments.length} Comments </b>
+              </Typography>
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
               <CardContent>

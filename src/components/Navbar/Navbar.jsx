@@ -37,7 +37,7 @@ const Search = styled("div")(({ theme }) => ({
 
 const Icons = styled(Box)(({ theme }) => ({
   display: "none",
-  gap: "20px",
+  gap: "16px",
   alignItems: "center",
   marginRight: "20px",
   [theme.breakpoints.up("sm")]: {
@@ -75,7 +75,7 @@ function Navbar() {
 
   const list = (anchor) => (
     <Box
-      sx={{ width: 180, height: "100vh" }}
+      sx={{ width: 185, height: "100vh" }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
@@ -150,13 +150,13 @@ function Navbar() {
 
           <Icons>
             <IconButton onClick={() => navigate("/chat")}>
-              <Badge badgeContent={4} color="error">
+              {/* <Badge badgeContent={4} color="error"> */}
                 <MailIcon sx={{ color: "grey" }} />
-              </Badge>
+              {/* </Badge> */}
             </IconButton>
-            <Badge badgeContent={4} color="error">
+            {/* <Badge badgeContent={4} color="error"> */}
               <NotificationsIcon sx={{ color: "grey" }} />
-            </Badge>
+            {/* </Badge> */}
             <Avatar
               alt={user.firstname}
               src={user.profileimage}

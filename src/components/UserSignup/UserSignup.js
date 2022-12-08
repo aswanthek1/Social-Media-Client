@@ -21,6 +21,7 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import jwt_decode from "jwt-decode";
 
 import useStyles from "./UserSignupStyle.js";
+import { CircularProgress } from "@mui/material";
 
 const initialValues = {
   firstname: "",
@@ -29,7 +30,7 @@ const initialValues = {
   phonenumber: "",
   password: "",
   confirmpassword: "",
-  otp:''
+  otp: "",
   // dateofbirth: ''
 };
 
@@ -72,9 +73,10 @@ const validationSchema = yup.object({
 
 function UserSignup() {
   const navigate = useNavigate();
-  const [otpField, setOtpField] = useState(false)
-  const [OTP, setOTP] = useState('')
-  const [OTPcheck, setOTPCheck] = useState('')
+  const [otpField, setOtpField] = useState(false);
+  const [OTP, setOTP] = useState("");
+  const [OTPError, setOtpError] = useState(false);
+  const [proceedProgress,setProceedProgress] = useState(false)
   const [values, setValues] = React.useState({
     password: "",
     showPassword: false,
@@ -103,47 +105,65 @@ function UserSignup() {
   // const showTextfield = useMediaQuery(theme.breakpoints.up('sm'))
   // const showTextfieldSM = useMediaQuery(theme.breakpoints.up('md'))
 
+  const resentOTP = (value) => {
+    setProceedProgress(true)
 
-  const verifyOTP = (value) => {
-    value.preventDefault()
-    console.log('value otp', OTPcheck, "  ", OTP)
-    if(OTPcheck === OTP){
-      
-    }
-  }
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/otp/resent`, { email: value })
+      .then((response) => {
+        setOTP(response.data.otp);
+        setProceedProgress(false)
+        toast.success('An otp sent to your email')
 
-
+      });
+  };
 
   const formik = useFormik({
     initialValues,
     onSubmit: (values) => {
       try {
-        axios
-          .post(`${process.env.REACT_APP_BACKEND_URL}/register`, values)
-          .then((e) => {
-            console.log("response", e);
-
-            if (e.data.message === 'This email already exists, try another one') {
-              toast.error("You already have an account", {
-                icon: "⚠️",
-                duration: 2000,
-                style: {
-                  width: "300px",
-                  backgroundColor: "greenyellow",
-                  fontSize: "20px",
-                },
+        
+        if (OTP == "") {
+          setProceedProgress(true)
+          axios
+            .post(`${process.env.REACT_APP_BACKEND_URL}/register`, values)
+            .then((e) => {
+              if (
+                e.data.message === "This email already exists, try another one"
+              ) {
+                toast.error("You already have an account", {
+                  icon: "⚠️",
+                  duration: 2000,
+                  style: {
+                    width: "300px",
+                    backgroundColor: "greenyellow",
+                    fontSize: "20px",
+                  },
+                });
+              } else if (e.data.message === "otp sent") {
+                toast.success('An otp sent to your email')
+                setOtpField(true);
+                setProceedProgress(false)
+                setOTP(e.data.otp);
+              }
+            })
+            .catch((error) => {
+              console.log("erereor", error);
+            });
+        } else {
+          if (OTP === values.otp) {
+            axios
+              .post(`${process.env.REACT_APP_BACKEND_URL}/register/otp`, values)
+              .then((response) => {
+                if (response.data) {
+                  localStorage.setItem("userToken", response.data.token);
+                  navigate("/");
+                }
               });
-            } else if(e.data.message === 'otp sent') {
-              toast.success('otp sent')
-              setOtpField(true)
-              setOTP(e.data.otp)
-              // localStorage.setItem("userToken", e.data.token);
-              // navigate("/");
-            }
-          })
-          .catch((error) => {
-            console.log("erereor", error);
-          });
+          } else {
+            setOtpError(true);
+          }
+        }
       } catch (error) {
         console.log(error);
       }
@@ -151,18 +171,11 @@ function UserSignup() {
     validationSchema,
   });
 
-
-
-
-
   function handleCallbackResponse(response) {
-    console.log("jwt credentials ", response.credential);
     const userObj = jwt_decode(response.credential);
-    console.log(userObj);
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/googleRegister`, userObj)
       .then((e) => {
-        console.log("google login response", e);
         if (e.data.message === "user already exists") {
           toast.error("You already have an account", {
             icon: "⚠️",
@@ -374,54 +387,74 @@ function UserSignup() {
                   </FormHelperText>
                 ) : null}
 
-{otpField ===false ? <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Proceed
-                </Button> : null}
-             </form>
+                {otpField === false ? (
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    disabled={proceedProgress?true:false}
+                  >
+                    Proceed
+                  </Button>
+                ) : null}
 
-
-          {/* <form action="">                    */}
-       { otpField ? <TextField
-                  name="otp"
-                  size="small"
-                  value={OTPcheck}
-                  onChange={(event) => {setOTPCheck(event.target.value)}}
-                  // value={formik.values.otp}
-                  // onChange={formik.handleChange}
-                  type="text"
-                  id="otp"
-                  variant="outlined"
-                  label="Enter otp sent to your mail"
-                  fullWidth
-                  placeholder="OTP"
-                  className={classes.textfield}
+{ proceedProgress ?  <CircularProgress
+                sx={{position:'absolute',color:'green',size:'10px',left:'46%',bottom:'18%'}}
                 />: null}
-                {/* {formik.touched.phonenumber && formik.errors.phonenumber ? (
-                  <FormHelperText className={classes.errors}>
-                    {formik.errors.phonenumber}
-                  </FormHelperText>
-                ) : null} */} 
+                {/* </form> */}
 
-    { otpField ? <Button
-                  variant="contained"
-                  // onClick={verifyOTP}
-                  color="primary"
-                  className={classes.submit}
+                {/* <form action=""> */}
+                {otpField ? (
+                  <TextField
+                    name="otp"
+                    size="small"
+                    // value={OTPcheck}
+                    // onChange={(event) => {setOTPCheck(event.target.value)}}
+                    value={formik.values.otp}
+                    onChange={formik.handleChange}
+                    type="text"
+                    id="otp"
+                    variant="outlined"
+                    label="Enter otp sent to your mail"
+                    fullWidth
+                    placeholder="OTP"
+                    className={classes.textfield}
+                  />
+                ) : null}
+                {OTPError ? (
+                  <FormHelperText className={classes.errors}>
+                    You enterd a wrong OTP
+                  </FormHelperText>
+                ) : null}
+                {otpField ? (
+                  <span style={{color:'#1893c5', position:'absolute', right:'33px', top:'71%'}}
+                    onClick={() => {
+                      resentOTP(formik.values.email);
+                    }}
+                  >
+                    Resent otp
+                  </span>
+                ) : null}
+
+                {otpField ? (
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    // onClick={verifyOTP}
+                    color="primary"
+                    className={classes.submit}
                   >
                     Submit
-                  </Button>:null}
+                  </Button>
+                ) : null}
 
                 <Typography align="center" className={classes.or}>
                   {" "}
                   <b>Or</b>{" "}
                 </Typography>
                 <div id="googlebtn" className={classes.google}></div>
-              {/* </form> */}
+              </form>
               <Toaster />
             </Paper>
           </Grid>

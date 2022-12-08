@@ -1,34 +1,35 @@
-import { Box, TextField } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Posts from "../Posts/Posts";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import './Feed.css'
+import "./Feed.css";
 
-function Feed({}) {
+function Feed() {
   const [allPosts, setAllPosts] = useState([]);
+  const [loader, setLoader] = useState(false);
   const refresh = useSelector((state) => state.refresh.refresh);
   const userToken = localStorage.getItem("userToken");
   useEffect(() => {
+    setLoader(true);
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/posts/allPosts`, {
         headers: { token: userToken },
       })
       .then((response) => {
-        if(response.data){
-          setAllPosts(response.data.allPosts)
-        }
-        else{
-          console.log('no posts available')
+        if (response.data) {
+          setLoader(false);
+          setAllPosts(response.data.allPosts);
+        } else {
+          console.log("no posts available");
         }
       });
   }, [refresh]);
 
-
   return (
     <>
-    <Box flex={4} paddingTop={1}>
-      {/* <div className="feedMain">
+      <Box flex={4} paddingTop={1} marginLeft="0px !important">
+        {/* <div className="feedMain">
         <Box >
         <TextField            
             type="text"
@@ -39,11 +40,23 @@ function Feed({}) {
           />
         </Box>
       </div> */}
-      { allPosts ? allPosts.map((postArray) => {
-        return <Posts key={postArray._id} data={postArray} />;
-       }) : null} 
-    </Box>
 
+        {loader ? (
+          <CircularProgress
+            sx={{
+              position: "absolute",
+              left: "43%",
+              top: "50%",
+            }}
+          />
+        ) : null}
+
+        {allPosts
+          ? allPosts.map((postArray) => {
+              return <Posts key={postArray._id} data={postArray} />;
+            })
+          : null}
+      </Box>
     </>
   );
 }

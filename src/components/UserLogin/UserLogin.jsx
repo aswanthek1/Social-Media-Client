@@ -25,6 +25,7 @@ import FormControl from "@mui/material/FormControl";
 import jwt_decode from "jwt-decode";
 
 import useStyles from "./UserLoginStyles.js";
+import ForgotPassword from "./ForgotPassword.js";
 
 const initialValues = {
   email: "",
@@ -71,6 +72,7 @@ function UserLogin() {
   const theme = useTheme();
   const showGrid = useMediaQuery(theme.breakpoints.up("sm"));
   // const [loginState, setLoginState] = useState('')
+  const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const classes = useStyles();
   const formik = useFormik({
@@ -239,11 +241,6 @@ function UserLogin() {
                     </div>
                   ) : null}
                 </FormControl>
-
-                {/* <FormControlLabel
-                                    control={<Checkbox name="checkedB" color='primary' />}
-                                    label="Remember me" /> */}
-
                 <Button
                   className={classes.buttonSignin}
                   type="submit"
@@ -259,7 +256,13 @@ function UserLogin() {
 
               <Typography>
                 {" "}
-                <Link href="#" underline="none">
+                <Link
+                  href="#"
+                  underline="none"
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                >
                   {" "}
                   Forgot Password ?
                 </Link>
@@ -285,6 +288,7 @@ function UserLogin() {
           </Grid>
         </Grid>
       </Container>
+      <ForgotPassword open={open} setOpen={setOpen} />
     </>
   );
 }

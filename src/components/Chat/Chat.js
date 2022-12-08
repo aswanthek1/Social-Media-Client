@@ -19,7 +19,6 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import MessageArea from "./MessageArea";
 import { refreshReducer } from "../../Redux/RefreshSlice";
-import { useMediaQuery } from "react-responsive";
 
 ///socket connection with backend url
 import io from "socket.io-client";
@@ -193,6 +192,7 @@ const Chat = () => {
                     {chatList.map((value) => {
                       return (
                         <ListItem
+                          sx={{ paddingLeft: "61px" }}
                           className="chatUser"
                           secondaryAction={
                             <IconButton edge="end" aria-label="delete">
@@ -202,22 +202,28 @@ const Chat = () => {
                         >
                           {value.users.map((userValue) => {
                             return (
-                              <ListItemAvatar>
+                              <>
                                 {userValue._id === user._id ? null : (
-                                  <Avatar
-                                    src={
-                                      userValue._id !== user._id
-                                        ? userValue.profileimage
-                                        : null
+                                  <ListItemAvatar
+                                    onClick={() =>
+                                      setToChat(userValue) && setShowList(false)
                                     }
-                                    sx={{
-                                      width: "52px",
-                                      height: "52px",
-                                      border: "2px solid",
-                                    }}
-                                  ></Avatar>
+                                  >
+                                    <Avatar
+                                      src={
+                                        userValue._id !== user._id
+                                          ? userValue.profileimage
+                                          : null
+                                      }
+                                      sx={{
+                                        width: "52px",
+                                        height: "52px",
+                                        border: "2px solid",
+                                      }}
+                                    ></Avatar>
+                                  </ListItemAvatar>
                                 )}
-                              </ListItemAvatar>
+                              </>
                             );
                           })}
                           {value.users.map((userValue) => {

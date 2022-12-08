@@ -9,10 +9,10 @@ import {
   ListItemText,
   Divider,
   InputBase,
+  CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 import { useFormik } from "formik";
-import Unfollow from "../People/Unfollow";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -27,7 +27,11 @@ function Rightbar() {
   });
 
   useEffect(() => {
+    
     console.log(formik.values.users);
+    if(formik.values.users === ''){
+      console.log('type some thing')
+    }else{
     axios
       .get(
         `${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`,
@@ -36,6 +40,7 @@ function Rightbar() {
       .then((e) => {
         setSearchUser(e.data);
       });
+    }
   }, [formik.values.users]);
 
   return (

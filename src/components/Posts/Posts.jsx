@@ -169,7 +169,6 @@ function Posts(props) {
           { values, postid: props.data._id }
         )
         .then((response) => {
-          console.log("comment response", response);
           //  dispatch(updatePostOnload(e.data))
           dispatch(refreshReducer());
           resetForm({ values: "" });

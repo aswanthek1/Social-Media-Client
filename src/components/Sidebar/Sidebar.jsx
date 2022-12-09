@@ -23,7 +23,7 @@ import { useNavigate } from "react-router-dom";
 
 function Sidebar() {
   const navigate = useNavigate();
-  const [homeActive, setHomeActive] = useState(true)
+  const [homeActive, setHomeActive] = useState(false)
   const [savedActive, setSavedActive] = useState(false)
   const [peopleActive, setPeopleActive] = useState(false)
   return (
@@ -98,6 +98,7 @@ function Sidebar() {
             }}
             >
               <ListItemButton
+              selected={peopleActive ? true : false}
                 component="a"
                 onClick={() => {
                   navigate("/people");

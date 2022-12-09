@@ -15,7 +15,7 @@ const SavedFeed = () => {
       </Box>
     );
   return (
-    <Box flex={4} paddingTop={1}>
+    <Box flex={4} paddingTop={1} marginLeft="0px !important" >
       {user.savedPosts
         ? user.savedPosts.map((savedPostArray) => {
             return <Posts key={savedPostArray._id} data={savedPostArray} />;

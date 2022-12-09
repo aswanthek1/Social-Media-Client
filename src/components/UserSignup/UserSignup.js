@@ -213,7 +213,7 @@ function UserSignup() {
 
   return (
     <>
-      <Container maxWidth="sm">
+      <Container maxWidth="xs">
         <Grid item className={classes.mainGrid}>
           <IconButton
             className={classes.arrowBack}
@@ -428,7 +428,7 @@ function UserSignup() {
                   </FormHelperText>
                 ) : null}
                 {otpField ? (
-                  <span style={{color:'#1893c5', position:'absolute', right:'33px', top:'71%'}}
+                  <span style={{color:'#1893c5', position:'absolute', right:'33px', top:'74%'}}
                     onClick={() => {
                       resentOTP(formik.values.email);
                     }}

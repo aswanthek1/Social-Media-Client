@@ -48,8 +48,9 @@ function Add() {
     try {
       const userToken = localStorage.getItem("userToken");
       axios
-        .post("http://api.cloudinary.com/v1_1/dm0l6abeb/image/upload", formData)
+        .post("https://api.cloudinary.com/v1_1/dm0l6abeb/image/upload", formData)
         .then((response) => {
+          console.log('coudinary response', response)
           return axios
             .post(
               `${process.env.REACT_APP_BACKEND_URL}/posts/addPost`,

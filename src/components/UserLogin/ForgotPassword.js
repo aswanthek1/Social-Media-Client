@@ -3,6 +3,7 @@ import {
   Button,
   FormHelperText,
   Modal,
+  styled,
   TextField,
   Typography,
 } from "@mui/material";
@@ -18,12 +19,18 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 280,
   bgcolor: "background.paper",
   borderRadius: "6px",
   boxShadow: 24,
   p: 4,
 };
+
+const StyledModal = styled(Modal)({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+});
 
 const validationSchema = yup.object({
   password: yup
@@ -92,7 +99,7 @@ const ForgotPassword = ({ open, setOpen }) => {
 
   return (
     <div>
-      <Modal
+      <StyledModal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -176,7 +183,7 @@ const ForgotPassword = ({ open, setOpen }) => {
             ) : null}
           </form>
         </Box>
-      </Modal>
+      </StyledModal>
       <Toaster />
     </div>
   );

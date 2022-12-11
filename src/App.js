@@ -9,6 +9,10 @@ import UserProfilePage from "./pages/UserProfile";
 import PeoplePage from "./pages/People";
 import ChatPage from "./pages/Chat";
 import SavedPostsPage from "./pages/SavedPosts";
+import AdminLoginPage from "./pages/AdminLogin";
+import AdminDashBoardPage from "./pages/AdminDashBoard";
+import AdminLogginRouter from "./utils/AdminLogginRouter";
+import AdminLogoutRouter from "./utils/AdminLogoutRouter";
 
 
 function App() {
@@ -19,6 +23,15 @@ function App() {
       {/* <Route element={<TemporaryDrawer />} path='/test' /> */}
       <BrowserRouter>
         <Routes>
+          
+          <Route element={<AdminLogginRouter/>}>
+          <Route element={<AdminDashBoardPage/>} path='/admin/dash' />
+          </Route>
+
+          <Route element={<AdminLogoutRouter/>}>
+          <Route element={<AdminLoginPage/>} path='/admin/login' />
+          </Route>
+
           <Route element={<UserRouter />}>
             <Route element={<UserHomePage />} path="/" />
             <Route element={<UserProfilePage />} path="/profile/:id" />

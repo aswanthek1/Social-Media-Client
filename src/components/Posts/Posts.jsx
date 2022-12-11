@@ -40,6 +40,7 @@ import EmojiPicker from "emoji-picker-react";
 import { Picker } from "emoji-mart";
 import ScrollToBottom from "react-scroll-to-bottom";
 import { useNavigate } from "react-router-dom";
+import ReportPostModal from "../ReportPostModal/ReportPostModal";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -54,6 +55,8 @@ const ExpandMore = styled((props) => {
 
 function Posts(props) {
   const dispatch = useDispatch();
+  const [reported, setReported] = useState(false)
+  const [reportedId, setReportedId] = useState('')
   const [expanded, setExpanded] = React.useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -248,6 +251,7 @@ function Posts(props) {
                   Delete Post
                 </MenuItem>
               ) : (
+                <>
                 <MenuItem
                   onClick={() => {
                     handleClose();
@@ -260,6 +264,8 @@ function Posts(props) {
                     ? "Remove post from saved"
                     : "Save Post"}
                 </MenuItem>
+                <MenuItem onClick={() => {setReported(true); setReportedId(props.data._id)}}>Report post</MenuItem>
+                </>
               )}
             </Menu>
             <CardMedia
@@ -369,6 +375,7 @@ function Posts(props) {
           <Toaster />
         </div>
       }
+      {reported ?<ReportPostModal reported={reported} setReported={setReported} reportedId={reportedId} /> : null}
     </>
   );
 }

@@ -54,7 +54,7 @@ const validationSchema = yup.object({
     .required("Field is reqluired")
     .min(6, "Password is too short - should be 8 chars minimum.")
     .max(12, "Maximum 12 charachters are permitted"),
-});
+}); 
 
 function UserLogin() {
   const [values, setValues] = React.useState({

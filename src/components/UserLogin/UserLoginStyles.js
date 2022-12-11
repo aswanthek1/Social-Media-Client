@@ -1,74 +1,62 @@
-import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
-    mainGrid: {
-        position: 'relative',
-        top: 40
-    },
+  mainGrid: {
+    position: "relative",
+    top: 40,
+  },
+  paper: {
+    padding: 20,
+    height: 460,
+    marginInline: "auto",
+  },
+  firstpaperSignin: {
+    padding: 20,
+    height: 460,
+    marginInline: "auto",
+    backgroundColor: "aqua",
+  },
 
-    firstgrid: {
-        // display:"none",
-    },
+  avatarLock: {
+    backgroundColor: "green",
+  },
 
-    paper: {
-        padding: 20,
-        height: 460,
-        marginInline: 'auto',
-    },
-    firstpaperSignin: {
-        padding: 20,
-        height: 460,
-        marginInline: 'auto',
-        backgroundColor: 'aqua'
-    },
+  buttonSignin: {
+    margin: "30px 0",
+  },
 
-    avatarLock: {
-        backgroundColor: 'green'
-    },
+  passwordField: {},
 
-    buttonSignin: {
-        margin: '30px 0'
-    },
+  or: {
+    marginTop: 12,
+  },
 
-    passwordField: {
-        // marginTop: '400px'
-    },
+  googleLogin: {
+    marginTop: 10,
+  },
 
-    or: {
-        marginTop: 12
-    },
+  loginState: {
+    marginBottom: "12px",
+    color: "red",
+    backgroundColor: "aqua",
+    textAlign: "center",
+    alignItems: "center",
+    width: 200,
+    height: 30,
+    paddingTop: 6,
+    marginInline: "auto",
+  },
 
-    googleLogin: {
-        marginTop: 10,
-    },
+  erroricon: {
+    position: "relative",
+    top: 3,
+    fontSize: "medium",
+    marginTop: 1,
+  },
 
-    loginState: {
-        marginBottom: "12px",
-        color: 'red',
-        backgroundColor: 'aqua',
-        textAlign: 'center',
-        alignItems: 'center',
-        width: 200,
-        height: 30,
-        paddingTop: 6,
-        marginInline: 'auto'
-    },
+  error: {
+    color: "red",
+  },
+}));
 
-    erroricon: {
-        position: 'relative',
-        // left:,
-        top: 3,
-        fontSize: 'medium',
-        marginTop: 1
-    },
-
-    error: {
-        color: 'red'
-    }
-
-
-
-}))
-
-export default useStyles
+export default useStyles;

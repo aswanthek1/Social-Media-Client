@@ -5,11 +5,11 @@ import {
   Box,
   styled,
   Typography,
-  Avatar,
   TextField,
   ButtonGroup,
   Button,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Add as AddIcon, Image } from "@mui/icons-material";
@@ -37,9 +37,12 @@ function Add() {
   const [open, setOpen] = useState(false);
   const [imageSelected, setImageSelected] = useState([]);
   const [description, setDescription] = useState("");
+  const [circularProgress, setCircularProgress] = useState(false);
   const user = useSelector((state) => state.user);
+  const [file, setFile] = useState("");
 
   const uploadPost = () => {
+    setCircularProgress(true);
     const formData = new FormData();
     const descriptionData = new FormData();
     formData.append("file", imageSelected);
@@ -48,9 +51,11 @@ function Add() {
     try {
       const userToken = localStorage.getItem("userToken");
       axios
-        .post("https://api.cloudinary.com/v1_1/dm0l6abeb/image/upload", formData)
+        .post(
+          "https://api.cloudinary.com/v1_1/dm0l6abeb/image/upload",
+          formData
+        )
         .then((response) => {
-          console.log('coudinary response', response)
           return axios
             .post(
               `${process.env.REACT_APP_BACKEND_URL}/posts/addPost`,
@@ -58,8 +63,11 @@ function Add() {
               { headers: { token: userToken } }
             )
             .then((res) => {
+              setCircularProgress(false);
               dispatch(refreshReducer());
               dispatch(updatePostOnload(res.data));
+              setImageSelected(null);
+              setFile(null);
               setOpen(false);
             });
         });
@@ -90,17 +98,17 @@ function Add() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box width={400} height={280} bgcolor="white" p={3} borderRadius={5}>
+        <Box width={400} maxHeight={680} bgcolor="white" p={3} borderRadius={5}>
           <Typography variant="h6" color="grey" textAlign="center">
             Create Post
           </Typography>
-          <UserBox>
-            <Avatar src="" sx={{ width: 30, height: 30 }} />
-            <Typography fontWeight={500} variant="span">
-              {user.firstname} {user.lastname}
-            </Typography>
-          </UserBox>
-
+          {file ? (
+            <img
+              src={file ? file : null}
+              style={{ width: "300px", height: "150px", marginLeft: "45px" }}
+              alt=""
+            />
+          ) : null}
           <TextField
             fullWidth
             onChange={(event) => {
@@ -108,12 +116,12 @@ function Add() {
             }}
             type="text"
             id="standard-multiline-static"
-            multiline
+            // multiline
             rows={3}
             placeholder="What's on your mind ?"
             variant="standard"
           />
-          <Stack direction="row" gap={1} marginTop={2} mb={3}>
+          <Stack direction="row" gap={1} marginTop={1} mb={3}>
             {/* <EmojiEmotions color='primary' /> */}
 
             <IconButton
@@ -126,6 +134,7 @@ function Add() {
                 accept="image/*"
                 onChange={(event) => {
                   setImageSelected(event.target.files[0]);
+                  setFile(URL.createObjectURL(event.target.files[0]));
                 }}
                 // name='postimages'
                 multiple
@@ -141,6 +150,16 @@ function Add() {
             variant="contained"
             aria-label="outlined primary button group"
           >
+            {circularProgress ? (
+              <CircularProgress
+                sx={{
+                  color: "red",
+                  position: "absolute",
+                  zIndex: 1,
+                  left: "40%",
+                }}
+              />
+            ) : null}
             <Button type="submit" onClick={uploadPost}>
               Post
             </Button>

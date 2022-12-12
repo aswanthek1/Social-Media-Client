@@ -18,7 +18,6 @@ const Follow = (id) => {
           { headers: { token: userToken } }
         )
         .then((response) => {
-          console.log("resposner after follow", response);
           toast.success("Started following", {
             duration: 3000,
             style: {

@@ -23,7 +23,8 @@ const ProfileEditingModal = (props) => {
   const user = useSelector((state) => state.user);
   const [coverImageSelected, setCoverImage] = useState("");
   const [profileImageSelected, setProfileImage] = useState("");
-  const refresh = useSelector((state) => state.refresh.refresh);
+  const [coverPreview, setCoverPreview] = useState("");
+  const [profilePreview, setProfilePreview] = useState("");
 
   const uploadCoverImage = () => {
     const formData = new FormData();
@@ -43,6 +44,7 @@ const ProfileEditingModal = (props) => {
             .then((response) => {
               console.log(response);
               props.modalOpenState(false);
+              setCoverPreview(null);
               dispatch(refreshReducer());
             });
         });
@@ -53,7 +55,7 @@ const ProfileEditingModal = (props) => {
 
   const uploadProfileImage = () => {
     const formData = new FormData();
-    console.log('============', profileImageSelected)
+    console.log("============", profileImageSelected);
     formData.append("file", profileImageSelected);
     formData.append("upload_preset", "himv7zii");
     try {
@@ -85,7 +87,10 @@ const ProfileEditingModal = (props) => {
         <StyledModal
           keepMounted
           open={props.modalState}
-          onClose={() => props.modalOpenState(false)}
+          onClose={() => {
+            props.modalOpenState(false);
+            setCoverPreview(null);
+          }}
           aria-labelledby="keep-mounted-modal-title"
           aria-describedby="keep-mounted-modal-description"
         >
@@ -108,16 +113,14 @@ const ProfileEditingModal = (props) => {
             >
               <img
                 style={{ width: "300px", height: "100px" }}
-                src={user.coverimage 
-                  ? user.coverimage
-                  : ""}
+                src={coverPreview ? coverPreview : user.coverimage}
+                alt=''
               />
             </div>
             <div
               style={{
                 display: "flex",
                 justifyContent: "center",
-                justifyContent: "space-around",
                 marginTop: "18px",
               }}
             >
@@ -132,6 +135,7 @@ const ProfileEditingModal = (props) => {
                   accept="image/*"
                   onChange={(event) => {
                     setCoverImage(event.target.files[0]);
+                    setCoverPreview(URL.createObjectURL(event.target.files[0]));
                   }}
                   type="file"
                 />
@@ -188,11 +192,7 @@ const ProfileEditingModal = (props) => {
             >
               <img
                 style={{ width: "110px", height: "110px", borderRadius: "50%" }}
-                src={
-                  profileImageSelected
-                    ? profileImageSelected.name
-                    : user.profileimage
-                }
+                src={profilePreview ? profilePreview : user.profileimage}
                 alt=""
               />
             </div>
@@ -213,7 +213,12 @@ const ProfileEditingModal = (props) => {
                 <input
                   hidden
                   accept="image/*"
-                  onChange={(event) => setProfileImage(event.target.files[0])}
+                  onChange={(event) => {
+                    setProfileImage(event.target.files[0]);
+                    setProfilePreview(
+                      URL.createObjectURL(event.target.files[0])
+                    );
+                  }}
                   type="file"
                 />
                 <Image color="secondary" />

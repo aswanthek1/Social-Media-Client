@@ -3,7 +3,6 @@ import {
   Toolbar,
   Typography,
   styled,
-  Badge,
   Avatar,
   Menu,
   MenuItem,
@@ -28,12 +27,6 @@ const StyledToolBar = styled(Toolbar)({
   justifyContent: "space-between",
 });
 
-const Search = styled("div")(({ theme }) => ({
-  backgroundColor: "white",
-  padding: "0 10px",
-  borderRadius: theme.shape.borderRadius,
-  width: "40%",
-}));
 
 const Icons = styled(Box)(({ theme }) => ({
   display: "none",
@@ -151,11 +144,11 @@ function Navbar() {
           <Icons>
             <IconButton onClick={() => navigate("/chat")}>
               {/* <Badge badgeContent={4} color="error"> */}
-                <MailIcon sx={{ color: "grey" }} />
+              <MailIcon sx={{ color: "grey" }} />
               {/* </Badge> */}
             </IconButton>
             {/* <Badge badgeContent={4} color="error"> */}
-              <NotificationsIcon sx={{ color: "grey" }} />
+            <NotificationsIcon sx={{ color: "grey" }} />
             {/* </Badge> */}
             <Avatar
               alt={user.firstname}

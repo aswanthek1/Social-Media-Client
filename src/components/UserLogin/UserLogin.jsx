@@ -71,7 +71,6 @@ function UserLogin() {
 
   const theme = useTheme();
   const showGrid = useMediaQuery(theme.breakpoints.up("sm"));
-  // const [loginState, setLoginState] = useState('')
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const classes = useStyles();
@@ -105,13 +104,11 @@ function UserLogin() {
   });
 
   function handleCallbackResponse(response) {
-    console.log("jwt credentials ", response.credential);
     const userObj = jwt_decode(response.credential);
     console.log(userObj);
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/googleLogin`, userObj)
       .then((e) => {
-        console.log("google login response", e);
         if (e.data.message) {
           toast.error("You should Signup first", {
             icon: " 🚫 ",

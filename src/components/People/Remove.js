@@ -26,7 +26,6 @@ const Remove = (id) => {
               { headers: { token: userToken } }
             )
             .then((response) => {
-              console.log("removed response ", response);
               toast.success("Removed successfully");
               dispatch(refreshReducer());
             });

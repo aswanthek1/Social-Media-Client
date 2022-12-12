@@ -9,7 +9,8 @@ function UserRouter() {
   // const [loginAuthState, setLoginAuthState ] = useState(false)
 
   // useEffect(()=>{
-  // axios.get('http://localhost:5000/userLoginAuth', {headers:{token:auth}}).then((e)=> {
+  //   // ${process.env.REACT_APP_BACKEND_URL}
+  // axios.get('http://localhost:5000/userLoginAuth', {headers:{token:auth.authtoken}}).then((e)=> {
   //   console.log('login auth is here ', e)
   // })
   // },[])

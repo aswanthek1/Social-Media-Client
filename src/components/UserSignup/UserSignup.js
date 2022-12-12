@@ -17,8 +17,8 @@ import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import IconButton from "@mui/material/IconButton";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import jwt_decode from "jwt-decode";
+import EastIcon from "@mui/icons-material/East";
 
 import useStyles from "./UserSignupStyle.js";
 import { CircularProgress } from "@mui/material";
@@ -76,7 +76,7 @@ function UserSignup() {
   const [otpField, setOtpField] = useState(false);
   const [OTP, setOTP] = useState("");
   const [OTPError, setOtpError] = useState(false);
-  const [proceedProgress,setProceedProgress] = useState(false)
+  const [proceedProgress, setProceedProgress] = useState(false);
   const [values, setValues] = React.useState({
     password: "",
     showPassword: false,
@@ -106,15 +106,14 @@ function UserSignup() {
   // const showTextfieldSM = useMediaQuery(theme.breakpoints.up('md'))
 
   const resentOTP = (value) => {
-    setProceedProgress(true)
+    setProceedProgress(true);
 
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/otp/resent`, { email: value })
       .then((response) => {
         setOTP(response.data.otp);
-        setProceedProgress(false)
-        toast.success('An otp sent to your email')
-
+        setProceedProgress(false);
+        toast.success("An otp sent to your email");
       });
   };
 
@@ -122,9 +121,8 @@ function UserSignup() {
     initialValues,
     onSubmit: (values) => {
       try {
-        
-        if (OTP == "") {
-          setProceedProgress(true)
+        if (OTP === "") {
+          setProceedProgress(true);
           axios
             .post(`${process.env.REACT_APP_BACKEND_URL}/register`, values)
             .then((e) => {
@@ -141,9 +139,9 @@ function UserSignup() {
                   },
                 });
               } else if (e.data.message === "otp sent") {
-                toast.success('An otp sent to your email')
+                toast.success("An otp sent to your email");
                 setOtpField(true);
-                setProceedProgress(false)
+                setProceedProgress(false);
                 setOTP(e.data.otp);
               }
             })
@@ -213,16 +211,24 @@ function UserSignup() {
 
   return (
     <>
-      <Container maxWidth="xs">
+      <Container maxWidth="sm" style={{ paddingLeft: "6px" }}>
         <Grid item className={classes.mainGrid}>
-          <IconButton
-            className={classes.arrowBack}
-            onClick={() => navigate("/login")}
-          >
-            <ArrowBackIosIcon />
-          </IconButton>
           <Grid item align="center">
-            <Paper elevation={21} className={classes.firstPaper}>
+            <Paper elevation={8} className={classes.firstPaper}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: "-30px",
+                }}
+              >
+                <IconButton
+                  className={classes.arrowBack}
+                  onClick={() => navigate("/login")}
+                >
+                  <EastIcon />
+                </IconButton>
+              </div>
               <Grid item className={classes.avatarGrid}>
                 <Avatar className={classes.avatar}>
                   <AddCircleOutlineOutlinedIcon />
@@ -390,18 +396,27 @@ function UserSignup() {
                 {otpField === false ? (
                   <Button
                     type="submit"
+                    size="small"
                     variant="contained"
                     color="primary"
                     className={classes.submit}
-                    disabled={proceedProgress?true:false}
+                    disabled={proceedProgress ? true : false}
                   >
                     Proceed
                   </Button>
                 ) : null}
 
-{ proceedProgress ?  <CircularProgress
-                sx={{position:'absolute',color:'green',size:'10px',left:'46%',bottom:'18%'}}
-                />: null}
+                {proceedProgress ? (
+                  <CircularProgress
+                    sx={{
+                      position: "absolute",
+                      color: "green",
+                      left: "48.5%",
+                      bottom: "23.5%",
+                    }}
+                    size="20px"
+                  />
+                ) : null}
                 {/* </form> */}
 
                 {/* <form action=""> */}
@@ -427,28 +442,37 @@ function UserSignup() {
                     You enterd a wrong OTP
                   </FormHelperText>
                 ) : null}
-                {otpField ? (
-                  <span style={{color:'#1893c5', position:'absolute', right:'33px', top:'74%'}}
-                    onClick={() => {
-                      resentOTP(formik.values.email);
-                    }}
-                  >
-                    Resent otp
-                  </span>
-                ) : null}
+                <div
+                  style={{ display: "flex", justifyContent: "space-evenly" }}
+                >
+                  {otpField ? (
+                    <Button
+                      variant="contained"
+                      size="small"
+                      style={{ width: "106px", padding: "0px" }}
+                      className={classes.submit}
+                      onClick={() => {
+                        resentOTP(formik.values.email);
+                      }}
+                    >
+                      Resent otp
+                    </Button>
+                  ) : null}
 
-                {otpField ? (
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    // onClick={verifyOTP}
-                    color="primary"
-                    className={classes.submit}
-                  >
-                    Submit
-                  </Button>
-                ) : null}
-
+                  {otpField ? (
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      style={{ width: "106px", padding: "0px" }}
+                      // onClick={verifyOTP}
+                      color="primary"
+                      size="small"
+                      className={classes.submit}
+                    >
+                      Submit
+                    </Button>
+                  ) : null}
+                </div>
                 <Typography align="center" className={classes.or}>
                   {" "}
                   <b>Or</b>{" "}

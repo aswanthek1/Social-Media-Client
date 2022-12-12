@@ -1,10 +1,7 @@
-import { Camera, Image } from "@mui/icons-material";
 import "./ProfileAreaStyles.css";
 import {
   Box,
   Button,
-  FormHelperText,
-  IconButton,
   Modal,
   styled,
   TextField,
@@ -14,11 +11,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { update } from "../../Redux/UserSlice";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { refreshReducer } from "../../Redux/RefreshSlice";
-import { useFormik } from "formik";
-import * as yup from "yup";
 
 const StyledModal = styled(Modal)({
   display: "flex",
@@ -26,32 +20,15 @@ const StyledModal = styled(Modal)({
   justifyContent: "center",
 });
 
-const validationSchema = yup.object({
-  firstname: yup
-    .string()
-    .required("This field is required")
-    .min(3, "First name must need minimum 3 charachters")
-    .max(12, "Maximum 12 charachters are permitted")
-    .matches(/^[A-Za-z]+(\s*[A-Za-z]+)*$/, "Only alphabets are allowed"),
-
-  lastname: yup
-    .string()
-    .required("This field is required")
-    .min(1, "Last name must need minimum 1 charachter")
-    .max(12, "Maximum 12 charachters are permitted")
-    .matches(/^[A-Za-z]+(\s*[A-Za-z]+)*$/, "Only alphabets are allowed"),
-
-  bio: yup.string().matches(/^(?:\b\w+\b[\s\r\n]*){1,250}$/),
-});
-
-const BioEditingModal = ({ bioEditingModal, setBioEditingModal,userProfileData,setUserProfileData }) => {
+const BioEditingModal = ({
+  bioEditingModal,
+  setBioEditingModal,
+  userProfileData,
+  setUserProfileData,
+}) => {
   const refresh = useSelector((state) => state.refresh.refresh);
   const [userDetails, setUserDetails] = useState({});
-  const [validFirstname, setFirstnameValid] = useState(null);
-  // const [initialValues,setinitialValues]=useState({})
   const dispatch = useDispatch();
-  const [maxDate, setMaxDate] = useState(null);
-  const user = useSelector((state) => state.user); 
 
   useEffect(() => {
     const userToken = localStorage.getItem("userToken");
@@ -60,7 +37,6 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal,userProfileData,s
         headers: { token: userToken },
       })
       .then((response) => {
-        console.log("userdetails at modal", response);
         if (response.data.message === "userNotFound") {
           return null;
         } else {
@@ -70,34 +46,28 @@ const BioEditingModal = ({ bioEditingModal, setBioEditingModal,userProfileData,s
       });
   }, [refresh]);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const bioFormat = /^(?:\b\w+\b[\s\r\n]*){1,250}$/
-    // const isValid = await validationSchema.isValid(userDetails);
-
-    if(userDetails.firstname.length < 3 || userDetails.firstname.length > 12){
-      console.log("firstname not correct")
+    if (userDetails.firstname.length < 3 || userDetails.firstname.length > 12) {
+      console.log("firstname not correct");
+    } else if (
+      userDetails.lastname.length < 1 ||
+      userDetails.lastname.length > 12
+    ) {
+      console.log("second name incorrect");
+    } else {
+      axios
+        .put(`${process.env.REACT_APP_BACKEND_URL}/user/update`, {
+          userDetails,
+        })
+        .then((response) => {
+          setUserProfileData(response.data);
+          dispatch(update(response.data));
+          setBioEditingModal(false);
+          dispatch(refreshReducer());
+        });
     }
-   else if(userDetails.lastname.length < 1 || userDetails.lastname.length > 12 ){
-      console.log('second name incorrect')
-    }
-else{
-  axios
-    .put(`${process.env.REACT_APP_BACKEND_URL}/user/update`, {
-      userDetails,
-    })
-    .then((response) => {
-      console.log("response ", response);
-      setUserProfileData(response.data)
-      dispatch(update(response.data));
-      setBioEditingModal(false)
-      dispatch(refreshReducer())
-    });
-}
-
   };
-
 
   return (
     <div>
@@ -105,7 +75,10 @@ else{
         <StyledModal
           keepMounted
           open={bioEditingModal}
-          onClose={() =>{ setBioEditingModal(false) ; dispatch(refreshReducer())}}
+          onClose={() => {
+            setBioEditingModal(false);
+            dispatch(refreshReducer());
+          }}
           aria-labelledby="keep-mounted-modal-title"
           aria-describedby="keep-mounted-modal-description"
         >
@@ -126,7 +99,6 @@ else{
                     value={userDetails.firstname}
                     onChange={(event) => {
                       userDetails.firstname = event.target.value;
-                      console.log("first userdaetails", userDetails);
                       setUserDetails({ ...userDetails });
                     }}
                     name="firstname"
@@ -206,6 +178,11 @@ else{
                     <pre>Date of birth</pre>
                     <input
                       type="date"
+                      style={{
+                        width: "100px",
+                        height: "20px",
+                        marginLeft: "20px",
+                      }}
                       value={userDetails.dateofbirth}
                       onChange={(event) => {
                         userDetails.dateofbirth = event.target.value;
@@ -217,7 +194,7 @@ else{
                     />
                   </div>
                   <div className="saveButton">
-                    <Button type="submit" variant="outlined" size="small" >
+                    <Button type="submit" variant="outlined" size="small">
                       Save
                     </Button>
                   </div>

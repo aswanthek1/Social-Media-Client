@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Paper,
   Table,
@@ -74,12 +73,24 @@ const ReportedPost = () => {
         >
           <TableHead>
             <TableRow>
-              <TableCell>Image</TableCell>
-              <TableCell align="center">Posted By</TableCell>
-              <TableCell align="center">Posted Date</TableCell>
-              <TableCell align="center">Reasons</TableCell>
-              <TableCell align="center">Remove Post</TableCell>
-              <TableCell align="center">Decline Request</TableCell>
+              <TableCell>
+                <b>Image</b>
+              </TableCell>
+              <TableCell align="center">
+                <b>Posted By</b>
+              </TableCell>
+              <TableCell align="center">
+                <b>Posted Date</b>
+              </TableCell>
+              <TableCell align="center">
+                <b>Reasons</b>
+              </TableCell>
+              <TableCell align="center">
+                <b>Remove Post</b>
+              </TableCell>
+              <TableCell align="center">
+                <b>Decline Request</b>
+              </TableCell>
             </TableRow>
           </TableHead>
           {emptyPosts ? (

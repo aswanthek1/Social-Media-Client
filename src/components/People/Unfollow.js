@@ -23,12 +23,11 @@ export default function Unfollow({ id }) {
         if (result.isConfirmed) {
           axios
             .post(
-              "http://localhost:5000/unFollow",
+              `${process.env.REACT_APP_BACKEND_URL}/unFollow`,
               { id },
               { headers: { token: userToken } }
             )
             .then((response) => {
-              console.log("response of unfollow", response);
               toast.success("Unfollowed successfully");
               dispatch(refreshReducer());
             });

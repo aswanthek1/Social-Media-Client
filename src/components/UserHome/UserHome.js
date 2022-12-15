@@ -66,6 +66,7 @@ function UserHome() {
         headers: { token: userToken },
       })
       .then((response) => {
+        console.log('allposts is here',response)
         setAllPosts(response.data);
       });
   }, [refresh]);

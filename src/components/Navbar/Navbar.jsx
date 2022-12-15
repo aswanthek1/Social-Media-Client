@@ -21,18 +21,18 @@ import { update } from "../../Redux/UserSlice";
 import { Drawer } from "@mui/material";
 import DrawerSidebar from "./DrawerSidebar";
 import { PersonSearchRounded } from "@mui/icons-material";
+import UserSearchBox from "./UserSearchBox";
 
 const StyledToolBar = styled(Toolbar)({
   display: "flex",
   justifyContent: "space-between",
 });
 
-
 const Icons = styled(Box)(({ theme }) => ({
   display: "none",
-  gap: "16px",
+  gap: "12px",
   alignItems: "center",
-  marginRight: "20px",
+  // marginRight: "20px",
   [theme.breakpoints.up("sm")]: {
     display: "flex",
   },
@@ -40,9 +40,9 @@ const Icons = styled(Box)(({ theme }) => ({
 
 const UserBox = styled(Box)(({ theme }) => ({
   display: "none",
-  gap: "20px",
+  gap: "14px",
   alignItems: "center",
-  marginRight: "20px",
+  // marginRight: "20px",
   [theme.breakpoints.down("sm")]: {
     display: "flex",
   },
@@ -50,9 +50,9 @@ const UserBox = styled(Box)(({ theme }) => ({
 
 function Navbar() {
   const dispatch = useDispatch();
+  const [searchBox, setSearchBox] = useState(false);
   const [state, setState] = React.useState({
     left: false,
-    right: false,
   });
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -140,7 +140,28 @@ function Navbar() {
               sx={{ display: { xs: "block", md: "none" }, color: "grey" }}
             />
           </div>
+          <Box sx={{ display: { xs: "block", lg: "none" } }}>
+            {searchBox ? (
+              <UserSearchBox
+                searchBox={searchBox}
+                setSearchBox={setSearchBox}
+              />
+            ) : null}
+          </Box>
 
+          <IconButton
+            sx={{
+              display: { xs: "block", lg: "none" },
+              position: "absolute",
+              right: { sm: "135px", xs: "47px" },
+              top: { sm: "13px", xs: "10px" },
+            }}
+            onClick={() => {
+              setSearchBox(true);
+            }}
+          >
+            <PersonSearchRounded />
+          </IconButton>
           <Icons>
             <IconButton onClick={() => navigate("/chat")}>
               {/* <Badge badgeContent={4} color="error"> */}
@@ -166,14 +187,7 @@ function Navbar() {
             />
           </UserBox>
         </StyledToolBar>
-        <Box
-          onClick={toggleDrawer("right", true)}
-          style={{ position: "absolute", right: "2px", top: "15px" }}
-        >
-          <PersonSearchRounded
-            sx={{ color: "grey", fontSize: "30px", display: { lg: "none" } }}
-          />
-        </Box>
+
         <Menu
           id="demo-positioned-menu"
           aria-labelledby="demo-positioned-button"
@@ -221,7 +235,7 @@ function Navbar() {
       </AppBar>
 
       <div>
-        {["left", "right"].map((anchor) => (
+        {["left"].map((anchor) => (
           <React.Fragment key={anchor}>
             <Drawer
               anchor={anchor}

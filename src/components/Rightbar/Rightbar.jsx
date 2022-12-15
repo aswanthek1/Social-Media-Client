@@ -1,25 +1,14 @@
 import Box from "@mui/material/Box";
 import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Avatar,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Divider,
-  InputBase,
-  CircularProgress,
-} from "@mui/material";
+import { InputBase } from "@mui/material";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import SearchUsersList from "../SearchUsersList/SearchUsersList";
 
 function Rightbar() {
   const [searchUser, setSearchUser] = useState([]);
   const user = useSelector((state) => state.user);
-  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       users: null,
@@ -27,19 +16,18 @@ function Rightbar() {
   });
 
   useEffect(() => {
-    
     console.log(formik.values.users);
-    if(formik.values.users === ''){
-      console.log('type some thing')
-    }else{
-    axios
-      .get(
-        `${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`,
-        { headers: { user: user._id } }
-      )
-      .then((e) => {
-        setSearchUser(e.data);
-      });
+    if (formik.values.users === "") {
+      console.log("type some thing");
+    } else {
+      axios
+        .get(
+          `${process.env.REACT_APP_BACKEND_URL}/userSearch/${formik.values.users}`,
+          { headers: { user: user._id } }
+        )
+        .then((e) => {
+          setSearchUser(e.data);
+        });
     }
   }, [formik.values.users]);
 
@@ -73,52 +61,10 @@ function Rightbar() {
             // onClick={() => setShowSearch(true)}
           />
         </Box>
-
-        {/* <List sx={{ width: '100%', maxWidth: 360, bgcolor: '#F8FFDB' }}> */}
-        {formik.values.users !== "" ? (
-          <List
-            dense
-            sx={{
-              width: "100%",
-              maxWidth: 360,
-              bgcolor: "#ec255a00",
-              marginLeft: "10%",
-              marginTop: "12px",
-            }}
-          >
-            {searchUser.map((value) => {
-              return (
-                <ListItem alignItems="flex-start">
-                  <ListItemAvatar
-                    onClick={() => {
-                      navigate(`/profile/${value._id}`);
-                      localStorage.setItem("profileUser", value._id);
-                    }}
-                  >
-                    <Avatar alt="Remy Sharp" src={value.profileimage} />
-                  </ListItemAvatar>
-                  <ListItemText
-                    sx={{ marginTop: "18px" }}
-                    onClick={() => {
-                      navigate(`/profile/${value._id}`);
-                      localStorage.setItem("profileUser", value._id);
-                    }}
-                    disableTypography
-                    primary={
-                      <Typography style={{ fontWeight: 500 }}>
-                        {" "}
-                        <b>{value.firstname} </b>{" "}
-                      </Typography>
-                    }
-                  />
-                  <Divider variant="inset" component="li" />
-                </ListItem>
-              );
-            })}
-          </List>
-        ) : (
-          ""
-        )}
+        <SearchUsersList
+          searchUser={searchUser}
+          setSearchUser={setSearchUser}
+        />
       </Box>
     </Box>
   );

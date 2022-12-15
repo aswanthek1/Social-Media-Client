@@ -15,9 +15,11 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Settings } from "@mui/icons-material";
+import { useSelector } from "react-redux";
 
 const UserSidebarList = () => {
   const navigate = useNavigate();
+  const user = useSelector(state => state.user)
   const [homeActive, setHomeActive] = useState(false);
   const [savedActive, setSavedActive] = useState(false);
   const [peopleActive, setPeopleActive] = useState(false);
@@ -128,7 +130,9 @@ const UserSidebarList = () => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem disablePadding>
+          <ListItem disablePadding
+          onClick={() => { navigate(`/settings/${user._id}`)}}
+          >
             <ListItemButton component="a" href="#">
               <ListItemIcon>
                 <Settings />

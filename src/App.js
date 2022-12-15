@@ -13,6 +13,7 @@ import AdminLoginPage from "./pages/AdminLogin";
 import AdminDashBoardPage from "./pages/AdminDashBoard";
 import AdminLogginRouter from "./utils/AdminLogginRouter";
 import AdminLogoutRouter from "./utils/AdminLogoutRouter";
+import SettingsPage from "./pages/Settings";
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
             <Route element={<PeoplePage />} path="/people" />
             <Route element={<ChatPage />} path="/chat" />
             <Route element={<SavedPostsPage/>} path='/posts/saved' />
+            <Route element={<SettingsPage/>} path='/settings/:id' />
           </Route>
 
           <Route element={<UserLoggedout />}>

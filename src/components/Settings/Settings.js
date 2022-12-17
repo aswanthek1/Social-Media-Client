@@ -1,6 +1,7 @@
 import { Box, Stack } from "@mui/material";
 import React from "react";
 import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 import EditPassword from "../EditPassword/EditPassword";
 import Navbar from "../Navbar/Navbar";
 import Privacy from "../Privacy/Privacy";
@@ -26,6 +27,7 @@ const Settings = () => {
            </Box>
         </Stack>
       </Box>
+      <Toaster/>
     </div>
   );
 };

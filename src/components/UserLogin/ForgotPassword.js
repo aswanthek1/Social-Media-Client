@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   FormHelperText,
   Modal,
   styled,
@@ -49,10 +50,18 @@ const ForgotPassword = ({ open, setOpen }) => {
   const [email, setEmail] = useState("");
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [passwordFields, setPasswordFields] = useState(false);
+  const [emailField, setEmailField] = useState(true);
+  const [otpField, setOtpField] = useState(false);
+  const [otpError, setOtpError] = useState(false);
+  const [progress, setProgress] = useState(false);
+  const [forgotOtp, setForgotOtp] = useState("");
+  const [responseOtp, setResponseOtp] = useState("");
   const handleClose = () => setOpen(false);
 
   const submitEmail = (event) => {
     event.preventDefault();
+    setInvalidEmail(false);
+    setProgress(true);
     if (
       /^([a-z\d\.-]+)@([a-z\d-]+)\.([a-z]{2,12})(\.[a-z]{2,12})?$/.test(email)
     ) {
@@ -61,14 +70,33 @@ const ForgotPassword = ({ open, setOpen }) => {
           email: email,
         })
         .then((response) => {
+          console.log("response of forgot otp", response);
           if (response.data.message === "User exists") {
-            setPasswordFields(true);
+            // setPasswordFields(true);
+            toast.success("An otp sent to your mail");
+            setOtpField(true);
+            setEmailField(false);
+            setResponseOtp(response.data.otpResponse.otp);
+            setProgress(false);
           } else {
             setInvalidEmail(true);
           }
         });
     } else {
       setInvalidEmail(true);
+    }
+  };
+
+  const checkOtp = (event) => {
+    event.preventDefault();
+    console.log("forgot otp", forgotOtp, "  ", responseOtp);
+    setOtpError(false);
+    if (forgotOtp === responseOtp) {
+      setPasswordFields(true);
+      setOtpField(false);
+    } else {
+      console.log("invalid otp");
+      setOtpError(true);
     }
   };
 
@@ -106,32 +134,62 @@ const ForgotPassword = ({ open, setOpen }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form action="" onSubmit={submitEmail}>
-            <TextField
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-              }}
-              size="small"
-              type="email"
-              label="Enter your registered email"
-              placeholder="Enter your registered email"
-              fullWidth
-            />
-            {invalidEmail ? (
-              <FormHelperText>Invalid Email Address</FormHelperText>
-            ) : null}
-            {passwordFields === false ? (
+          {emailField ? (
+            <form action="" onSubmit={submitEmail}>
+              <TextField
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                }}
+                size="small"
+                type="email"
+                label="Enter your registered email"
+                placeholder="Enter your registered email"
+                fullWidth
+              />
+              {invalidEmail ? (
+                <FormHelperText>Invalid Email Address</FormHelperText>
+              ) : null}
+              {emailField ? (
+                <Button
+                  type="submit"
+                  variant="contained"
+                  size="small"
+                  disabled={progress ? true : false}
+                  sx={{ marginTop: "20px", marginLeft: "38%" }}
+                >
+                  Proceed
+                </Button>
+              ) : null}
+              {/* <CircularProgress sx={{position:'absolute'}}/> */}
+            </form>
+          ) : null}
+
+          {otpField ? (
+            <form action="" onSubmit={checkOtp}>
+              <TextField
+                size="small"
+                value={forgotOtp}
+                onChange={(event) => {
+                  setForgotOtp(event.target.value);
+                }}
+                label="Enter the OTP sent to your mail"
+                placeholder="Enter the OTP sent to your mail"
+                fullWidth
+              />
+              {otpError ? (
+                <FormHelperText>Entered OTP is wrong</FormHelperText>
+              ) : null}
               <Button
                 type="submit"
                 variant="contained"
                 size="small"
                 sx={{ marginTop: "20px", marginLeft: "38%" }}
               >
-                Proceed
+                Next
               </Button>
-            ) : null}
-          </form>
+            </form>
+          ) : null}
 
           <form action="" onSubmit={formik.handleSubmit}>
             {passwordFields ? (

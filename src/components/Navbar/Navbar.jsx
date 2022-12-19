@@ -135,11 +135,11 @@ function Navbar() {
           >
             Instants
           </Typography>
-          <div onClick={toggleDrawer("left", true)}>
+          <Box sx={{ display: { xs: "block", md: "none", }}} onClick={toggleDrawer("left", true)}>
             <InterestsIcon
               sx={{ display: { xs: "block", md: "none" }, color: "grey" }}
             />
-          </div>
+          </Box>
           <Box sx={{ display: { xs: "block", lg: "none" } }}>
             {searchBox ? (
               <UserSearchBox

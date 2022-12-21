@@ -22,6 +22,7 @@ import { Drawer } from "@mui/material";
 import DrawerSidebar from "./DrawerSidebar";
 import { PersonSearchRounded } from "@mui/icons-material";
 import UserSearchBox from "./UserSearchBox";
+import { refreshReducer } from "../../Redux/RefreshSlice";
 
 const StyledToolBar = styled(Toolbar)({
   display: "flex",
@@ -215,6 +216,7 @@ function Navbar() {
             onClick={() => {
               navigate(`/profile/${user._id}`);
               localStorage.setItem("profileUser", user._id);
+              dispatch(refreshReducer())
             }}
           >
             Profile

@@ -1,24 +1,15 @@
 import { Button } from "@mui/material";
 import React from "react";
-import { useDispatch } from "react-redux";
-import { refreshReducer } from "../../Redux/RefreshSlice";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { useState } from "react";
 
 const Remove = (id) => {
-  const dispatch = useDispatch();
+  const [buttonState, setButtonState] = useState(true)
 
   const remove = (id) => {
     try {
-      Swal.fire({
-        title: "Do you want to remove this follower ?",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-      }).then((result) => {
-        if (result.isConfirmed) {
           const userToken = localStorage.getItem("userToken");
-
           axios
             .post(
               `${process.env.REACT_APP_BACKEND_URL}/follwers/remove`,
@@ -27,10 +18,8 @@ const Remove = (id) => {
             )
             .then((response) => {
               toast.success("Removed successfully");
-              dispatch(refreshReducer());
+              setButtonState(false)
             });
-        }
-      });
     } catch (error) {
       console.log(error);
     }
@@ -38,14 +27,14 @@ const Remove = (id) => {
 
   return (
     <div>
-      <Button
+      { buttonState ? <Button
         onClick={() => remove(id)}
         variant="contained"
         size="small"
         sx={{ marginLeft: "30px", marginTop: "19px" }}
       >
-        REMOVE
-      </Button>
+      REMOVE
+      </Button>  : <h5 style={{marginTop:'25px',color:'red', marginLeft:"30px"}}>Removed</h5> }
     </div>
   );
 };

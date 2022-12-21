@@ -1,5 +1,6 @@
 import HomeIcon from "@mui/icons-material/Home";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
+import ExploreIcon from '@mui/icons-material/Explore';
 import RequestPageIcon from "@mui/icons-material/RequestPage";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import { Settings } from "@mui/icons-material";
@@ -117,21 +118,23 @@ const DrawerSidebar = ({ state }) => {
           <ListItem disablePadding>
             <ListItemButton component="a" href="#">
               <ListItemIcon>
-                <RequestPageIcon />
+                <ExploreIcon />
               </ListItemIcon>
               <ListItemText
                 disableTypography
                 primary={
                   <Typography style={{ fontWeight: 500 }}>
                     {" "}
-                    <b>Requests</b>{" "}
+                    <b>Explore</b>{" "}
                   </Typography>
                 }
               />
             </ListItemButton>
           </ListItem>
 
-          <ListItem disablePadding>
+          <ListItem disablePadding
+          onClick={() => { navigate(`/settings/${user._id}`)}}
+          >
             <ListItemButton component="a" href="#">
               <ListItemIcon>
                 <Settings />

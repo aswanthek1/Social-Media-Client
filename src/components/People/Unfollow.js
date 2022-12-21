@@ -1,26 +1,15 @@
 import {  Button } from "@mui/material";
 import axios from "axios";
-import { refreshReducer } from "../../Redux/RefreshSlice";
 import { useDispatch } from "react-redux";
-import Swal from "sweetalert2";
 import toast, { Toaster } from "react-hot-toast";
 import React, { useState } from "react";
 
 export default function Unfollow({ id }) {
-  const dispatch = useDispatch();
   const [buttonState, setButtonState] = useState(true);
 
   const unFollow = (id) => {
     const userToken = localStorage.getItem("userToken");
     try {
-      Swal.fire({
-        title: "Do you want to unfollow?",
-        showCancelButton: true,
-        confirmButtonText: "Do it",
-        width: 300,
-        customClass: "swal-size",
-      }).then((result) => {
-        if (result.isConfirmed) {
           axios
             .post(
               `${process.env.REACT_APP_BACKEND_URL}/unFollow`,
@@ -29,10 +18,8 @@ export default function Unfollow({ id }) {
             )
             .then((response) => {
               toast.success("Unfollowed successfully");
-              dispatch(refreshReducer());
+              setButtonState(false)
             });
-        }
-      });
     } catch (error) {
       console.log(error);
     }
@@ -45,7 +32,7 @@ export default function Unfollow({ id }) {
         size="small"
         sx={{ marginLeft: "30px", marginTop: "19px" }}
       >
-        {buttonState ? "UNFOLLOW" : "FOLLOWING"}
+        {buttonState ? "UNFOLLOW" : "FOLLOW"}
       </Button>
       <Toaster />
     </>

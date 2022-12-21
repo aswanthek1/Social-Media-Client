@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
-import RequestPageIcon from "@mui/icons-material/RequestPage";
+import ExploreIcon from '@mui/icons-material/Explore';
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useState } from "react";
@@ -116,14 +116,14 @@ const UserSidebarList = () => {
           <ListItem disablePadding>
             <ListItemButton component="a" href="#">
               <ListItemIcon>
-                <RequestPageIcon />
+                <ExploreIcon />
               </ListItemIcon>
               <ListItemText
                 disableTypography
                 primary={
                   <Typography style={{ fontWeight: 500 }}>
                     {" "}
-                    <b>Requests</b>{" "}
+                    <b>Explore</b>{" "}
                   </Typography>
                 }
               />

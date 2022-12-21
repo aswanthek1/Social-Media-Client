@@ -1,7 +1,10 @@
 import { Tab, Tabs } from "@mui/material";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { refreshReducer } from "../../Redux/RefreshSlice";
 
 const ChangingTabs = ({ setTabNumber, tabNumber, people, settings }) => {
+  const dispatch = useDispatch()
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -16,7 +19,9 @@ const ChangingTabs = ({ setTabNumber, tabNumber, people, settings }) => {
              {settings ? <b>Change Password</b> :  <b>Following</b>}
             </span>
           }
-          onClick={() => setTabNumber(1)}
+          onClick={() => {setTabNumber(1)
+            dispatch(refreshReducer())
+          }}
         />
         <Tab
           label={
@@ -24,7 +29,9 @@ const ChangingTabs = ({ setTabNumber, tabNumber, people, settings }) => {
               {settings ? <b>Privacy</b> :  <b>Followers</b>}
             </span>
           }
-          onClick={() => setTabNumber(2)}
+          onClick={() => {setTabNumber(2)
+            dispatch(refreshReducer())
+          }}
         />
 
        { people===true ? <Tab
@@ -33,7 +40,9 @@ const ChangingTabs = ({ setTabNumber, tabNumber, people, settings }) => {
               <b>You may know</b>
             </span>
           }
-          onClick={() => setTabNumber(3)}
+          onClick={() =>{ setTabNumber(3)
+            dispatch(refreshReducer())
+          }}
         /> : null}
       </Tabs>
     </div>

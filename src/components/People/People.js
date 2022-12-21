@@ -8,9 +8,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { addAllUsers } from "../../Redux/AllUserSlice";
 import { Toaster } from "react-hot-toast";
-import FollowersLists from "../UserLists/FollowersLists";
 import FollowingLists from "../UserLists/FollowingLists";
-import YouMayKnow from "../UserLists/YouMayKnow";
 import ChangingTabs from "../Tabs/ChangingTabs";
 
 const People = () => {
@@ -34,6 +32,7 @@ const People = () => {
           headers: { token: userToken },
         })
         .then((response) => {
+          
           dispatch(addAllUsers(response.data.allUsers));
           setYouMayKnow(response.data.exceptFollowing);
           setFollowing(response.data.following);
@@ -60,19 +59,19 @@ const People = () => {
           <div className="cards">
             {tabNumber === 1 ? (
               <div>
-                <FollowingLists following={following} people={true} />
+                <FollowingLists data={following} people={true} following={true} />
               </div>
             ) : null}
 
             {tabNumber === 2 ? (
               <div className="tabTwo">
-                <FollowersLists followers={followers} people={true} />
+                <FollowingLists data={followers} people={true} followers={true} />
               </div>
             ) : null}
 
             {tabNumber === 3 ? (
               <div className="tabThree">
-                <YouMayKnow youMayKnow={youMayKnow} />
+                <FollowingLists data={youMayKnow} people={true} suggetions={true} />
               </div>
             ) : null}
           </div>

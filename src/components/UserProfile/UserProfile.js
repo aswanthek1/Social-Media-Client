@@ -16,7 +16,6 @@ import { useDispatch } from "react-redux";
 import Posts from "../Posts/Posts";
 import BioEditingModal from "./BioEditingModal";
 import ChangingTabs from "../Tabs/ChangingTabs";
-import FollowersLists from "../UserLists/FollowersLists";
 import FollowingLists from "../UserLists/FollowingLists";
 import toast, {Toaster} from 'react-hot-toast'
 
@@ -195,12 +194,12 @@ const UserProfile = () => {
                 </Box>
 
                 {tabNumber === 1 ? <div className="following">
-                  <FollowingLists following={userProfileData.following} />
+                  <FollowingLists data={userProfileData.following} />
                 </div> : null}
 
                 {tabNumber === 2 ? (
                   <div className="followers">
-                    <FollowersLists followers={userProfileData.followers} />
+                    <FollowingLists data={userProfileData.followers} />
                   </div>
                 ) : null}
               </div>

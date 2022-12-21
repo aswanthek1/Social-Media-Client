@@ -11,16 +11,19 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import Unfollow from "../People/Unfollow";
 import { useNavigate } from "react-router-dom";
+import Remove from "../People/Remove";
+import Follow from "../People/Follow";
+import { refreshReducer } from "../../Redux/RefreshSlice";
 
-const FollowingLists = ({ following, profile, people }) => {
-  console.log(profile)
+const FollowingLists = (following,{  profile, people }) => {
+  console.log(following,"people lists")
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   return (
     <div>
-      {following
-        ? following.map((followingValue) => {
+      {following.data
+        ? following.data.map((followingValue) => {
             return (
               <List
                 key={followingValue._id}
@@ -35,6 +38,7 @@ const FollowingLists = ({ following, profile, people }) => {
                     onClick={() => {
                       navigate(`/profile/${followingValue._id}`);
                       localStorage.setItem("profileUser", followingValue._id);
+                      dispatch(refreshReducer())
                     }}
                   >
                     <Avatar
@@ -46,6 +50,7 @@ const FollowingLists = ({ following, profile, people }) => {
                     onClick={() => {
                       navigate(`/profile/${followingValue._id}`);
                       localStorage.setItem("profileUser", followingValue._id);
+                      dispatch(refreshReducer())
                     }}
                     sx={{ marginTop: "20px" }}
                     disableTypography
@@ -56,7 +61,12 @@ const FollowingLists = ({ following, profile, people }) => {
                       </Typography>
                     }
                   />
-                 { people ? <Unfollow id={followingValue._id} /> :null }
+                 { following.people && following.following ? <Follow id={followingValue._id} following={true}  /> :null }
+
+                 { following.people && following.suggetions ? <Follow id={followingValue._id} suggetions={true} /> : null}
+
+
+                {following.people && following.followers ? <Remove id={followingValue._id} /> : null } 
                 </ListItem>
 
                 <Divider variant="inset" component="li" />

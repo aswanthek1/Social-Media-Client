@@ -4,8 +4,11 @@ import { useDispatch } from "react-redux";
 import { refreshReducer } from "../../Redux/RefreshSlice";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import { useState } from "react";
 
-const Follow = (id) => {
+const Follow = (othersId) => {
+  console.log('id',othersId)
+  const [buttonState, setButtonState] = useState(false)
   const dispatch = useDispatch();
 
   const setFollow = (id) => {
@@ -18,13 +21,31 @@ const Follow = (id) => {
           { headers: { token: userToken } }
         )
         .then((response) => {
-          toast.success("Started following", {
-            duration: 3000,
-            style: {
-              width: "300px",
-            },
-          });
-          dispatch(refreshReducer());
+          console.log('response of ', response)
+          
+          if(response.data.message === 'followed'){
+            setButtonState(true)
+            toast.success("Started following", {
+              duration: 3000,
+              style: {
+                width: "300px",
+                fontSize:"20px"
+              },
+            });         
+          }
+          else{
+            setButtonState(false)
+            toast.success('Unfollowed',{
+              duration: 3000,
+              style: {
+                width: "300px",
+                fontSize:"20px"
+              },
+            });
+          }
+          
+
+          // dispatch(refreshReducer());
         });
     } catch (error) {
       console.log(error);
@@ -33,14 +54,16 @@ const Follow = (id) => {
 
   return (
     <div>
-      <Button
-        onClick={() => setFollow(id)}
-        variant="contained"
+  <Button
+        onClick={() => {setFollow(othersId.id)
+        }}
+        variant="contained" 
         size="small"
         sx={{ marginLeft: "30px", marginTop: "19px" }}
       >
-        Follow
-      </Button>
+        {othersId.suggetions ? 'Follow' : 'unfollow'}
+       
+      </Button> 
     </div>
   );
 };

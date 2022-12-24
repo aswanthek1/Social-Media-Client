@@ -14,6 +14,7 @@ import AdminDashBoardPage from "./pages/AdminDashBoard";
 import AdminLogginRouter from "./utils/AdminLogginRouter";
 import AdminLogoutRouter from "./utils/AdminLogoutRouter";
 import SettingsPage from "./pages/Settings";
+import ExplorePage from "./pages/Explore";
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
             <Route element={<ChatPage />} path="/chat" />
             <Route element={<SavedPostsPage/>} path='/posts/saved' />
             <Route element={<SettingsPage/>} path='/settings/:id' />
+            <Route element={<ExplorePage/>} path='/explore/:id' />
           </Route>
 
           <Route element={<UserLoggedout />}>

@@ -40,10 +40,7 @@ const MessageArea = ({ socket, room , uniqueChat, setUniqueChat, showList, setSh
         authorId: user._id,
         message: currentMessage,
         receiver: chatUserState._id,
-        time:
-          new Date(Date.now()).getHours() +
-          ":" +
-          new Date(Date.now()).getMinutes(),
+        time:new Date(),
       };
 
       await socket.emit("send_message", messageData);

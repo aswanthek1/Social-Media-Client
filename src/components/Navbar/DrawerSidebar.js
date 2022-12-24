@@ -115,7 +115,9 @@ const DrawerSidebar = ({ state }) => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem disablePadding>
+          <ListItem disablePadding
+          onClick={() => { navigate(`/explore/${user._id}`)}}
+          >
             <ListItemButton component="a" href="#">
               <ListItemIcon>
                 <ExploreIcon />

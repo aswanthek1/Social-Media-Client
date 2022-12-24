@@ -7,16 +7,14 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
-import Unfollow from "../People/Unfollow";
 import { useNavigate } from "react-router-dom";
 import Remove from "../People/Remove";
 import Follow from "../People/Follow";
 import { refreshReducer } from "../../Redux/RefreshSlice";
 
-const FollowingLists = (following,{  profile, people }) => {
-  console.log(following,"people lists")
+const FollowingLists = (following) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

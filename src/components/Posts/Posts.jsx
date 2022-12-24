@@ -8,22 +8,20 @@ import {
   Avatar,
   IconButton,
   CardHeader,
-  Checkbox,
-  Badge,
   styled,
   TextField,
-  Button,
   FormHelperText,
   Menu,
   MenuItem,
   Fade,
 } from "@mui/material";
 import InsertCommentIcon from "@mui/icons-material/InsertComment";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 import toast, { Toaster } from "react-hot-toast";
 import React, { useState, useEffect } from "react";
+import Moment from "react-moment";
 import {
-  CoPresent,
   Favorite,
   FavoriteBorder,
   MoreVert,
@@ -35,9 +33,6 @@ import SendIcon from "@mui/icons-material/Send";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { refreshReducer } from "../../Redux/RefreshSlice";
-import InputEmoji from "react-input-emoji";
-import EmojiPicker from "emoji-picker-react";
-import { Picker } from "emoji-mart";
 import ScrollToBottom from "react-scroll-to-bottom";
 import { useNavigate } from "react-router-dom";
 import ReportPostModal from "../ReportPostModal/ReportPostModal";
@@ -55,8 +50,11 @@ const ExpandMore = styled((props) => {
 
 function Posts(props) {
   const dispatch = useDispatch();
-  const [reported, setReported] = useState(false)
-  const [reportedId, setReportedId] = useState('')
+  const [reported, setReported] = useState(false);
+  const [reportedId, setReportedId] = useState("");
+  const [fullDescription, showFullDescription] = useState("");
+  const [slicedComment, setslicedComment] = useState(false);
+  const [showLessDesc, setShowLessDesc] = useState(false);
   const [expanded, setExpanded] = React.useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -64,9 +62,7 @@ function Posts(props) {
 
   const navigate = useNavigate();
   const [likeState, setLikeState] = useState(false);
-  const [likeNumber, setLikeNumber] = useState(0);
   const [savedState, setSavedState] = useState(false);
-  const [imojiState, setImojiState] = useState(false);
   const user = useSelector((state) => state.user);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -148,12 +144,59 @@ function Posts(props) {
       });
   };
 
+  const deleteComment = (postId, commentId) => {
+    axios
+      .delete(
+        `${process.env.REACT_APP_BACKEND_URL}/posts/comment/deleteComment`,
+        { data: { postId: postId, commentId: commentId } }
+      )
+      .then((response) => {
+        if (response.data.message === "Comment Deleted") {
+          toast.success("Comment deleted successfully", {
+            duration: 3000,
+            style: {
+              width: "400px",
+              height: "55px",
+              fontSize: "18px",
+            },
+          });
+          dispatch(refreshReducer());
+        }
+      });
+  };
+
+  const setReadMore = (commentId) => {
+    props.data.comments.map((commentObj) => {
+      console.log(commentId, "=========", commentObj._id);
+      if (commentId === commentObj._id) {
+        console.log("trueaaaaaa");
+        setslicedComment(false);
+        showFullDescription("");
+        setShowLessDesc(true);
+      } else {
+        console.log("only that one");
+      }
+    });
+  };
+
   useEffect(() => {
     console.log(typeof user._id, typeof props.data.likes[0]);
     const id = `${user._id}`;
     let proplike = [];
     proplike = `${props.data.likes}`;
     proplike.includes(id) ? setLikeState(true) : setLikeState(false);
+  }, []);
+
+  useEffect(() => {
+    const comment = props.data.comments.map((commentValues) => {
+      if (commentValues.comment.length > 20) {
+        showFullDescription(commentValues.comment);
+        setslicedComment(true);
+        setShowLessDesc(false);
+      } else {
+        console.log("no big comments");
+      }
+    });
   }, []);
 
   const formik = useFormik({
@@ -229,7 +272,7 @@ function Posts(props) {
                     props.data.userId.lastname
                   : null
               }
-              subheader={props.data.date}
+              subheader={<Moment fromNow>{props.data.createdAt}</Moment>}
             />
             <Menu
               id="fade-menu"
@@ -252,19 +295,24 @@ function Posts(props) {
                 </MenuItem>
               ) : (
                 <>
-                <MenuItem
-                  onClick={() => {
-                    handleClose();
-                    savePost(props.data._id);
-                  }}
-                >
-                  {/* {savedState || props.saved ? "Remove post from saved" : "Save Post"} */}
-
-                  {user.saved.includes(props.data._id)
-                    ? "Remove post from saved"
-                    : "Save Post"}
-                </MenuItem>
-                <MenuItem onClick={() => {setReported(true); setReportedId(props.data._id)}}>Report post</MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      savePost(props.data._id);
+                    }}
+                  >
+                    {user.saved.includes(props.data._id)
+                      ? "Remove post from saved"
+                      : "Save Post"}
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setReported(true);
+                      setReportedId(props.data._id);
+                    }}
+                  >
+                    Report post
+                  </MenuItem>
                 </>
               )}
             </Menu>
@@ -320,23 +368,81 @@ function Posts(props) {
                             key={obj._id}
                             style={{
                               color: "red",
-                              fontSize: "12px",
+                              fontSize: "20px",
                               fontWeight: "800",
                             }}
                           >
                             {obj.commentBy.firstname}
                           </p>
                           <Box
+                            key={obj._id}
                             sx={{
                               display: "flex",
                               justifyContent: "space-between",
                             }}
                           >
-                            <Box marginBottom={2} height="30px" bgColor="aqua">
-                              {obj.comment}
+                            <Box
+                              marginBottom={2}
+                              fontSize={18}
+                              maxWidth={{ sm: "275px", xs: "220px" }}
+                              bgColor="aqua"
+                            >
+                              {slicedComment ? (
+                                <div>{obj.comment.slice(0, 40)}</div>
+                              ) : (
+                                <div> {obj.comment} </div>
+                              )}
+
+                              {showLessDesc === false &&
+                              fullDescription === obj.comment ? (
+                                <span
+                                  key={obj._id}
+                                  style={{ color: "blue", fontSize: "15px" }}
+                                  onClick={() => {
+                                    setReadMore(obj._id);
+                                  }}
+                                >
+                                  ...Read More
+                                </span>
+                              ) : null}
+
+                              {(slicedComment === false &&
+                                fullDescription === obj.comment) ||
+                              (showLessDesc && obj.comment.length > 20) ? (
+                                <span
+                                  key={obj._id}
+                                  style={{ color: "blue", paddingLeft: "15px" }}
+                                  onClick={() => {
+                                    setShowLessDesc(false);
+                                    setslicedComment(true);
+                                    showFullDescription(obj.comment);
+                                  }}
+                                >
+                                  Show less
+                                </span>
+                              ) : null}
                             </Box>
 
-                            <Box bgColor="aqua">{obj.createdAt}</Box>
+                            <Box
+                              bgColor="aqua"
+                              sx={{
+                                display: "flex",
+                                justifyContent: "flex-end",
+                              }}
+                            >
+                              <span style={{ fontSize: "18px" }}>
+                                {<Moment fromNow>{obj.createdAt}</Moment>}{" "}
+                              </span>
+                              {obj.commentBy._id === user._id ? (
+                                <span
+                                  onClick={() =>
+                                    deleteComment(props.data._id, obj._id)
+                                  }
+                                >
+                                  <DeleteIcon />
+                                </span>
+                              ) : null}
+                            </Box>
                           </Box>
                         </>
                       );
@@ -375,7 +481,13 @@ function Posts(props) {
           <Toaster />
         </div>
       }
-      {reported ?<ReportPostModal reported={reported} setReported={setReported} reportedId={reportedId} /> : null}
+      {reported ? (
+        <ReportPostModal
+          reported={reported}
+          setReported={setReported}
+          reportedId={reportedId}
+        />
+      ) : null}
     </>
   );
 }

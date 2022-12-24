@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import Moment from "react-moment";
 import { useSelector } from "react-redux";
 import ScrollToBottom from "react-scroll-to-bottom";
 
@@ -30,7 +31,8 @@ const Message = ({ uniqueChat }) => {
                     </p>
                   </div>
                   <div className="messageBottom">
-                    {value ? value.time : null}
+                    {/* {value ? value.time : null} */}
+                <Moment fromNow>{value ? value.time : null}</Moment>
                   </div>
                 </div>
               );

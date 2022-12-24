@@ -1,23 +1,32 @@
-import React,{ useEffect, useState} from 'react'
-import { Outlet, Navigate} from 'react-router-dom'
-import axios from 'axios'
-
-
+import React, { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import axios from "axios";
+import UserLogin from "../components/UserLogin/UserLogin";
 
 function UserRouter() {
-  let auth = {authtoken:localStorage.getItem('userToken')}
-  // const [loginAuthState, setLoginAuthState ] = useState(false)
+  const navigate = useNavigate();
+  let auth = { authtoken: localStorage.getItem("userToken") };
 
-  // useEffect(()=>{
-  //   // ${process.env.REACT_APP_BACKEND_URL}
-  // axios.get('http://localhost:5000/userLoginAuth', {headers:{token:auth.authtoken}}).then((e)=> {
-  //   console.log('login auth is here ', e)
-  // })
-  // },[])
+  useEffect(() => {
+    try {
+      axios
+        .get(`${process.env.REACT_APP_BACKEND_URL}/loginAuth`, {
+          headers: { token: auth.authtoken },
+        })
+        .then((response) => {
+          if (response.data.status) {
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+          localStorage.clear();
+        });
+    } catch (error) {
+      console.log("error at auth", error);
+    }
+  }, [navigate]);
 
-  return (
-     auth.authtoken ? <Outlet/> : <Navigate to='/login' />
-  )
+  return auth.authtoken ? <Outlet /> : <UserLogin />;
 }
 
-export default UserRouter
+export default UserRouter;

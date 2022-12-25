@@ -134,7 +134,7 @@ const Chat = () => {
               {formik.values.users !== "" ? (
                 <div className="userList">
                   {formik.values.users !== "" ? (
-                    <List className="users">
+                    <List className="users" sx={{ marginLeft: "30px" }}>
                       {searchUser
                         ? searchUser.map((value) => {
                             return (
@@ -188,7 +188,7 @@ const Chat = () => {
                     </h3>
                     <Divider sx={{ borderBottomWidth: 2 }} />
                   </div>
-                  <List sx={{ paddingLeft: "4px", paddingRight: "28x" }}>
+                  <List sx={{ paddingLeft: "30px", paddingRight: "28x" }}>
                     {chatList.map((value) => {
                       return (
                         <ListItem

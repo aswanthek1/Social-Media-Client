@@ -31,18 +31,20 @@ const UserSidebarList = () => {
         bgcolor="#EAF6F6"
       >
         <List>
-          <ListItem selected={homeActive ? true : false} disablePadding>
+          <ListItem selected={homeActive ? true : false} disablePadding 
+          >
             <ListItemButton
               component="a"
               onClick={() => {
                 navigate("/");
-                setHomeActive(true);
+                setHomeActive(true); 
                 setSavedActive(false);
                 setPeopleActive(false);
               }}
             >
               <ListItemIcon>
                 <HomeIcon />
+                
               </ListItemIcon>
               <ListItemText
                 disableTypography

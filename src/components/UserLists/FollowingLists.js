@@ -26,8 +26,8 @@ const FollowingLists = (following) => {
               <List
                 key={followingValue._id}
                 sx={{
-                  width: "100%",
-                  maxWidth: 460,
+                  // width: "100%",
+                  width: 360,
                   bgcolor: "background.paper",
                 }}
               >

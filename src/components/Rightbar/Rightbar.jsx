@@ -1,11 +1,10 @@
 import Box from "@mui/material/Box";
 import React, { useState, useEffect } from "react";
-import { InputBase } from "@mui/material";
+import {  InputBase } from "@mui/material";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useSelector } from "react-redux";
 import SearchUsersList from "../SearchUsersList/SearchUsersList";
-
 function Rightbar() {
   const [searchUser, setSearchUser] = useState([]);
   const user = useSelector((state) => state.user);
@@ -59,8 +58,13 @@ function Rightbar() {
             onChange={formik.handleChange}
             value={formik.values.users}
             // onClick={() => setShowSearch(true)}
+            // endAdornment={
+            //   <InputAdornment position="end">
+            //    <CircularProgress/>
+            //   </InputAdornment>
+            // }
           />
-        </Box>
+        </Box> 
         <SearchUsersList
           searchUser={searchUser}
           setSearchUser={setSearchUser}

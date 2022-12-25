@@ -28,7 +28,7 @@ const SearchUsersList = ({ searchUser, setSearchUser }) => {
             width: "100%",
             maxWidth: 360,
             bgcolor: "#ec255a00",
-            marginLeft: "3%",
+            marginLeft: "9%",
             marginTop: "12px",
           }}
         >
@@ -51,7 +51,7 @@ const SearchUsersList = ({ searchUser, setSearchUser }) => {
                   }}
                   disableTypography
                   primary={
-                    <Typography style={{ fontWeight: 500 }}>
+                    <Typography style={{ fontWeight: 500,marginLeft:'20px' }}>
                       {" "}
                       <b>{value.firstname} </b>{" "}
                     </Typography>
@@ -65,6 +65,8 @@ const SearchUsersList = ({ searchUser, setSearchUser }) => {
       ) : (
         ""
       )}
+
+
     </>
   );
 };

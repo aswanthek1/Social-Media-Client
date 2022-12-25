@@ -3,7 +3,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import { useSelector } from "react-redux";
 import "./ProfileAreaStyles.css";
-import { Box, Button, IconButton } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ProfileEditingModal from "./ProfileEditingModal";
 import { useState } from "react";
@@ -28,6 +28,7 @@ const UserProfile = () => {
   const userToken = localStorage.getItem("userToken");
   const [userProfileData, setUserProfileData] = useState({});
   const [userPost, setUserPost] = useState([]);
+  const [progress, setProgress] = useState(false);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -45,11 +46,13 @@ const UserProfile = () => {
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
+    setProgress(true);
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}/posts/getPost/${profileId}`, {
         headers: { token: userToken },
       })
       .then((response) => {
+        setProgress(false);
         setUserPost(response.data);
         // dispatch(postUpdate(response.data));
       });
@@ -178,9 +181,28 @@ const UserProfile = () => {
           <div>
             <div className="profileRightBottomMain">
               <div className="profileRightBottom">
-                {userPost.map((postArray) => {
-                  return <Posts key={postArray._id} data={postArray} />;
-                })}
+                {userPost.length < 1 ? (
+                  <div style={{ backgroundColor: "" }}>
+                    <h2
+                      style={{
+                        textAlign: "center",
+                        color: "red",
+                        marginTop: "20px",
+                      }}
+                    >
+                      No posts added yet
+                    </h2>
+                  </div>
+                ) : (
+                  userPost.map((postArray) => {
+                    return <Posts key={postArray._id} data={postArray} />;
+                  })
+                )}
+                {progress ? (
+                  <CircularProgress
+                    sx={{ align: "center", marginTop: "25px" }}
+                  />
+                ) : null}
               </div>
 
               <div className="peopleBox">

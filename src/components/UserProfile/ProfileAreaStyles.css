@@ -5,9 +5,18 @@
 
 @media screen and (min-width: 900px) {
   .profileRightTop {
+    margin-left: 15%;
+  }
+}
+
+
+@media screen and (min-width: 950px) {
+  .profileRightTop {
     margin-left: 8%;
   }
 }
+
+
 
 .profile {
   display: flex;
@@ -85,9 +94,16 @@
 
 @media screen and (min-width: 900px) {
   .bioMain {
+    margin-left: 15%;
+  }
+}
+
+@media screen and (min-width: 950px) {
+  .bioMain {
     margin-left: 8%;
   }
 }
+
 
 @media screen and (max-width: 350px) {
   .bioMain {
@@ -179,7 +195,7 @@
 .profileRightBottomMain {
   display: flex;
   justify-content: space-evenly;
-  padding-left: 4%;
+  /* padding-left: 8%; */
   position: -webkit-sticky;
   position: sticky;
   top: 0px;
@@ -187,6 +203,21 @@
   overflow: hidden;
   /* top: 0px; */
   /* max-height: 500px; */
+}
+
+
+
+@media screen and (min-width: 900px) {
+  .profileRightBottomMain {
+    margin-left: 7%;
+    padding-left: 8%;
+  }
+}
+
+@media screen and (min-width: 950px) {
+  .profileRightBottomMain {
+    margin-left: 0%;
+  }
 }
 
 @media screen and (max-width: 800px) {

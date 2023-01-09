@@ -22,31 +22,7 @@ const ReportedPost = () => {
   const adminToken = localStorage.getItem("adminToken");
   const refresh = useSelector((state) => state.refresh.refresh);
 
-  const removeReportedPost = (postId) => {
-    axios
-      .patch(`${process.env.REACT_APP_BACKEND_URL}/admin/post/report`, {
-        postId: postId,
-      })
-      .then((response) => {
-        if (response.data.message === "Removed") {
-          dispatch(refreshReducer());
-          toast.success("Post removed successfully");
-        }
-      });
-  };
 
-  const declineRequest = (postId) => {
-    console.log("postid for reporting", postId);
-    axios
-      .delete(
-        `${process.env.REACT_APP_BACKEND_URL}/admin/post/declineReport/${postId}`
-      )
-      .then((response) => {
-        console.log("response for decling", response);
-        dispatch(refreshReducer());
-        toast.success("Request declined");
-      });
-  };
 
   useEffect(() => {
     axios

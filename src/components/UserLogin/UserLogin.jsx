@@ -2,15 +2,12 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
-// import { useState } from 'react'
 import * as yup from "yup";
 import { Typography, Paper, Grid, Container } from "@material-ui/core";
 import toast, { Toaster } from "react-hot-toast";
 import Avatar from "@material-ui/core/Avatar";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
@@ -54,7 +51,7 @@ const validationSchema = yup.object({
     .required("Field is reqluired")
     .min(6, "Password is too short - should be 8 chars minimum.")
     .max(12, "Maximum 12 charachters are permitted"),
-}); 
+});
 
 function UserLogin() {
   const [values, setValues] = React.useState({
@@ -153,7 +150,7 @@ function UserLogin() {
               sm={6}
               xs={12}
               className={classes.firstgrid}
-              display={{ xs: "none", md: "block" }}
+              // display={{ xs: "none", md: "block" }}
             >
               <Paper elevation={6} className={classes.firstpaperSignin}>
                 {/* <img src="/Assets/istockphoto-576586626-612x612.jpg" alt="" style={{width:'100%',height:'500px',objectFit:'cover'}} /> */}

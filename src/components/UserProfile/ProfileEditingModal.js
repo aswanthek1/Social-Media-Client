@@ -112,7 +112,7 @@ const ProfileEditingModal = (props) => {
               }}
             >
               <img
-                style={{ width: "300px", height: "100px" }}
+                style={{ width: "300px", height: "100px",marginTop:"20px" }}
                 src={coverPreview ? coverPreview : user.coverimage}
                 alt=''
               />
@@ -120,8 +120,8 @@ const ProfileEditingModal = (props) => {
             <div
               style={{
                 display: "flex",
-                justifyContent: "center",
-                marginTop: "18px",
+                justifyContent: "space-evenly",
+                marginTop: "25px",
               }}
             >
               <IconButton
@@ -129,7 +129,7 @@ const ProfileEditingModal = (props) => {
                 aria-label="upload picture"
                 component="label"
               >
-                <Typography>Choose from gallery</Typography>
+                <Typography>Pick One</Typography>
                 <input
                   hidden
                   accept="image/*"
@@ -141,7 +141,7 @@ const ProfileEditingModal = (props) => {
                 />
                 <Image color="secondary" />
               </IconButton>
-              <IconButton
+              {/* <IconButton
                 color="primary"
                 aria-label="upload picture"
                 component="label"
@@ -149,11 +149,12 @@ const ProfileEditingModal = (props) => {
                 <Typography>Capture One</Typography>
                 <input hidden accept="image/*" type="file" />
                 <Camera color="secondary" />
-              </IconButton>
+              </IconButton> */}
               <Button
                 variant="contained"
                 type="submit"
                 size="small"
+                sx={{ width: "70px", fontSize: "10px",height:'30px' }}
                 onClick={uploadCoverImage}
               >
                 Upload
@@ -191,7 +192,7 @@ const ProfileEditingModal = (props) => {
               }}
             >
               <img
-                style={{ width: "110px", height: "110px", borderRadius: "50%" }}
+                style={{ width: "140px", height: "140px", borderRadius: "50%" }}
                 src={profilePreview ? profilePreview : user.profileimage}
                 alt=""
               />
@@ -209,7 +210,7 @@ const ProfileEditingModal = (props) => {
                 aria-label="upload picture"
                 component="label"
               >
-                <Typography>Choose from gallery</Typography>
+                <Typography>Pick One</Typography>
                 <input
                   hidden
                   accept="image/*"
@@ -223,7 +224,7 @@ const ProfileEditingModal = (props) => {
                 />
                 <Image color="secondary" />
               </IconButton>
-              <IconButton
+              {/* <IconButton
                 color="primary"
                 type="submit"
                 aria-label="upload picture"
@@ -232,12 +233,13 @@ const ProfileEditingModal = (props) => {
                 <Typography>Capture One</Typography>
                 <input hidden accept="image/*" type="file" />
                 <Camera color="secondary" />
-              </IconButton>
+              </IconButton> */}
               <Button
                 variant="contained"
                 type="submit"
                 size="small"
                 onClick={uploadProfileImage}
+                sx={{ width: "70px", fontSize: "10px",height:'30px' }}
               >
                 Upload
               </Button>

@@ -63,7 +63,7 @@ const UserProfile = () => {
       <Toaster />
       <Navbar />
       <div className="profile">
-        <Sidebar />
+        <Sidebar profile={true}/>
         <div className="profileRight">
           <div className="profileRightTop">
             <div className="profileCover">

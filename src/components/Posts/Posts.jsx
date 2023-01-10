@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import InsertCommentIcon from "@mui/icons-material/InsertComment";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Swal from "sweetalert2";
 import toast, { Toaster } from "react-hot-toast";
 import React, { useState, useEffect } from "react";
 import Moment from "react-moment";
@@ -36,6 +35,7 @@ import { refreshReducer } from "../../Redux/RefreshSlice";
 import ScrollToBottom from "react-scroll-to-bottom";
 import { useNavigate } from "react-router-dom";
 import ReportPostModal from "../ReportPostModal/ReportPostModal";
+import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -56,6 +56,8 @@ function Posts(props) {
   const [slicedComment, setslicedComment] = useState(false);
   const [showLessDesc, setShowLessDesc] = useState(false);
   const [expanded, setExpanded] = React.useState(false);
+  const [confirmModal, setConfirmModal] = useState(false)
+  const [postId, setPostId] = useState('')
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -74,35 +76,11 @@ function Posts(props) {
   };
 
   const deletePost = (postId) => {
-    try {
-      Swal.fire({
-        title: "If you do this it will be deleted permenently",
-        showCancelButton: true,
-        confirmButtonText: "Yes",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const userId = user._id;
-          axios
-            .patch(`${process.env.REACT_APP_BACKEND_URL}/posts/deletePost`, {
-              postId,
-              userId,
-            })
-            .then((response) => {
-              toast.success("Post deleted successfully", {
-                style: {
-                  zIndex: 999,
-                },
-              });
-              dispatch(refreshReducer());
-            });
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
+      setConfirmModal(true)
+      setPostId(postId)
   };
 
-  const savePost = (postId) => {
+  const savePost = (postId) => { 
     try {
       const userId = user._id;
       axios
@@ -488,6 +466,7 @@ function Posts(props) {
           reportedId={reportedId}
         />
       ) : null}
+      {confirmModal ? <ConfirmationModal confirmModal={confirmModal} setConfirmModal={setConfirmModal} userId={user._id} postId={postId} /> : null}
     </>
   );
 }

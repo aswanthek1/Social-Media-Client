@@ -19,11 +19,10 @@ import ListItemText from "@mui/material/ListItemText";
 import ReportIcon from "@mui/icons-material/Report";
 import PeopleIcon from "@mui/icons-material/People";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import MailIcon from "@mui/icons-material/Mail";
 import AdminUserManagement from "../AdminUserManagement.js/AdminUserManagement";
 import ReportedPost from "../ReportedPost/ReportedPost";
 import { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -141,7 +140,14 @@ const AdminSidebarList = () => {
           </DrawerHeader>
           <Divider />
           <List>
-            <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItem
+              disablePadding
+              sx={{
+                display: "block",
+                backgroundColor: reported ? "aqua" : "",
+                borderRadius: reported ? "11px" : "",
+              }}
+            >
               <ListItemButton
                 onClick={() => {
                   setUser(false);
@@ -169,7 +175,14 @@ const AdminSidebarList = () => {
               </ListItemButton>
             </ListItem>
 
-            <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItem
+              disablePadding
+              sx={{
+                display: "block",
+                backgroundColor: user ? "aqua" : "",
+                borderRadius: user ? "11px" : "",
+              }}
+            >
               <ListItemButton
                 onClick={() => {
                   setUser(true);

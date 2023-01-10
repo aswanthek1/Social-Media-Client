@@ -5,8 +5,7 @@ const TableHeader = (props) => {
 
   return (
     <>
-      <TableHead>
-
+      <TableHead sx={{ backgroundColor: "aquamarine", color: "white", borderBottom:'2px solid grey' }}>
             <TableRow>
             {props?.data?.map((obj) => {
           return (

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect } from 'react'
 import { Outlet, Navigate, useNavigate} from 'react-router-dom'
+import AdminLoginPage from '../pages/AdminLogin';
 
 const AdminLogginRouter = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const AdminLogginRouter = () => {
     }
   }, [navigate]);
   return (
-    auth.authtoken ? <Outlet/> : <Navigate to='/admin/login' />
+    auth.authtoken ? <Outlet/> : <AdminLoginPage/>
   )
 }
 

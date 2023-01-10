@@ -15,33 +15,32 @@ import AdminLogginRouter from "./utils/AdminLogginRouter";
 import AdminLogoutRouter from "./utils/AdminLogoutRouter";
 import SettingsPage from "./pages/Settings";
 import ExplorePage from "./pages/Explore";
-
+import UserAccessRouter from "./utils/UserAccessRouter";
 
 function App() {
-
-
   return (
     <div className="App">
       {/* <Route element={<TemporaryDrawer />} path='/test' /> */}
       <BrowserRouter>
         <Routes>
-          
-          <Route element={<AdminLogginRouter/>}>
-          <Route element={<AdminDashBoardPage/>} path='/admin/dash' />
+          <Route element={<AdminLogginRouter />}>
+            <Route element={<AdminDashBoardPage />} path="/admin/dash" />
           </Route>
 
-          <Route element={<AdminLogoutRouter/>}>
-          <Route element={<AdminLoginPage/>} path='/admin/login' />
+          <Route element={<AdminLogoutRouter />}>
+            <Route element={<AdminLoginPage />} path="/admin/login" />
           </Route>
 
           <Route element={<UserRouter />}>
-            <Route element={<UserHomePage />} path="/" />
-            <Route element={<UserProfilePage />} path="/profile/:id" />
-            <Route element={<PeoplePage />} path="/people" />
-            <Route element={<ChatPage />} path="/chat" />
-            <Route element={<SavedPostsPage/>} path='/posts/saved' />
-            <Route element={<SettingsPage/>} path='/settings/:id' />
-            <Route element={<ExplorePage/>} path='/explore/:id' />
+            <Route element={<UserAccessRouter />}>
+              <Route element={<UserHomePage />} path="/" />
+              <Route element={<UserProfilePage />} path="/profile/:id" />
+              <Route element={<PeoplePage />} path="/people" />
+              <Route element={<ChatPage />} path="/chat" />
+              <Route element={<SavedPostsPage />} path="/posts/saved" />
+              <Route element={<SettingsPage />} path="/settings/:id" />
+              <Route element={<ExplorePage />} path="/explore/:id" />
+            </Route>
           </Route>
 
           <Route element={<UserLoggedout />}>

@@ -40,39 +40,66 @@ function Add() {
   const [circularProgress, setCircularProgress] = useState(false);
   const user = useSelector((state) => state.user);
   const [file, setFile] = useState("");
+  const userToken = localStorage.getItem("userToken");
 
   const uploadPost = () => {
-    setCircularProgress(true);
-    const formData = new FormData();
-    const descriptionData = new FormData();
-    formData.append("file", imageSelected);
-    formData.append("upload_preset", "q9zryfyr");
-    descriptionData.append("text", description);
-    try {
-      const userToken = localStorage.getItem("userToken");
-      axios
-        .post(
-          "https://api.cloudinary.com/v1_1/dm0l6abeb/image/upload",
-          formData
-        )
-        .then((response) => {
-          return axios
-            .post(
-              `${process.env.REACT_APP_BACKEND_URL}/posts/addPost`,
-              { image: response.data.secure_url, description: description },
-              { headers: { token: userToken } }
-            )
-            .then((res) => {
-              setCircularProgress(false);
-              dispatch(refreshReducer());
-              dispatch(updatePostOnload(res.data));
-              setImageSelected(null);
-              setFile(null);
-              setOpen(false);
-            });
-        });
-    } catch (error) {
-      console.log("error", error);
+    if(imageSelected.length <1 && description.trim() === ""){
+      console.log('What you meant')
+    }
+    else if (imageSelected.length < 1 && description.trim() !== ''){
+      console.log('only description')
+      try {
+        axios
+              .post(
+                `${process.env.REACT_APP_BACKEND_URL}/posts/addPost`,
+                {  description: description },
+                { headers: { token: userToken } }
+              )
+              .then((res) => {
+                setCircularProgress(false);
+                dispatch(refreshReducer());
+                dispatch(updatePostOnload(res.data));
+                setImageSelected(null);
+                setFile(null);
+                setOpen(false);
+              });
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    else{
+
+      setCircularProgress(true);
+      const formData = new FormData();
+      const descriptionData = new FormData();
+      formData.append("file", imageSelected);
+      formData.append("upload_preset", "q9zryfyr");
+      descriptionData.append("text", description);
+      try {
+        axios
+          .post(
+            "https://api.cloudinary.com/v1_1/dm0l6abeb/image/upload",
+            formData
+          )
+          .then((response) => {
+            return axios
+              .post(
+                `${process.env.REACT_APP_BACKEND_URL}/posts/addPost`,
+                { image: response.data.secure_url, description: description },
+                { headers: { token: userToken } }
+              )
+              .then((res) => {
+                setCircularProgress(false);
+                dispatch(refreshReducer());
+                dispatch(updatePostOnload(res.data));
+                setImageSelected(null);
+                setFile(null);
+                setOpen(false);
+              });
+          });
+      } catch (error) {
+        console.log("error", error);
+      }
     }
   };
 

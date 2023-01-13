@@ -20,11 +20,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import toast, { Toaster } from "react-hot-toast";
 import React, { useState, useEffect } from "react";
 import Moment from "react-moment";
-import {
-  Favorite,
-  FavoriteBorder,
-  MoreVert,
-} from "@mui/icons-material";
+import { Favorite, FavoriteBorder, MoreVert } from "@mui/icons-material";
 import Collapse from "@mui/material/Collapse";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
@@ -56,8 +52,8 @@ function Posts(props) {
   const [slicedComment, setslicedComment] = useState(false);
   const [showLessDesc, setShowLessDesc] = useState(false);
   const [expanded, setExpanded] = React.useState(false);
-  const [confirmModal, setConfirmModal] = useState(false)
-  const [postId, setPostId] = useState('')
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [postId, setPostId] = useState("");
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -76,11 +72,11 @@ function Posts(props) {
   };
 
   const deletePost = (postId) => {
-      setConfirmModal(true)
-      setPostId(postId)
+    setConfirmModal(true);
+    setPostId(postId);
   };
 
-  const savePost = (postId) => { 
+  const savePost = (postId) => {
     try {
       const userId = user._id;
       axios
@@ -294,16 +290,22 @@ function Posts(props) {
                 </>
               )}
             </Menu>
-            <CardMedia
-              component="img"
-              sx={{ objectFit: "cover" }}
-              height="400"
-              // width="400px"
-              image={props.data.image ? props.data.image : null}
-              alt="A"
-            />
+            {props.data.image?.length > 0 ? (
+              <CardMedia
+                component="img"
+                sx={{ objectFit: "cover" }}
+                height="400"
+                // width="400px"
+                image={props.data.image ? props.data.image[0] : null}
+                alt=""
+              />
+            ) : null}
             <CardContent>
-              <Typography variant="body2" color="text.secondary">
+              <Typography
+                variant={props.data?.image?.length > 0 ? "body1" : "body1"}
+                sx={{ fontWeight: 700 }}
+                color="text.secondary"
+              >
                 {props.data.description ? props.data.description : null}
               </Typography>
             </CardContent>
@@ -466,7 +468,14 @@ function Posts(props) {
           reportedId={reportedId}
         />
       ) : null}
-      {confirmModal ? <ConfirmationModal confirmModal={confirmModal} setConfirmModal={setConfirmModal} userId={user._id} postId={postId} /> : null}
+      {confirmModal ? (
+        <ConfirmationModal
+          confirmModal={confirmModal}
+          setConfirmModal={setConfirmModal}
+          userId={user._id}
+          postId={postId}
+        />
+      ) : null}
     </>
   );
 }

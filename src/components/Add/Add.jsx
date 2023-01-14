@@ -132,7 +132,7 @@ function Add() {
           {file ? (
             <img
               src={file ? file : null}
-              style={{ width: "300px", height: "150px", marginLeft: "45px" }}
+              style={{ width: "350px", height: "400px", marginLeft:'5%' }}
               alt=""
             />
           ) : null}

@@ -27,6 +27,7 @@
   position: relative;
 }
 
+
 .profileRight {
   flex: 9;
   margin-top: 0.5%;
@@ -114,6 +115,9 @@
   .bioMain {
     padding-left: 2%;
   }
+}
+.bioLeftMain{
+  min-width: 35%
 }
 
 .followersMain {

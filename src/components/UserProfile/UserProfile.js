@@ -3,7 +3,13 @@ import Sidebar from "../Sidebar/Sidebar";
 import Navbar from "../Navbar/Navbar";
 import { useSelector } from "react-redux";
 import "./ProfileAreaStyles.css";
-import { Box, Button, CircularProgress, IconButton } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ProfileEditingModal from "./ProfileEditingModal";
 import { useState } from "react";
@@ -16,6 +22,7 @@ import ChangingTabs from "../Tabs/ChangingTabs";
 import FollowingLists from "../UserLists/FollowingLists";
 import toast, { Toaster } from "react-hot-toast";
 import Follow from "../People/Follow";
+import { Camera } from "@mui/icons-material";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
@@ -63,14 +70,14 @@ const UserProfile = () => {
       <Toaster />
       <Navbar />
       <div className="profile">
-        <Sidebar profile={true}/>
+        <Sidebar profile={true} />
         <div className="profileRight">
           <div className="profileRightTop">
             <div className="profileCover">
               <img
-                onClick={() => {
-                  setOpen(true);
-                }}
+                // onClick={() => {
+                //   setOpen(true);
+                // }}
                 className="profileCoverImg"
                 src={
                   userProfileData.coverimage
@@ -79,6 +86,19 @@ const UserProfile = () => {
                 }
                 alt=""
               />
+
+              <IconButton
+                onClick={() => {
+                  setOpen(true);
+                }}
+                color="primary"
+                aria-label="upload picture"
+                component="label"
+                sx={{ position: "absolute", right: 0, backgroundColor: "grey" }}
+              >
+                <EditIcon sx={{ color: "wheat" }} />
+              </IconButton>
+
               <img
                 onClick={() => setOpenProfile(true)}
                 className="profileUserImg"

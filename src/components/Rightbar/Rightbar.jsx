@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import React, { useState, useEffect } from "react";
-import {  InputBase } from "@mui/material";
+import { InputBase } from "@mui/material";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useSelector } from "react-redux";
@@ -31,16 +31,29 @@ function Rightbar() {
   }, [formik.values.users]);
 
   return (
-    <Box flex={3} p={1} sx={{ display: { xs: "none", lg: "block" } }}>
-      <Box position="fixed" width="31%" height="100vh" bgcolor="#EAF6F6">
+    <Box
+      flex={3}
+      p={1}
+      sx={{
+        display: { xs: "none", lg: "block" },
+        marginLeft: "0px !important",
+      }}
+    >
+      <Box
+        position="fixed"
+        width="35%"
+        height="100vh"
+        bgcolor="#EAF6F6"
+        sx={{ paddingX: { xl: "57px", lg: "28px" } }}
+      >
         {/* <Typography align='center' variant='h5' fontWeight={100} mt={1} mb={2} color='green' > <b>Search People</b> </Typography> */}
         {/* <Divider variant="middle" sx={{ borderBottomWidth: 3 }} /> */}
 
         <Box
           sx={{
-            width: "80%",
+            width: { xl: "80%", lg: "70%" },
             marginTop: "26px",
-            marginLeft: "9%",
+            // marginLeft: "9%",
             height: "30px",
             borderRadius: "15px",
             padding: "0 10px",
@@ -64,7 +77,7 @@ function Rightbar() {
             //   </InputAdornment>
             // }
           />
-        </Box> 
+        </Box>
         <SearchUsersList
           searchUser={searchUser}
           setSearchUser={setSearchUser}

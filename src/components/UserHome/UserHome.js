@@ -24,8 +24,6 @@ function UserHome() {
 
   const user = useSelector((state) => state.user);
   const refresh = useSelector((state) => state.refresh.refresh);
-  const [userDetails, setUserDetails] = useState({});
-  const [allPosts, setAllPosts] = useState([]);
 
   // const [mode, setMode] = useState("light")
   // const darkTheme = createTheme({
@@ -44,7 +42,6 @@ function UserHome() {
         if (response.data.message === "userNotFound") {
           return null;
         } else {
-          setUserDetails(response.data);
           dispatch(update(response.data));
         }
       });
@@ -57,17 +54,6 @@ function UserHome() {
       })
       .then((response) => {
         dispatch(postUpdate(response.data));
-      });
-  }, [refresh]);
-
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/posts/allPosts`, {
-        headers: { token: userToken },
-      })
-      .then((response) => {
-        console.log("allposts is here", response);
-        setAllPosts(response.data);
       });
   }, [refresh]);
 

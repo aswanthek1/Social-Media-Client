@@ -33,7 +33,7 @@ const People = () => {
         })
         .then((response) => {
           
-          dispatch(addAllUsers(response.data.allUsers));
+          // dispatch(addAllUsers(response.data.allUsers));
           setYouMayKnow(response.data.exceptFollowing);
           setFollowing(response.data.following);
           setFollowers(response.data.followers);

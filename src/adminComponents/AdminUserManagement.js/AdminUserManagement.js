@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import TableHeader from "../Table/TableHeader";
 import { refreshReducer } from "../../Redux/RefreshSlice";
 import TablePagination from "../Pagination/TablePagination";
+import { fetchUsers } from "../../Redux/AllUserSlice";
 
 const blockButtonStyle = {
   backgroundColor: "red",
@@ -40,33 +41,23 @@ const activateButtonStyle = {
 };
 
 const AdminUserManagement = () => {
-  const [usersState, setUsersState] = useState([]);
   const [searchTable, setSearchTable] = useState("");
   const [tableData, setTableData] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const adminToken = localStorage.getItem("adminToken");
   const refresh = useSelector((state) => state.refresh.refresh);
+  const users = useSelector((state) => state.allUsers.users)
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/admin/getUsers`, {
-        headers: { token: adminToken },
-      })
-      .then((response) => {
-        setUsersState(response.data);
-      })
-      .catch((error) => {
-        console.log(error, "error");
-      });
-  }, [refresh]);
 
   useEffect(() => {
-    console.log("changes   ", searchTable);
+    dispatch(fetchUsers())
+  },[refresh])
+
+  useEffect(() => {
     if (searchTable.length > 0) {
       setTableData(
-        usersState?.filter((item) => {
+        users?.filter((item) => {
           return (
             item.firstname.toLowerCase().includes(searchTable.toLowerCase()) ||
             item.lastname.toLowerCase().includes(searchTable.toLowerCase()) ||
@@ -75,9 +66,9 @@ const AdminUserManagement = () => {
         })
       );
     } else if (searchTable.length === 0) {
-      setTableData(usersState);
+      setTableData(users);
     }
-  }, [searchTable, usersState]);
+  }, [searchTable, users]);
 
   const userAction = (id) => {
     axios
